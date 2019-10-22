@@ -12,6 +12,7 @@
 
     <script>
       const env = '%NODE_ENV%';
+      const reactEnv = '%REACT_ENV%';
       window.favicon = '%PUBLIC_URL%/favicon.ico';
 
       let apiUrl = '';
@@ -21,6 +22,7 @@
       else if (env == 'production')
         apiUrl = 'https://lapp-back-prod.herokuapp.com/';
       console.log(env);
+      console.log(reactEnv);
 
       console.log(apiUrl);
     </script>
