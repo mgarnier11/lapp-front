@@ -9,6 +9,19 @@
       name="description"
       content="Web site created using create-react-app"
     />
+
+    <script>
+      const env = '%NODE_ENV%';
+      window.favicon = '%PUBLIC_URL%/favicon.ico';
+
+      let apiUrl = '';
+      if (env == 'development') apiUrl = 'http://localhost:3030';
+      else if (env === 'staging')
+        apiUrl = 'https://lapp-back-dev.herokuapp.com/';
+      else if (env == 'production')
+        apiUrl = 'https://lapp-back-prod.herokuapp.com/';
+      console.log(apiUrl);
+    </script>
     <link rel="apple-touch-icon" href="logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
