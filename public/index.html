@@ -16,10 +16,12 @@
 
       let apiUrl = '';
       if (env == 'development') apiUrl = 'http://localhost:3030';
-      else if (env === 'staging')
+      else if (env == 'staging')
         apiUrl = 'https://lapp-back-dev.herokuapp.com/';
       else if (env == 'production')
         apiUrl = 'https://lapp-back-prod.herokuapp.com/';
+      console.log(env);
+
       console.log(apiUrl);
     </script>
     <link rel="apple-touch-icon" href="logo192.png" />
