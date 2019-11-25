@@ -20,12 +20,14 @@ async function test2() {
     name: 'test',
     email: 'test@mail.com',
     password: 'test',
-    role: '5ddaab2e9ec7fc272b378dfd'
+    roleId: '5ddaab2e9ec7fc272b378dfd',
+    gender: 0
   });
   console.log(role);
 }
 
 async function test3() {
+  /*
   let users = (await apiHandler.userService.find({
     query: { email: 'test@mail.com' }
   })) as User[];
@@ -45,12 +47,14 @@ async function test3() {
   });
 
   console.log(game);
+  */
 }
 
 async function test4() {
   let users = (await apiHandler.userService.find({
     query: { email: 'test@mail.com' }
   })) as User[];
+  console.log(users);
 
   let users2 = await apiHandler.userService.find({
     query: {

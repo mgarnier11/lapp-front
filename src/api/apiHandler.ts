@@ -3,7 +3,7 @@ import * as io from 'socket.io-client';
 import Feathers from '@feathersjs/feathers';
 import FeathersSocketIOClient from '@feathersjs/socketio-client';
 import FeathersAuthClient2 from '@feathersjs/authentication-client';
-import { User } from './classes/user.class';
+import { User, UserBackModel } from './classes/user.class';
 import { QuestionType } from './classes/questionType.class';
 import { Question } from './classes/question.class';
 import { Role } from './classes/role.class';

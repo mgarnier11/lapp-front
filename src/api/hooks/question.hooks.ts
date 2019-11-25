@@ -1,20 +1,25 @@
 import { Hook, HookContext } from '@feathersjs/feathers';
-
+import * as Validator from 'validate.js';
 import { Question } from '../classes/question.class';
 
 export function afterAllHook(options = {}): Hook {
-  return async (context: HookContext) => {
-    if (context.method === 'find') {
-      let newResults = [];
+  return (context: HookContext) => {
+    if (Validator.isArray(context.result)) {
+      let oldResults = [...context.result];
+      context.result = [];
 
-      for (let data of context.result) {
-        newResults.push(Question.fromBack(data));
+      for (let data of oldResults) {
+        context.result.push(convertToClass(data));
       }
-
-      context.result = newResults;
     } else {
-      context.result = Question.fromBack(context.result);
+      context.result = convertToClass(context.result);
     }
+
     return context;
   };
+}
+
+function convertToClass(data: any): Question {
+  if (data.constructor.name === Question.name) return data;
+  else return Question.fromBack(data);
 }
