@@ -1,22 +1,47 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
+import styles from './App.module.scss';
 import apiHandler from './api/apiHandler';
 import { User } from './api/classes/user.class';
 
 async function test() {
+  /*
   let role = await apiHandler.roleService.create({
-    name: 'tetete',
-    icon: 'patate',
-    permissionLevel: 0
+    name: 'user',
+    icon: '',
+    permissionLevel: 10
   });
   console.log(role);
-
+*/
   //console.log(await apiHandler.roleService.get(role.id));
 }
 
 async function test2() {
-  let role = await apiHandler.register({
+  let role = await apiHandler.roleService.getUserRole();
+  //await apiHandler.logout();
+
+  console.log(
+    await apiHandler.login({
+      email: 'mgarnier11@gmail.com',
+      password: 'password'
+    })
+  );
+  console.log(await apiHandler.isAuthenticated());
+
+  //let me = await apiHandler.userservice.
+  /*
+
+  let user = await apiHandler.register({
+    email: 'mgarnier11@gmail.com',
+    name: 'mgarnier11',
+    password: 'password',
+    role: role,
+    gender: 1
+  });
+  console.log(user);
+*/
+  /*
+  let user = await apiHandler.register({
     name: 'test',
     email: 'test@mail.com',
     password: 'test',
@@ -24,6 +49,7 @@ async function test2() {
     gender: 0
   });
   console.log(role);
+  */
 }
 
 async function test3() {
@@ -51,6 +77,7 @@ async function test3() {
 }
 
 async function test4() {
+  /*
   let users = (await apiHandler.userService.find({
     query: { email: 'test@mail.com' }
   })) as User[];
@@ -62,22 +89,23 @@ async function test4() {
     }
   });
   console.log(users2);
+  */
 }
 
 const App: React.FC = () => {
   /*
 
   */
-  test4();
+  test2();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+    <div className={styles.App}>
+      <header className={styles.App_header}>
+        <img src={logo} className={styles.App_logo} alt="logo" />
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
         <a
-          className="App-link"
+          className={styles.App_link}
           href="https://reactjs.org"
           target="_blank"
           rel="noopener noreferrer"

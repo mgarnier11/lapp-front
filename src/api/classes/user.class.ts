@@ -1,10 +1,15 @@
 import { Role, RoleBackModel } from './role.class';
 
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
 export interface UserBackModel {
   _id: string;
   _name: string;
   _email: string;
-  //_password: string;
+  _password: string;
   _role: RoleBackModel;
   _gender: number;
 }
@@ -16,7 +21,7 @@ export class User {
 
   public email: string = '';
 
-  //public password: string = '';
+  public password: string = '';
 
   public role: Role = new Role();
 
@@ -32,7 +37,7 @@ export class User {
     newObj.id = datas._id;
     newObj.name = datas._name;
     newObj.email = datas._email;
-    //newObj.password = datas._password;
+    newObj.password = datas._password;
     newObj.role = Role.fromBack(datas._role);
     newObj.gender = datas._gender;
 
