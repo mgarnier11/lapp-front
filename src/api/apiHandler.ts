@@ -91,16 +91,8 @@ class ApiHandler {
     return response;
   }
 
-  async register(credentials: Partial<User>) {
-    try {
-      console.log(await this.userservice.featherService.create(credentials));
-
-      return null;
-    } catch (error) {
-      console.log(error);
-
-      return error;
-    }
+  async register(userDatas: Partial<User>): Promise<User> {
+    return await this.userservice.featherService.create(userDatas);
   }
 }
 
