@@ -19,7 +19,11 @@ export enum UserActionTypes {
 
 // Declare state types with `readonly` modifier to get compile time immutability.
 // https://github.com/piotrwitek/react-redux-typescript-guide#state-with-type-level-immutability
-export interface AuthState {
+export interface UserState {
   readonly loading: boolean;
-  readonly user: User | undefined;
+  readonly user?: User;
 }
+
+export const defaultUserState: UserState = {
+  loading: false
+};

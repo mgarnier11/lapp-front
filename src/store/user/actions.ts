@@ -32,7 +32,7 @@ export interface Delete {
 }
 
 // Union Action Types
-//export type Action =  Login | Logout | Register;
+export type Action = Login | Logout | Register | Update | Delete;
 
 const actionStartedCreator = (): ActionStarted => {
   return {
@@ -59,7 +59,7 @@ export const login = (
         .then(response => {
           dispatch({
             type: UserActionTypes.LOGIN,
-            user: User.fromBack(response.user)
+            user: response.user
           });
         })
         .catch(error => {

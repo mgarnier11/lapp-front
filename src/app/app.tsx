@@ -1,26 +1,43 @@
 import React from 'react';
-import logo from './logo.svg';
-import styles from './app.module.scss';
+import Header from './components/header/header.component';
 
-const App: React.FC = () => {
-  return (
-    <div className={styles.App}>
-      <header className={styles.App_header}>
-        <img src={logo} className={styles.App_logo} alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className={styles.App_link}
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-};
+import { Switch, Route } from 'react-router';
+
+import apiHandler from '../api/apiHandler';
+import Login from './pages/auth/login/login.page';
+import Home from './pages/home/home.component';
+import Guard from './components/guard.component';
+
+interface StateProps {}
+
+type Props = StateProps;
+
+interface State {}
+
+class App extends React.Component<Props, State> {
+  /**
+   *
+   */
+  constructor(props: Props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {
+    return (
+      <React.Fragment>
+        <Header></Header>
+        <Switch>
+          <Guard minimalPermission={10} path="/home" redirect="/patate">
+            <Home />
+          </Guard>
+          <Route exact path="/login">
+            <Login />
+          </Route>
+        </Switch>
+      </React.Fragment>
+    );
+  }
+}
 
 export default App;

@@ -1,31 +1,36 @@
-import { Reducer } from 'redux';
-import { AuthState, AuthActionTypes } from './types';
+import { combineReducers } from 'redux';
+import { Action } from './actions';
+import { UserState, defaultUserState, UserActionTypes } from './types';
+import { statement } from '@babel/template';
+// States' definition
 
-// Type-safe initialState!
-const initialState: AuthState = {
-  loading: false,
-  user: undefined
-};
+export interface State {
+  user: UserState;
+}
 
-// Thanks to Redux 4's much simpler typings, we can take away a lot of typings on the reducer side,
-// everything will remain type-safe.
-const reducer: Reducer<AuthState> = (state = initialState, action) => {
+const user = (
+  userState: UserState = defaultUserState,
+  action: Action
+): UserState => {
   switch (action.type) {
-    case AuthActionTypes.LOGIN: {
-      return state;
+    case UserActionTypes.LOGIN: {
+      return {
+        ...userState,
+        user: action.user
+      };
     }
-    case AuthActionTypes.LOGOUT: {
-      return state;
+
+    case UserActionTypes.LOGOUT: {
+      return {
+        ...userState,
+        user: undefined
+      };
     }
-    case AuthActionTypes.REGISTER: {
-      return state;
-    }
-    default: {
-      return state;
-    }
+    default:
+      return userState;
   }
 };
 
-// Instead of using default export, we use named exports. That way we can group these exports
-// inside the `index.js` folder.
-export { reducer as authReducer };
+export default combineReducers<State>({
+  user
+});
