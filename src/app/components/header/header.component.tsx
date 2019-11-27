@@ -8,17 +8,29 @@ import IconButton from '@material-ui/core/IconButton';
 import HouseIcon from '@material-ui/icons/Home';
 import { ThunkDispatch } from 'redux-thunk';
 import { Link } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core';
 
 import { UserState } from '../../../store/user/types';
 import { RootState } from '../../../store';
-import { logout, login } from '../../../store/user/actions';
-import { LoginCredentials } from '../../../api/classes/user.class';
-import { useStyle } from '../useStyle.hoc';
-import { styles } from './header.component.style';
+import { logout } from '../../../store/user/actions';
 
-interface OwnProps {
-  classes: any;
-}
+const useStyles = makeStyles(theme => ({
+  menuButton: {
+    marginRight: theme.spacing(2)
+  },
+  title: {
+    flexGrow: 1
+  },
+  userName: {
+    marginRight: '5px'
+  },
+  button: {
+    color: 'inherit',
+    textDecoration: 'none'
+  }
+}));
+
+interface OwnProps {}
 
 interface DispatchProps {
   logout: () => void;
@@ -31,7 +43,7 @@ interface StateProps {
 type Props = StateProps & OwnProps & DispatchProps;
 
 const Header: React.FunctionComponent<Props> = (props: Props) => {
-  const classes = props.classes;
+  const classes = useStyles();
 
   return (
     <AppBar position="static">
@@ -58,7 +70,7 @@ const Header: React.FunctionComponent<Props> = (props: Props) => {
             <Button
               color="inherit"
               onClick={props.logout}
-              className={classes.logButton}
+              className={classes.button}
             >
               Logout
             </Button>
@@ -90,10 +102,7 @@ const mapDispatchToProps = (
   };
 };
 
-export default useStyle(
-  connect<StateProps, DispatchProps, OwnProps, RootState>(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Header),
-  styles
-);
+export default connect<StateProps, DispatchProps, OwnProps, RootState>(
+  mapStateToProps,
+  mapDispatchToProps
+)(Header);

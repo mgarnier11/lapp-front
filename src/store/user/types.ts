@@ -9,7 +9,6 @@ import { User } from '../../api/classes/user.class';
 export enum UserActionTypes {
   ACTION_STARTED = '@@user/ACTION_STARTED',
   ACTION_FAILURE = '@@user/ACTION_FAILURE',
-
   LOGIN = '@@user/LOGIN',
   LOGOUT = '@@user/LOGOUT',
   REGISTER = '@@user/REGISTER',
@@ -22,6 +21,7 @@ export enum UserActionTypes {
 // https://github.com/piotrwitek/react-redux-typescript-guide#state-with-type-level-immutability
 export interface UserState {
   readonly user?: User;
+  readonly loading: boolean;
 }
 
-export const defaultUserState: UserState = {};
+export const defaultUserState: UserState = { loading: false };

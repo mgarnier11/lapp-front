@@ -6,13 +6,12 @@ import { ThunkDispatch } from 'redux-thunk';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {
   Container,
-  CssBaseline,
   Avatar,
   TextField,
   Grid,
-  Link
+  CircularProgress
 } from '@material-ui/core';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 import { UserState } from '../../../../store/user/types';
 import { RootState } from '../../../../store';
@@ -82,11 +81,11 @@ class Login extends React.Component<Props, ComponentState> {
 
   render() {
     const classes = this.props.classes;
+    const loading = this.props.userState.loading;
     let { email, password } = this.state;
 
     return (
       <Container component="main" maxWidth="xs">
-        <CssBaseline />
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
@@ -130,15 +129,15 @@ class Login extends React.Component<Props, ComponentState> {
               fullWidth
               variant="contained"
               color="primary"
+              disabled={loading}
               className={classes.submit}
             >
-              Sign In
+              {loading && <CircularProgress size={24} />}
+              {!loading && 'Sign In'}
             </Button>
             <Grid container>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
+                <Link to="/register">Don't have an account? Sign Up</Link>
               </Grid>
             </Grid>
           </form>

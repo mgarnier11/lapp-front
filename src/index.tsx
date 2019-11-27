@@ -8,7 +8,6 @@ import { SnackbarProvider } from 'notistack';
 import store from './store';
 import App from './app/app';
 import * as serviceWorker from './serviceWorker';
-import { relog } from './store/user/actions';
 
 ReactDOM.render(
   <Provider store={store}>

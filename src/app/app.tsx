@@ -2,18 +2,18 @@ import React from 'react';
 
 import { Switch, Route } from 'react-router';
 
-import apiHandler from '../api/apiHandler';
 import Header from './components/header/header.component';
-
+//import Loading from './components/loading/loading.component';
 import Login from './pages/auth/login/login.page';
 import Home from './pages/home/home.component';
-import Guard from './components/guard.component';
+import Guard from './components/guard/guard.component';
 import Footer from './components/footer/footer.component';
-import Error from './components/error.component';
+import Error from './components/error/error.component';
 import { connect } from 'react-redux';
 import { RootState } from '../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { relog } from '../store/user/actions';
+import { CssBaseline } from '@material-ui/core';
 
 interface OwnProps {}
 
@@ -41,13 +41,18 @@ class App extends React.Component<Props, State> {
   render() {
     return (
       <React.Fragment>
+        <CssBaseline />
+
         <Header />
         <Switch>
-          <Guard minimalPermission={10} path="/home" redirect="/patate">
+          <Guard minimalPermission={0} path="/home" redirect="/patate">
             <Home />
           </Guard>
           <Route exact path="/login">
             <Login />
+          </Route>
+          <Route exact path="/register">
+            register
           </Route>
         </Switch>
         <Footer />
@@ -69,7 +74,7 @@ const mapDispatchToProps = (
 ): DispatchProps => {
   return {
     relog: async () => {
-      await dispatch(relog());
+      await dispatch(relog(false));
     }
   };
 };

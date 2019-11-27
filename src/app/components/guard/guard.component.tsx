@@ -1,10 +1,22 @@
 import React, { ReactChild, ReactPortal, ReactFragment } from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { Link } from 'react-router-dom';
 import { Route, Redirect } from 'react-router-dom';
-import { RootState } from '../../store';
-import { UserState } from '../../store/user/types';
+import { RootState } from '../../../store';
+import { UserState } from '../../../store/user/types';
+import { relog } from '../../../store/user/actions';
+import { makeStyles, CircularProgress } from '@material-ui/core';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: 'flex',
+    '& > * + *': {
+      marginLeft: theme.spacing(2)
+    },
+    justifyContent: 'center',
+    paddingTop: theme.spacing(2)
+  }
+}));
 
 interface OwnProps {
   path: string;
@@ -19,7 +31,9 @@ interface OwnProps {
     | undefined;
 }
 
-interface DispatchProps {}
+interface DispatchProps {
+  relog: () => void;
+}
 
 interface StateProps {
   userState: UserState;
@@ -28,9 +42,14 @@ interface StateProps {
 type Props = StateProps & OwnProps & DispatchProps;
 
 const Guard: React.FunctionComponent<Props> = (props: Props) => {
-  let user = props.userState.user;
+  let { user, loading } = props.userState;
+  const classes = useStyles();
 
-  return (
+  return loading ? (
+    <div className={classes.root}>
+      <CircularProgress />
+    </div>
+  ) : (
     <Route
       path={props.path}
       render={() =>
@@ -58,7 +77,11 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<{}, {}, any>,
   ownProps: OwnProps
 ): DispatchProps => {
-  return {};
+  return {
+    relog: async () => {
+      dispatch(relog(false));
+    }
+  };
 };
 
 export default connect<StateProps, DispatchProps, OwnProps, RootState>(

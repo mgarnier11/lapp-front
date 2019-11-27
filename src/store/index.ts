@@ -1,6 +1,6 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import user, { State as UserState } from './user/reducer';
-import global, { State as GlobalState } from './global/reducer';
+import error, { State as ErrorState } from './error/reducer';
 import thunk from 'redux-thunk';
 
 declare global {
@@ -13,13 +13,13 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export interface RootState {
   user: UserState;
-  global: GlobalState;
+  error: ErrorState;
 }
 
 export default createStore(
   combineReducers<RootState>({
     user,
-    global
+    error
   }),
   composeEnhancers(applyMiddleware(thunk))
 );

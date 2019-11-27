@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import CloseIcon from '@material-ui/icons/Close';
 
-import { RootState } from '../../store';
-import { GlobalState, MyError } from '../../store/global/types';
-import { handleError } from '../../store/global/actions';
+import { RootState } from '../../../store';
+import { ErrorState, MyError } from '../../../store/error/types';
+import { handleError } from '../../../store/error/actions';
 import { IconButton } from '@material-ui/core';
 import { WithSnackbarProps, withSnackbar } from 'notistack';
 
@@ -16,7 +16,7 @@ interface DispatchProps {
 }
 
 interface StateProps {
-  globalState: GlobalState;
+  errorState: ErrorState;
 }
 
 type Props = StateProps & OwnProps & DispatchProps & WithSnackbarProps;
@@ -62,8 +62,8 @@ class Error extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
-    let prevErrors = prevProps.globalState.errors;
-    let errors = this.props.globalState.errors;
+    let prevErrors = prevProps.errorState.errors;
+    let errors = this.props.errorState.errors;
 
     if (prevErrors.length !== errors.length) {
       let newError = errors
@@ -81,7 +81,7 @@ class Error extends React.Component<Props, State> {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    globalState: states.global.global
+    errorState: states.error.error
   };
 };
 

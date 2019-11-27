@@ -10,7 +10,6 @@ import { GameService } from './services/game.service';
 import { QuestionTypeService } from './services/questionType.service';
 import { RoleService } from './services/role.service';
 import { User, LoginCredentials } from './classes/user.class';
-import { AuthenticationResult } from '@feathersjs/authentication/lib';
 
 class ApiHandler {
   //api initialization

@@ -4,9 +4,15 @@ import { AnyAction } from 'redux';
 import { UserActionTypes } from './types';
 import { LoginCredentials, User } from '../../api/classes/user.class';
 import apiHandler from '../../api/apiHandler';
-import { actionFailureCreator, actionStartedCreator } from '../global/actions';
+import { addError } from '../error/actions';
 
 // Action Definition
+export interface ActionStarted {
+  type: UserActionTypes.ACTION_STARTED;
+}
+export interface ActionFailure {
+  type: UserActionTypes.ACTION_FAILURE;
+}
 export interface Login {
   type: UserActionTypes.LOGIN;
   user: User;
@@ -30,7 +36,27 @@ export interface Relog {
 }
 
 // Union Action Types
-export type Action = Login | Logout | Register | Update | Delete | Relog;
+export type Action =
+  | ActionStarted
+  | ActionFailure
+  | Login
+  | Logout
+  | Register
+  | Update
+  | Delete
+  | Relog;
+
+const userActionStartedCreator = (): ActionStarted => {
+  return {
+    type: UserActionTypes.ACTION_STARTED
+  };
+};
+
+const userActionFailureCreator = (): ActionFailure => {
+  return {
+    type: UserActionTypes.ACTION_FAILURE
+  };
+};
 
 // Async Actions
 export const login = (
@@ -40,20 +66,19 @@ export const login = (
     dispatch: ThunkDispatch<{}, {}, AnyAction>
   ): Promise<boolean> => {
     return new Promise<boolean>(resolve => {
-      dispatch(actionStartedCreator());
+      dispatch(userActionStartedCreator());
       apiHandler
         .login(credentials)
         .then(response => {
-          setTimeout(() => {
-            dispatch({
-              type: UserActionTypes.LOGIN,
-              user: response.user
-            });
-            resolve(true);
-          }, 2500);
+          dispatch({
+            type: UserActionTypes.LOGIN,
+            user: response.user
+          });
+          resolve(true);
         })
         .catch(error => {
-          dispatch(actionFailureCreator(error));
+          dispatch(userActionFailureCreator());
+          dispatch(addError(error));
           resolve(false);
         });
     });
@@ -65,7 +90,7 @@ export const register = (
 ): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
     return new Promise<void>(resolve => {
-      dispatch(actionStartedCreator());
+      dispatch(userActionStartedCreator());
       apiHandler
         .register(userDatas)
         .then(user => {
@@ -73,12 +98,12 @@ export const register = (
             type: UserActionTypes.REGISTER,
             user
           });
-          resolve();
         })
         .catch(error => {
-          dispatch(actionFailureCreator(error));
-          resolve();
-        });
+          dispatch(userActionFailureCreator());
+          dispatch(addError(error));
+        })
+        .finally(resolve);
     });
   };
 };
@@ -86,24 +111,27 @@ export const register = (
 export const logout = (): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
     return new Promise<void>(resolve => {
-      dispatch(actionStartedCreator());
+      dispatch(userActionStartedCreator());
       apiHandler
         .logout()
         .then(() => {
           dispatch({ type: UserActionTypes.LOGOUT });
-          resolve();
         })
         .catch(error => {
-          dispatch(actionFailureCreator(error));
-          resolve();
-        });
+          dispatch(userActionFailureCreator());
+          dispatch(addError(error));
+        })
+        .finally(resolve);
     });
   };
 };
 
-export const relog = (): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+export const relog = (
+  dispatchError: boolean
+): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
     return new Promise<void>(resolve => {
+      dispatch(userActionStartedCreator());
       apiHandler
         .reAuthenticate()
         .then(response => {
@@ -113,8 +141,10 @@ export const relog = (): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
           });
         })
         .catch(error => {
-          console.log(error);
-        });
+          dispatch(userActionFailureCreator());
+          if (dispatchError) dispatch(addError(error));
+        })
+        .finally(resolve);
     });
   };
 };
