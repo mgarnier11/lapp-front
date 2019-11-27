@@ -5,7 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import HouseIcon from '@material-ui/icons/Home';
 import { ThunkDispatch } from 'redux-thunk';
 import { Link } from 'react-router-dom';
 
@@ -22,7 +22,6 @@ interface OwnProps {
 
 interface DispatchProps {
   logout: () => void;
-  login: (credentials: LoginCredentials) => void;
 }
 
 interface StateProps {
@@ -43,12 +42,12 @@ const Header: React.FunctionComponent<Props> = (props: Props) => {
           color="inherit"
           aria-label="menu"
         >
-          <MenuIcon />
+          <Link to="/home" className={classes.button}>
+            <HouseIcon />
+          </Link>
         </IconButton>
         <Typography variant="h6" className={classes.title}>
-          <Link to="/home" className={classes.logButton}>
-            News
-          </Link>
+          Patate
         </Typography>
 
         {props.userState.user ? (
@@ -65,18 +64,8 @@ const Header: React.FunctionComponent<Props> = (props: Props) => {
             </Button>
           </React.Fragment>
         ) : (
-          <Link to="/login" className={classes.logButton}>
-            <Button
-              color="inherit"
-              onClick={() => {
-                props.login({
-                  email: 'mgarnier11@gmail.com',
-                  password: 'password'
-                });
-              }}
-            >
-              Login
-            </Button>
+          <Link to="/login" className={classes.button}>
+            <Button className={classes.button}>Login</Button>
           </Link>
         )}
       </Toolbar>
@@ -97,9 +86,6 @@ const mapDispatchToProps = (
   return {
     logout: async () => {
       await dispatch(logout());
-    },
-    login: async (credentials: LoginCredentials) => {
-      await dispatch(login(credentials));
     }
   };
 };

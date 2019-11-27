@@ -26,6 +26,10 @@ const user = (
         user: undefined
       };
     }
+
+    case UserActionTypes.RELOG: {
+      return { ...userState, user: action.user };
+    }
     default:
       return userState;
   }

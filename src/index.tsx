@@ -3,15 +3,19 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { SnackbarProvider } from 'notistack';
 
 import store from './store';
 import App from './app/app';
 import * as serviceWorker from './serviceWorker';
+import { relog } from './store/user/actions';
 
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <App />
+      <SnackbarProvider maxSnack={10}>
+        <App />
+      </SnackbarProvider>
     </BrowserRouter>
   </Provider>,
   document.getElementById('root')

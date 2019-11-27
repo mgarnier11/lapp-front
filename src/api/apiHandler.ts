@@ -52,26 +52,12 @@ class ApiHandler {
   public questionTypeService: QuestionTypeService;
 
   //authentication
-  public async isAuthenticated() {
-    try {
-      let response = await this._feathers.reAuthenticate();
-      if (response.user) return true;
-      else return false;
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
-  }
+  public async reAuthenticate() {
+    let response = await this._feathers.reAuthenticate();
 
-  get authenticatedUser() {
-    return (async () => {
-      try {
-        let response = await this._feathers.reAuthenticate();
-        return User.fromBack(response.user);
-      } catch (error) {
-        return undefined;
-      }
-    })();
+    if (response.user) response.user = User.fromBack(response.user);
+
+    return response;
   }
 
   async logout() {
