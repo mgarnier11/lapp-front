@@ -5,6 +5,7 @@ import { Switch, Route } from 'react-router';
 import Header from './components/header/header.component';
 //import Loading from './components/loading/loading.component';
 import Login from './pages/auth/login/login.page';
+import Register from './pages/auth/register/register.page';
 import Home from './pages/home/home.component';
 import Guard from './components/guard/guard.component';
 import Footer from './components/footer/footer.component';
@@ -52,7 +53,7 @@ class App extends React.Component<Props, State> {
             <Login />
           </Route>
           <Route exact path="/register">
-            register
+            <Register />
           </Route>
         </Switch>
         <Footer />
