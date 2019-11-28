@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Container } from '@material-ui/core';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
+import MaterialTable, { Column } from 'material-table';
 import { RoleState } from '../../../store/role/types';
 import { RootState } from '../../../store';
 import { roleGetAll } from '../../../store/role/actions';
@@ -25,7 +26,17 @@ interface StateProps {
 
 type Props = StateProps & OwnProps & DispatchProps & WithSnackbarProps;
 
-interface ComponentState {}
+interface Row {
+  name: string;
+  surname: string;
+  birthYear: number;
+  birthCity: number;
+}
+
+interface ComponentState {
+  columns: Array<Column<Row>>;
+  data: Row[];
+}
 
 class Register extends React.Component<Props, ComponentState> {
   /**
@@ -34,15 +45,74 @@ class Register extends React.Component<Props, ComponentState> {
   constructor(props: Props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      columns: [
+        { title: 'Name', field: 'name' },
+        {
+          title: 'Permission Level',
+          field: 'permissionLevel',
+          type: 'numeric',
+          editComponent: props => (
+            <input
+              type="number"
+              required={true}
+              value={props.value}
+              onChange={e => props.onChange(e.target.value)}
+            ></input>
+          )
+        }
+      ],
+      data: []
+    };
   }
 
   render() {
     const classes = this.props.classes;
 
     return (
-      <Container component="main" maxWidth="xs">
-        roles
+      <Container component="main">
+        <MaterialTable
+          title="Editable Example"
+          columns={this.state.columns}
+          data={this.state.data}
+          editable={{
+            onRowAdd: newData =>
+              new Promise(resolve => {
+                setTimeout(() => {
+                  resolve();
+                  this.setState(prevState => {
+                    const data = [...prevState.data];
+                    data.push(newData);
+                    return { ...prevState, data };
+                  });
+                }, 600);
+              }),
+            onRowUpdate: (newData, oldData) =>
+              new Promise(resolve => {
+                setTimeout(() => {
+                  resolve();
+                  if (oldData) {
+                    this.setState(prevState => {
+                      const data = [...prevState.data];
+                      data[data.indexOf(oldData)] = newData;
+                      return { ...prevState, data };
+                    });
+                  }
+                }, 600);
+              }),
+            onRowDelete: oldData =>
+              new Promise(resolve => {
+                setTimeout(() => {
+                  resolve();
+                  this.setState(prevState => {
+                    const data = [...prevState.data];
+                    data.splice(data.indexOf(oldData), 1);
+                    return { ...prevState, data };
+                  });
+                }, 600);
+              })
+          }}
+        />
       </Container>
     );
   }
