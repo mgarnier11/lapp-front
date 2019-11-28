@@ -69,7 +69,7 @@ const Guard: React.FunctionComponent<Props> = (props: Props) => {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    userState: states.user.user
+    userState: states.userState.user
   };
 };
 

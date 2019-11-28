@@ -13,11 +13,9 @@ import { makeStyles } from '@material-ui/core';
 import { UserState } from '../../../store/user/types';
 import { RootState } from '../../../store';
 import { logout } from '../../../store/user/actions';
+import { User } from '../../../api/classes/user.class';
 
 const useStyles = makeStyles(theme => ({
-  menuButton: {
-    marginRight: theme.spacing(2)
-  },
   title: {
     flexGrow: 1
   },
@@ -25,6 +23,8 @@ const useStyles = makeStyles(theme => ({
     marginRight: '5px'
   },
   button: {
+    marginRight: '5px',
+    marginLeft: '5px',
     color: 'inherit',
     textDecoration: 'none'
   }
@@ -45,12 +45,45 @@ type Props = StateProps & OwnProps & DispatchProps;
 const Header: React.FunctionComponent<Props> = (props: Props) => {
   const classes = useStyles();
 
+  const user = props.userState.user;
+
+  const userLogged = (user: User) => {
+    return (
+      <React.Fragment>
+        <Typography className={classes.userName}>{user.name}</Typography>
+        <Button
+          color="inherit"
+          onClick={props.logout}
+          className={classes.button}
+        >
+          Logout
+        </Button>
+      </React.Fragment>
+    );
+  };
+
+  const userNotLogged = () => {
+    return (
+      <Link to="/login" className={classes.button}>
+        <Button className={classes.button}>Login</Button>
+      </Link>
+    );
+  };
+
+  const adminLogged = (user: User) => {
+    return (
+      <Link to="/roles" className={classes.button}>
+        <Button className={classes.button}>Roles</Button>
+      </Link>
+    );
+  };
+
   return (
     <AppBar position="static">
       <Toolbar>
         <IconButton
           edge="start"
-          className={classes.menuButton}
+          className={classes.button}
           color="inherit"
           aria-label="menu"
         >
@@ -60,26 +93,10 @@ const Header: React.FunctionComponent<Props> = (props: Props) => {
         </IconButton>
         <Typography variant="h6" className={classes.title}>
           Patate
+          {user && user.role.permissionLevel >= 100 ? adminLogged(user) : <></>}
         </Typography>
 
-        {props.userState.user ? (
-          <React.Fragment>
-            <Typography className={classes.userName}>
-              {props.userState.user.name}
-            </Typography>
-            <Button
-              color="inherit"
-              onClick={props.logout}
-              className={classes.button}
-            >
-              Logout
-            </Button>
-          </React.Fragment>
-        ) : (
-          <Link to="/login" className={classes.button}>
-            <Button className={classes.button}>Login</Button>
-          </Link>
-        )}
+        {user ? userLogged(user) : userNotLogged()}
       </Toolbar>
     </AppBar>
   );
@@ -87,7 +104,7 @@ const Header: React.FunctionComponent<Props> = (props: Props) => {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    userState: states.user.user
+    userState: states.userState.user
   };
 };
 

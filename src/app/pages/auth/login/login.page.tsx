@@ -26,7 +26,7 @@ interface OwnProps {
 }
 
 interface DispatchProps {
-  login: (credentials: LoginCredentials) => void;
+  login: (credentials: LoginCredentials) => Promise<any>;
   logout: () => void;
 }
 
@@ -59,10 +59,16 @@ class Login extends React.Component<Props, ComponentState> {
   onFormLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    this.props.login({
-      email: this.state.email,
-      password: this.state.password
-    });
+    this.props
+      .login({
+        email: this.state.email,
+        password: this.state.password
+      })
+      .then(logged => {
+        console.log(logged);
+
+        if (logged) this.props.history.push('/home');
+      });
   };
 
   handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,12 +78,6 @@ class Login extends React.Component<Props, ComponentState> {
   handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ password: e.target.value });
   };
-
-  componentDidUpdate() {
-    if (this.props.userState.user) {
-      this.props.history.push('/home');
-    }
-  }
 
   render() {
     const classes = this.props.classes;
@@ -149,7 +149,7 @@ class Login extends React.Component<Props, ComponentState> {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    userState: states.user.user
+    userState: states.userState.user
   };
 };
 
@@ -159,7 +159,7 @@ const mapDispatchToProps = (
 ): DispatchProps => {
   return {
     login: async (credentials: LoginCredentials) => {
-      await dispatch(login(credentials));
+      return await dispatch(login(credentials));
     },
     logout: async () => {
       await dispatch(logout());

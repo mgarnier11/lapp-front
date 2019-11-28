@@ -87,9 +87,11 @@ export const login = (
 
 export const register = (
   userDatas: Partial<User>
-): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
-  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-    return new Promise<void>(resolve => {
+): ThunkAction<Promise<boolean>, {}, {}, AnyAction> => {
+  return async (
+    dispatch: ThunkDispatch<{}, {}, AnyAction>
+  ): Promise<boolean> => {
+    return new Promise<boolean>(resolve => {
       dispatch(userActionStartedCreator());
       apiHandler
         .register(userDatas)
@@ -98,12 +100,15 @@ export const register = (
             type: UserActionTypes.REGISTER,
             user
           });
+
+          resolve(true);
         })
         .catch(error => {
           dispatch(userActionFailureCreator());
           dispatch(addError(error));
-        })
-        .finally(resolve);
+
+          resolve(false);
+        });
     });
   };
 };

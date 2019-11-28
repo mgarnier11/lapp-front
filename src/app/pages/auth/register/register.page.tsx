@@ -11,43 +11,55 @@ import {
   Grid,
   CircularProgress,
   FormControlLabel,
-  Checkbox
+  Checkbox,
+  Switch
 } from '@material-ui/core';
 import { withRouter, Link } from 'react-router-dom';
 
 import { UserState } from '../../../../store/user/types';
 import { RootState } from '../../../../store';
-import { LoginCredentials } from '../../../../api/classes/user.class';
-import { login, logout } from '../../../../store/user/actions';
+import { LoginCredentials, User } from '../../../../api/classes/user.class';
+import { login, logout, register } from '../../../../store/user/actions';
 import { useStyle } from '../../../components/useStyle.hoc';
 import { styles } from './register.page.style';
 import { RouterProps } from 'react-router';
 import { Role } from '../../../../api/classes/role.class';
+import { roleGetAll } from '../../../../store/role/actions';
+import { RoleState } from '../../../../store/role/types';
+import { addError } from '../../../../store/error/actions';
+import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 interface OwnProps {
   classes: any;
 }
 
 interface DispatchProps {
-  login: (credentials: LoginCredentials) => void;
+  register: (userDatas: Partial<User>) => Promise<any>;
   logout: () => void;
+  roleGetAll: () => void;
+  addError: (error: any) => void;
 }
 
 interface StateProps {
   userState: UserState;
+  roleState: RoleState;
 }
 
-type Props = StateProps & OwnProps & DispatchProps & RouterProps;
+type Props = StateProps &
+  OwnProps &
+  DispatchProps &
+  RouterProps &
+  WithSnackbarProps;
 
 interface ComponentState {
   email: string;
   password: string;
   name: string;
-  //role: Role;
+  roleId: string;
   gender: number;
 }
 
-class Login extends React.Component<Props, ComponentState> {
+class Register extends React.Component<Props, ComponentState> {
   /**
    *
    */
@@ -58,14 +70,46 @@ class Login extends React.Component<Props, ComponentState> {
       email: '',
       password: '',
       name: '',
+      roleId: '',
       gender: 0
     };
 
     this.props.logout();
   }
 
-  onFormLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  onFormRegisterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (this.state.email && this.state.name && this.state.password) {
+      this.props
+        .register({
+          email: this.state.email,
+          name: this.state.name,
+          password: this.state.password,
+          role: Role.New({ id: this.state.roleId }),
+          gender: this.state.gender
+        })
+        .then(registered => {
+          if (registered) {
+            this.props.enqueueSnackbar(
+              'Successfully registered, you can now log in',
+              {
+                variant: 'success'
+              }
+            );
+
+            this.props.history.push('/login');
+          }
+        });
+    } else {
+      let message = 'not defined';
+
+      if (!this.state.password) message = 'password ' + message;
+      if (!this.state.email) message = 'email ' + message;
+      if (!this.state.name) message = 'name ' + message;
+
+      this.props.addError({ message, code: 1 });
+    }
   };
 
   handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,7 +124,25 @@ class Login extends React.Component<Props, ComponentState> {
     this.setState({ password: e.target.value });
   };
 
-  componentDidUpdate() {}
+  handleGenderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ gender: e.target.checked ? 1 : 0 });
+  };
+
+  componentDidUpdate() {
+    if (this.state.roleId === '') {
+      if (this.props.roleState.roles) {
+        let role = this.props.roleState.roles.find(r => r.name === 'user');
+
+        if (role) {
+          this.setState({
+            roleId: role.id
+          });
+        }
+      } else {
+        if (!this.props.roleState.loading) this.props.roleGetAll();
+      }
+    }
+  }
 
   render() {
     const classes = this.props.classes;
@@ -96,7 +158,11 @@ class Login extends React.Component<Props, ComponentState> {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <form className={classes.form} noValidate>
+          <form
+            className={classes.form}
+            noValidate
+            onSubmit={this.onFormRegisterSubmit}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -137,6 +203,17 @@ class Login extends React.Component<Props, ComponentState> {
                   onChange={this.handlePasswordChange}
                 />
               </Grid>
+              <Grid item xs={12}>
+                <Typography align="center">
+                  Men
+                  <Switch
+                    color="primary"
+                    value={gender !== 0}
+                    onChange={this.handleGenderChange}
+                  />
+                  Women
+                </Typography>
+              </Grid>
             </Grid>
             <Button
               type="submit"
@@ -161,7 +238,8 @@ class Login extends React.Component<Props, ComponentState> {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    userState: states.user.user
+    userState: states.userState.user,
+    roleState: states.roleState.role
   };
 };
 
@@ -170,11 +248,17 @@ const mapDispatchToProps = (
   ownProps: OwnProps
 ): DispatchProps => {
   return {
-    login: async (credentials: LoginCredentials) => {
-      await dispatch(login(credentials));
+    register: async (userDatas: Partial<Role>) => {
+      return await dispatch(register(userDatas));
     },
     logout: async () => {
       await dispatch(logout());
+    },
+    roleGetAll: async () => {
+      await dispatch(roleGetAll());
+    },
+    addError: async (error: any) => {
+      await dispatch(addError(error));
     }
   };
 };
@@ -184,7 +268,7 @@ export default withRouter(
     connect<StateProps, DispatchProps, OwnProps, RootState>(
       mapStateToProps,
       mapDispatchToProps
-    )(Login),
+    )(withSnackbar(Register)),
     styles
   )
 );
