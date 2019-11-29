@@ -4,22 +4,13 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { ThunkDispatch } from 'redux-thunk';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import {
-  Container,
-  Avatar,
-  TextField,
-  Grid,
-  CircularProgress,
-  FormControlLabel,
-  Checkbox,
-  Switch
-} from '@material-ui/core';
+import { Container, Avatar, TextField, Grid, Switch } from '@material-ui/core';
 import { withRouter, Link } from 'react-router-dom';
 
 import { UserState } from '../../../../store/user/types';
 import { RootState } from '../../../../store';
-import { LoginCredentials, User } from '../../../../api/classes/user.class';
-import { login, logout, register } from '../../../../store/user/actions';
+import { User } from '../../../../api/classes/user.class';
+import { logout, register } from '../../../../store/user/actions';
 import { useStyle } from '../../../components/useStyle.hoc';
 import { styles } from './register.page.style';
 import { RouterProps } from 'react-router';
@@ -146,7 +137,6 @@ class Register extends React.Component<Props, ComponentState> {
 
   render() {
     const classes = this.props.classes;
-    const loading = this.props.userState.loading;
     let { email, password, name, gender } = this.state;
 
     return (

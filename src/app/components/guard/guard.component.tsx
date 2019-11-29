@@ -5,9 +5,10 @@ import { Route, Redirect } from 'react-router-dom';
 import { RootState } from '../../../store';
 import { UserState } from '../../../store/user/types';
 import { relog } from '../../../store/user/actions';
-import { makeStyles, CircularProgress } from '@material-ui/core';
+//import { makeStyles } from '@material-ui/core';
 import { Loading } from '../loading/loading.component';
 
+/*
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
@@ -18,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     paddingTop: theme.spacing(2)
   }
 }));
-
+*/
 interface OwnProps {
   path: string;
   redirect: string;
@@ -44,7 +45,7 @@ type Props = StateProps & OwnProps & DispatchProps;
 
 const Guard: React.FunctionComponent<Props> = (props: Props) => {
   let { user, loading } = props.userState;
-  const classes = useStyles();
+  //const classes = useStyles();
 
   return loading ? (
     <Loading />

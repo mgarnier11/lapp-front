@@ -15,8 +15,9 @@ import { connect } from 'react-redux';
 import { RootState } from '../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { relog } from '../store/user/actions';
-import { CssBaseline } from '@material-ui/core';
+import { CssBaseline, Fab, Modal } from '@material-ui/core';
 import { roleGetAll } from '../store/role/actions';
+import { UserState } from '../store/user/types';
 
 interface OwnProps {}
 
@@ -25,11 +26,15 @@ interface DispatchProps {
   roleGetAll: () => void;
 }
 
-interface StateProps {}
+interface StateProps {
+  userState: UserState;
+}
 
 type Props = StateProps & OwnProps & DispatchProps;
 
-interface State {}
+interface State {
+  questionModalOpen: boolean;
+}
 
 class App extends React.Component<Props, State> {
   /**
@@ -37,13 +42,41 @@ class App extends React.Component<Props, State> {
    */
   constructor(props: Props) {
     super(props);
-    this.state = {};
+    this.state = {
+      questionModalOpen: false
+    };
 
     this.props.relog();
     this.props.roleGetAll();
   }
 
+  openQuestionModal = () => {
+    this.setState({ questionModalOpen: true });
+  };
+
+  renderFAB() {
+    return (
+      <Fab
+        variant="extended"
+        className="floating-action-button"
+        color="primary"
+        onClick={this.openQuestionModal}
+      >
+        New Question
+      </Fab>
+    );
+  }
+
+  renderQuestionModal() {
+    return (
+      <Modal open={this.state.questionModalOpen}>
+        <>test</>
+      </Modal>
+    );
+  }
+
   render() {
+    const user = this.props.userState.user;
     return (
       <React.Fragment>
         <CssBaseline />
@@ -65,6 +98,14 @@ class App extends React.Component<Props, State> {
         </Switch>
         <Footer />
         <Error />
+        {user ? (
+          <>
+            {this.renderFAB()}
+            {this.renderQuestionModal()}
+          </>
+        ) : (
+          <></>
+        )}
       </React.Fragment>
     );
   }

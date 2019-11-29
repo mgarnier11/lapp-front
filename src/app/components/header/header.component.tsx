@@ -47,7 +47,7 @@ const Header: React.FunctionComponent<Props> = (props: Props) => {
 
   const user = props.userState.user;
 
-  const userLogged = (user: User) => {
+  const userStateLogged = (user: User) => {
     return (
       <React.Fragment>
         <Typography className={classes.userName}>{user.name}</Typography>
@@ -62,10 +62,18 @@ const Header: React.FunctionComponent<Props> = (props: Props) => {
     );
   };
 
-  const userNotLogged = () => {
+  const userStateNotLogged = () => {
     return (
       <Link to="/login" className={classes.button}>
         <Button className={classes.button}>Login</Button>
+      </Link>
+    );
+  };
+
+  const userLogged = () => {
+    return (
+      <Link to="/questions" className={classes.button}>
+        <Button className={classes.button}>Questions</Button>
       </Link>
     );
   };
@@ -93,10 +101,17 @@ const Header: React.FunctionComponent<Props> = (props: Props) => {
         </IconButton>
         <Typography variant="h6" className={classes.title}>
           Patate
-          {user && user.role.permissionLevel >= 100 ? adminLogged(user) : <></>}
+          {user ? (
+            <>
+              {userLogged()}
+              {user.role.permissionLevel >= 100 ? adminLogged(user) : <></>}
+            </>
+          ) : (
+            <></>
+          )}
         </Typography>
 
-        {user ? userLogged(user) : userNotLogged()}
+        {user ? userStateLogged(user) : userStateNotLogged()}
       </Toolbar>
     </AppBar>
   );

@@ -2,7 +2,7 @@ import * as lodash from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { Container, CircularProgress } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import MaterialTable, { Column } from 'material-table';
 import { RoleState } from '../../../store/role/types';
@@ -129,6 +129,7 @@ class Roles extends React.Component<Props, ComponentState> {
               else reject();
             })
         }}
+        options={{ pageSize: 10, pageSizeOptions: [10] }}
       />
     );
   }

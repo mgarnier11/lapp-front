@@ -30,3 +30,9 @@ footer {
   width: 100%;
   height: 100px;
 }
+
+.floating-action-button {
+  position: fixed !important;
+  right: 5%;
+  bottom: 5%;
+}
