@@ -6,6 +6,7 @@ import { RootState } from '../../../store';
 import { UserState } from '../../../store/user/types';
 import { relog } from '../../../store/user/actions';
 import { makeStyles, CircularProgress } from '@material-ui/core';
+import { Loading } from '../loading/loading.component';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -46,9 +47,7 @@ const Guard: React.FunctionComponent<Props> = (props: Props) => {
   const classes = useStyles();
 
   return loading ? (
-    <div className={classes.root}>
-      <CircularProgress />
-    </div>
+    <Loading />
   ) : (
     <Route
       path={props.path}
