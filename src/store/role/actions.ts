@@ -88,6 +88,8 @@ export const roleUpdate = (
       apiHandler.roleService.featherService
         .update(role.id, role)
         .then(role => {
+          console.log(role);
+
           dispatch({
             type: RoleActionTypes.UPDATE,
             role: role

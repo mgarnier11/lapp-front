@@ -42,6 +42,9 @@ const role = (
 
     case RoleActionTypes.UPDATE: {
       if (roleState.roles) {
+        console.log(JSON.parse(JSON.stringify(roleState.roles)));
+        console.log(JSON.parse(JSON.stringify(action.role)));
+
         return {
           ...roleState,
           roles: roleState.roles.map(role =>

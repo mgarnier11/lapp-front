@@ -1,3 +1,4 @@
+import * as lodash from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
@@ -38,10 +39,10 @@ type Props = StateProps & OwnProps & DispatchProps & WithSnackbarProps;
 
 interface ComponentState {
   columns: Array<Column<Role>>;
-  data: Role[];
+  roles: Role[];
 }
 
-class Register extends React.Component<Props, ComponentState> {
+class Roles extends React.Component<Props, ComponentState> {
   /**
    *
    */
@@ -59,7 +60,7 @@ class Register extends React.Component<Props, ComponentState> {
           emptyValue: '0'
         }
       ],
-      data: []
+      roles: []
     };
   }
 
@@ -69,52 +70,67 @@ class Register extends React.Component<Props, ComponentState> {
     }
   }
 
+  static getDerivedStateFromProps(nextProps: Props, prevState: ComponentState) {
+    let nextRoles = nextProps.roleState.roles;
+    if (nextRoles) {
+      let prevRoles = prevState.roles;
+
+      if (!Role.CompareArrays(nextRoles, prevRoles)) {
+        return {
+          roles: lodash.cloneDeep(nextRoles)
+        };
+      }
+    }
+
+    return null;
+  }
+
   render() {
     const classes = this.props.classes;
 
     return (
       <Container component="main" className={classes.root}>
-        {this.props.roleState.roles ? this.renderTable() : this.renderLoading()}
+        {this.props.roleState.roles
+          ? this.renderTable(this.state.roles)
+          : this.renderLoading()}
       </Container>
     );
   }
 
-  renderTable() {
-    if (this.props.roleState.roles) {
-      return (
-        <MaterialTable
-          title="Role Table"
-          columns={this.state.columns}
-          data={this.props.roleState.roles}
-          editable={{
-            onRowAdd: newData =>
-              new Promise(async (resolve, reject) => {
-                let newRole = Role.New(newData);
-                let created = await this.props.roleCreate(newRole);
-                if (created) resolve();
-                else reject();
-              }),
-            onRowUpdate: (newData, oldData) =>
-              new Promise(async (resolve, reject) => {
-                if ((newData as any).permissionLevel.length > 0)
-                  newData.permissionLevel = parseInt(
-                    (newData as any).permissionLevel
-                  );
-                let updatedRole = Role.New(newData);
-                let updated = await this.props.roleUpdate(updatedRole);
-                if (updated) resolve();
-                else reject();
-              }),
-            onRowDelete: oldData =>
-              new Promise(async (resolve, reject) => {
-                let deleted = await this.props.roleRemove(oldData.id);
-                if (deleted) resolve();
-                else reject();
-              })
-          }}
-        />
-      );
-    }
+  renderTable(roles: Role[]) {
+    return (
+      <MaterialTable
+        title="Role Table"
+        columns={this.state.columns}
+        data={roles}
+        editable={{
+          onRowAdd: newData =>
+            new Promise(async (resolve, reject) => {
+              let newRole = Role.New(newData);
+              let created = await this.props.roleCreate(newRole);
+              if (created) resolve();
+              else reject();
+            }),
+          onRowUpdate: (newData, oldData) =>
+            new Promise(async (resolve, reject) => {
+              if ((newData as any).permissionLevel.length > 0)
+                newData.permissionLevel = parseInt(
+                  (newData as any).permissionLevel
+                );
+              let updatedRole = Role.New(newData);
+              let updated = await this.props.roleUpdate(updatedRole);
+              if (updated) resolve();
+              else reject();
+            }),
+          onRowDelete: oldData =>
+            new Promise(async (resolve, reject) => {
+              let deleted = await this.props.roleRemove(oldData.id);
+              if (deleted) resolve();
+              else reject();
+            })
+        }}
+      />
+    );
   }
 
   renderLoading() {
@@ -155,6 +171,6 @@ export default useStyle(
   connect<StateProps, DispatchProps, OwnProps, RootState>(
     mapStateToProps,
     mapDispatchToProps
-  )(withSnackbar(Register)),
+  )(withSnackbar(Roles)),
   styles
 );
