@@ -20,4 +20,14 @@ export class QuestionType {
 
     return newObj;
   }
+
+  public static CompareArrays(
+    arr1: QuestionType[],
+    arr2: QuestionType[]
+  ): boolean {
+    return (
+      arr1.length === arr2.length &&
+      arr1.every((e, i) => e.id === arr2[i].id && e.name === arr2[i].name)
+    );
+  }
 }

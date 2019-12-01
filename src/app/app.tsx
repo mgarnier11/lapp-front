@@ -11,6 +11,8 @@ import Guard from './components/guard/guard.component';
 import Footer from './components/footer/footer.component';
 import Error from './components/error/error.component';
 import Roles from './pages/roles/roles.page';
+import QuestionTypes from './pages/questionTypes/question-types.page';
+
 import { connect } from 'react-redux';
 import { RootState } from '../store';
 import { ThunkDispatch } from 'redux-thunk';
@@ -88,6 +90,9 @@ class App extends React.Component<Props, State> {
           </Guard>
           <Guard minimalPermission={100} path="/roles" redirect="/home">
             <Roles />
+          </Guard>
+          <Guard minimalPermission={100} path="/questionTypes" redirect="/home">
+            <QuestionTypes />
           </Guard>
           <Route exact path="/login">
             <Login />

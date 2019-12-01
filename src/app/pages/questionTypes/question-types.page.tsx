@@ -5,18 +5,18 @@ import { ThunkDispatch } from 'redux-thunk';
 import { Container } from '@material-ui/core';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import MaterialTable, { Column } from 'material-table';
-import { RoleState } from '../../../store/role/types';
+import { QuestionTypeState } from '../../../store/questionType/types';
 import { RootState } from '../../../store';
 import {
-  roleGetAll,
-  roleCreate,
-  roleUpdate,
-  roleRemove
-} from '../../../store/role/actions';
+  questionTypeGetAll,
+  questionTypeCreate,
+  questionTypeUpdate,
+  questionTypeRemove
+} from '../../../store/questionType/actions';
 import { addError } from '../../../store/error/actions';
 import { useStyle } from '../../components/useStyle.hoc';
-import { styles } from './roles.page.style';
-import { Role } from '../../../api/classes/role.class';
+import { styles } from './question-types.page.style';
+import { QuestionType } from '../../../api/classes/questionType.class';
 import { Loading } from '../../components/loading/loading.component';
 
 interface OwnProps {
@@ -24,25 +24,25 @@ interface OwnProps {
 }
 
 interface DispatchProps {
-  roleCreate: (role: Partial<Role>) => Promise<any>;
-  roleUpdate: (role: Role) => Promise<any>;
-  roleRemove: (roleId: string) => Promise<any>;
-  roleGetAll: () => void;
+  questionTypeCreate: (questionType: Partial<QuestionType>) => Promise<any>;
+  questionTypeUpdate: (questionType: QuestionType) => Promise<any>;
+  questionTypeRemove: (questionTypeId: string) => Promise<any>;
+  questionTypeGetAll: () => void;
   addError: (error: any) => void;
 }
 
 interface StateProps {
-  roleState: RoleState;
+  questionTypeState: QuestionTypeState;
 }
 
 type Props = StateProps & OwnProps & DispatchProps & WithSnackbarProps;
 
 interface ComponentState {
-  columns: Array<Column<Role>>;
-  roles: Role[];
+  columns: Array<Column<QuestionType>>;
+  questionTypes: QuestionType[];
 }
 
-class Roles extends React.Component<Props, ComponentState> {
+class QuestionTypes extends React.Component<Props, ComponentState> {
   /**
    *
    */
@@ -50,23 +50,17 @@ class Roles extends React.Component<Props, ComponentState> {
     super(props);
 
     this.state = {
-      columns: [
-        { title: 'Name', field: 'name' },
-        { title: 'Icon', field: 'icon' },
-        {
-          title: 'Permission Level',
-          field: 'permissionLevel',
-          type: 'numeric',
-          emptyValue: '0'
-        }
-      ],
-      roles: []
+      columns: [{ title: 'Name', field: 'name' }],
+      questionTypes: []
     };
   }
 
   reloadDatas() {
-    if (!this.props.roleState.roles && !this.props.roleState.loading) {
-      this.props.roleGetAll();
+    if (
+      !this.props.questionTypeState.questionTypes &&
+      !this.props.questionTypeState.loading
+    ) {
+      this.props.questionTypeGetAll();
     }
   }
 
@@ -79,13 +73,13 @@ class Roles extends React.Component<Props, ComponentState> {
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: ComponentState) {
-    let nextRoles = nextProps.roleState.roles;
-    if (nextRoles) {
-      let prevRoles = prevState.roles;
+    let nextQuestionTypes = nextProps.questionTypeState.questionTypes;
+    if (nextQuestionTypes) {
+      let prevQuestionTypes = prevState.questionTypes;
 
-      if (!Role.CompareArrays(nextRoles, prevRoles)) {
+      if (!QuestionType.CompareArrays(nextQuestionTypes, prevQuestionTypes)) {
         return {
-          roles: lodash.cloneDeep(nextRoles)
+          questionTypes: lodash.cloneDeep(nextQuestionTypes)
         };
       }
     }
@@ -98,41 +92,41 @@ class Roles extends React.Component<Props, ComponentState> {
 
     return (
       <Container component="main" className={classes.root}>
-        {this.props.roleState.roles
-          ? this.renderTable(this.state.roles)
+        {this.props.questionTypeState.questionTypes
+          ? this.renderTable(this.state.questionTypes)
           : this.renderLoading()}
       </Container>
     );
   }
 
-  renderTable(roles: Role[]) {
+  renderTable(questionTypes: QuestionType[]) {
     return (
       <MaterialTable
-        title="Role Table"
+        title="QuestionType Table"
         columns={this.state.columns}
-        data={roles}
+        data={questionTypes}
         editable={{
           onRowAdd: newData =>
             new Promise(async (resolve, reject) => {
-              let newRole = Role.New(newData);
-              let created = await this.props.roleCreate(newRole);
+              let newQuestionType = QuestionType.New(newData);
+              let created = await this.props.questionTypeCreate(
+                newQuestionType
+              );
               if (created) resolve();
               else reject();
             }),
           onRowUpdate: (newData, oldData) =>
             new Promise(async (resolve, reject) => {
-              if ((newData as any).permissionLevel.length > 0)
-                newData.permissionLevel = parseInt(
-                  (newData as any).permissionLevel
-                );
-              let updatedRole = Role.New(newData);
-              let updated = await this.props.roleUpdate(updatedRole);
+              let updatedQuestionType = QuestionType.New(newData);
+              let updated = await this.props.questionTypeUpdate(
+                updatedQuestionType
+              );
               if (updated) resolve();
               else reject();
             }),
           onRowDelete: oldData =>
             new Promise(async (resolve, reject) => {
-              let deleted = await this.props.roleRemove(oldData.id);
+              let deleted = await this.props.questionTypeRemove(oldData.id);
               if (deleted) resolve();
               else reject();
             })
@@ -149,7 +143,7 @@ class Roles extends React.Component<Props, ComponentState> {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    roleState: states.roleState.role
+    questionTypeState: states.questionTypeState.questionType
   };
 };
 
@@ -158,17 +152,17 @@ const mapDispatchToProps = (
   ownProps: OwnProps
 ): DispatchProps => {
   return {
-    roleCreate: async (role: Partial<Role>) => {
-      return await dispatch(roleCreate(role));
+    questionTypeCreate: async (questionType: Partial<QuestionType>) => {
+      return await dispatch(questionTypeCreate(questionType));
     },
-    roleUpdate: async (role: Role) => {
-      return await dispatch(roleUpdate(role));
+    questionTypeUpdate: async (questionType: QuestionType) => {
+      return await dispatch(questionTypeUpdate(questionType));
     },
-    roleRemove: async (roleId: string) => {
-      return await dispatch(roleRemove(roleId));
+    questionTypeRemove: async (questionTypeId: string) => {
+      return await dispatch(questionTypeRemove(questionTypeId));
     },
-    roleGetAll: async () => {
-      await dispatch(roleGetAll());
+    questionTypeGetAll: async () => {
+      await dispatch(questionTypeGetAll());
     },
     addError: async (error: any) => {
       await dispatch(addError(error));
@@ -180,6 +174,6 @@ export default useStyle(
   connect<StateProps, DispatchProps, OwnProps, RootState>(
     mapStateToProps,
     mapDispatchToProps
-  )(withSnackbar(Roles)),
+  )(withSnackbar(QuestionTypes)),
   styles
 );

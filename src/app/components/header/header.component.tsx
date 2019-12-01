@@ -80,9 +80,14 @@ const Header: React.FunctionComponent<Props> = (props: Props) => {
 
   const adminLogged = (user: User) => {
     return (
-      <Link to="/roles" className={classes.button}>
-        <Button className={classes.button}>Roles</Button>
-      </Link>
+      <>
+        <Link to="/roles" className={classes.button}>
+          <Button className={classes.button}>Roles</Button>
+        </Link>
+        <Link to="/questionTypes" className={classes.button}>
+          <Button className={classes.button}>Question Types</Button>
+        </Link>
+      </>
     );
   };
 

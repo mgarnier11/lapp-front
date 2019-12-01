@@ -40,7 +40,7 @@ class ApiHandler {
     );
     this.gameService = new GameService(this._feathers.service('games'));
     this.questionTypeService = new QuestionTypeService(
-      this._feathers.service('questionTypes')
+      this._feathers.service('question-types')
     );
   }
 
