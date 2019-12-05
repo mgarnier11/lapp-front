@@ -12,18 +12,40 @@ import {
   CircularProgress
 } from '@material-ui/core';
 import { withRouter, Link } from 'react-router-dom';
+import { RouterProps } from 'react-router';
+import {
+  StyleRules,
+  Theme,
+  withStyles,
+  WithStyles
+} from '@material-ui/core/styles';
 
 import { UserState } from '../../../../store/user/types';
 import { RootState } from '../../../../store';
 import { LoginCredentials } from '../../../../api/classes/user.class';
 import { login, logout } from '../../../../store/user/actions';
-import { useStyle } from '../../../components/useStyle.hoc';
-import { styles } from './login.component.style';
-import { RouterProps } from 'react-router';
 
-interface OwnProps {
-  classes: any;
-}
+const styles = (theme: Theme): StyleRules => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1)
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2)
+  }
+});
+
+interface OwnProps {}
 
 interface DispatchProps {
   login: (credentials: LoginCredentials) => Promise<any>;
@@ -34,7 +56,11 @@ interface StateProps {
   userState: UserState;
 }
 
-type Props = StateProps & OwnProps & DispatchProps & RouterProps;
+type Props = StateProps &
+  OwnProps &
+  DispatchProps &
+  RouterProps &
+  WithStyles<typeof styles>;
 
 interface ComponentState {
   email: string;
@@ -168,11 +194,8 @@ const mapDispatchToProps = (
 };
 
 export default withRouter(
-  useStyle(
-    connect<StateProps, DispatchProps, OwnProps, RootState>(
-      mapStateToProps,
-      mapDispatchToProps
-    )(Login),
-    styles
-  )
+  connect<StateProps, DispatchProps, OwnProps, RootState>(
+    mapStateToProps,
+    mapDispatchToProps
+  )(withStyles(styles)(Login))
 );

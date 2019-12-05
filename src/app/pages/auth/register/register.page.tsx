@@ -5,14 +5,20 @@ import Button from '@material-ui/core/Button';
 import { ThunkDispatch } from 'redux-thunk';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { Container, Avatar, TextField, Grid, Switch } from '@material-ui/core';
+import {
+  withStyles,
+  WithStyles,
+  createStyles,
+  StyleRules,
+  Theme
+} from '@material-ui/core/styles';
+
 import { withRouter, Link } from 'react-router-dom';
 
 import { UserState } from '../../../../store/user/types';
 import { RootState } from '../../../../store';
 import { User } from '../../../../api/classes/user.class';
 import { logout, register } from '../../../../store/user/actions';
-import { useStyle } from '../../../components/useStyle.hoc';
-import { styles } from './register.page.style';
 import { RouterProps } from 'react-router';
 import { Role } from '../../../../api/classes/role.class';
 import { roleGetAll } from '../../../../store/role/actions';
@@ -20,9 +26,28 @@ import { RoleState } from '../../../../store/role/types';
 import { addError } from '../../../../store/error/actions';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 
-interface OwnProps {
-  classes: any;
-}
+const styles = (theme: Theme): StyleRules =>
+  createStyles({
+    paper: {
+      marginTop: theme.spacing(8),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
+    },
+    avatar: {
+      margin: theme.spacing(1),
+      backgroundColor: theme.palette.secondary.main
+    },
+    form: {
+      width: '100%', // Fix IE 11 issue.
+      marginTop: theme.spacing(1)
+    },
+    submit: {
+      margin: theme.spacing(3, 0, 2)
+    }
+  });
+
+interface OwnProps {}
 
 interface DispatchProps {
   register: (userDatas: Partial<User>) => Promise<any>;
@@ -40,7 +65,8 @@ type Props = StateProps &
   OwnProps &
   DispatchProps &
   RouterProps &
-  WithSnackbarProps;
+  WithSnackbarProps &
+  WithStyles<typeof styles>;
 
 interface ComponentState {
   email: string;
@@ -254,11 +280,8 @@ const mapDispatchToProps = (
 };
 
 export default withRouter(
-  useStyle(
-    connect<StateProps, DispatchProps, OwnProps, RootState>(
-      mapStateToProps,
-      mapDispatchToProps
-    )(withSnackbar(Register)),
-    styles
-  )
+  connect<StateProps, DispatchProps, OwnProps, RootState>(
+    mapStateToProps,
+    mapDispatchToProps
+  )(withStyles(styles)(withSnackbar(Register)))
 );

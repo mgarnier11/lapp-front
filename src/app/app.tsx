@@ -12,6 +12,7 @@ import Footer from './components/footer/footer.component';
 import Error from './components/error/error.component';
 import Roles from './pages/roles/roles.page';
 import QuestionTypes from './pages/questionTypes/question-types.page';
+import QuestionNewComponent from './components/question/new/question.new.component';
 
 import { connect } from 'react-redux';
 import { RootState } from '../store';
@@ -56,6 +57,10 @@ class App extends React.Component<Props, State> {
     this.setState({ questionModalOpen: true });
   };
 
+  closeQuestionModal = () => {
+    this.setState({ questionModalOpen: false });
+  };
+
   renderFAB() {
     return (
       <Fab
@@ -71,8 +76,11 @@ class App extends React.Component<Props, State> {
 
   renderQuestionModal() {
     return (
-      <Modal open={this.state.questionModalOpen}>
-        <>test</>
+      <Modal
+        open={this.state.questionModalOpen}
+        onClose={this.closeQuestionModal}
+      >
+        <QuestionNewComponent />
       </Modal>
     );
   }

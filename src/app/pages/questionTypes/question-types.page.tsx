@@ -5,6 +5,14 @@ import { ThunkDispatch } from 'redux-thunk';
 import { Container } from '@material-ui/core';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import MaterialTable, { Column } from 'material-table';
+import {
+  withStyles,
+  WithStyles,
+  StyleRules,
+  createStyles,
+  Theme
+} from '@material-ui/core/styles';
+
 import { QuestionTypeState } from '../../../store/questionType/types';
 import { RootState } from '../../../store';
 import {
@@ -14,14 +22,17 @@ import {
   questionTypeRemove
 } from '../../../store/questionType/actions';
 import { addError } from '../../../store/error/actions';
-import { useStyle } from '../../components/useStyle.hoc';
-import { styles } from './question-types.page.style';
 import { QuestionType } from '../../../api/classes/questionType.class';
 import { Loading } from '../../components/loading/loading.component';
 
-interface OwnProps {
-  classes: any;
-}
+const styles = (theme: Theme): StyleRules =>
+  createStyles({
+    root: {
+      paddingTop: theme.spacing(2)
+    }
+  });
+
+interface OwnProps {}
 
 interface DispatchProps {
   questionTypeCreate: (questionType: Partial<QuestionType>) => Promise<any>;
@@ -35,7 +46,11 @@ interface StateProps {
   questionTypeState: QuestionTypeState;
 }
 
-type Props = StateProps & OwnProps & DispatchProps & WithSnackbarProps;
+type Props = StateProps &
+  OwnProps &
+  DispatchProps &
+  WithSnackbarProps &
+  WithStyles<typeof styles>;
 
 interface ComponentState {
   columns: Array<Column<QuestionType>>;
@@ -170,10 +185,7 @@ const mapDispatchToProps = (
   };
 };
 
-export default useStyle(
-  connect<StateProps, DispatchProps, OwnProps, RootState>(
-    mapStateToProps,
-    mapDispatchToProps
-  )(withSnackbar(QuestionTypes)),
-  styles
-);
+export default connect<StateProps, DispatchProps, OwnProps, RootState>(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(withSnackbar(QuestionTypes)));
