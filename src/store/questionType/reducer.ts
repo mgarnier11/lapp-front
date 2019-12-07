@@ -83,8 +83,6 @@ const questionType = (
     }
 
     case QuestionTypeActionTypes.GETALL: {
-      console.log(action);
-
       return {
         ...questionTypeState,
         questionTypes: action.questionTypes,

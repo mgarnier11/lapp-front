@@ -5,6 +5,7 @@ import role, { State as RoleState } from './role/reducer';
 import questionType, {
   State as QuestionTypeState
 } from './questionType/reducer';
+import question, { State as QuestionState } from './question/reducer';
 import thunk from 'redux-thunk';
 
 declare global {
@@ -20,6 +21,7 @@ export interface RootState {
   errorState: ErrorState;
   roleState: RoleState;
   questionTypeState: QuestionTypeState;
+  questionState: QuestionState;
 }
 
 export default createStore(
@@ -27,7 +29,8 @@ export default createStore(
     userState: user,
     errorState: error,
     roleState: role,
-    questionTypeState: questionType
+    questionTypeState: questionType,
+    questionState: question
   }),
   composeEnhancers(applyMiddleware(thunk))
 );

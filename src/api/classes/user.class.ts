@@ -37,7 +37,6 @@ export class User {
     newObj.id = datas._id;
     newObj.name = datas._name;
     newObj.email = datas._email;
-    newObj.password = datas._password;
     newObj.role = Role.fromBack(datas._role);
     newObj.gender = datas._gender;
 

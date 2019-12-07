@@ -42,6 +42,12 @@ class ApiHandler {
     this.questionTypeService = new QuestionTypeService(
       this._feathers.service('question-types')
     );
+
+    this.services = [
+      {
+        roleService: this.roleService
+      }
+    ];
   }
 
   public roleService: RoleService;
@@ -49,6 +55,10 @@ class ApiHandler {
   public questionService: QuestionService;
   public gameService: GameService;
   public questionTypeService: QuestionTypeService;
+
+  public services: {
+    [key: string]: RoleService;
+  }[];
 
   //authentication
   public async reAuthenticate() {

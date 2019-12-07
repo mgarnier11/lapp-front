@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router';
 
 import Header from './components/header/header.component';
@@ -10,17 +10,19 @@ import Home from './pages/home/home.page';
 import Guard from './components/guard/guard.component';
 import Footer from './components/footer/footer.component';
 import Error from './components/error/error.component';
+import Success from './components/success/success.component';
 import Roles from './pages/roles/roles.page';
 import QuestionTypes from './pages/questionTypes/question-types.page';
 import QuestionNewComponent from './components/question/new/question.new.component';
 
-import { connect } from 'react-redux';
 import { RootState } from '../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { relog } from '../store/user/actions';
 import { CssBaseline, Fab, Modal } from '@material-ui/core';
 import { roleGetAll } from '../store/role/actions';
 import { UserState } from '../store/user/types';
+import apiHandler from '../api/apiHandler';
+import { Question } from '../api/classes/question.class';
 
 interface OwnProps {}
 
@@ -51,6 +53,28 @@ class App extends React.Component<Props, State> {
 
     this.props.relog();
     this.props.roleGetAll();
+
+    this.questionSuccessfullyCreated = this.questionSuccessfullyCreated.bind(
+      this
+    );
+  }
+
+  componentDidMount() {
+    apiHandler.questionService.featherService.on(
+      'created',
+      this.questionSuccessfullyCreated
+    );
+  }
+
+  componentWillUnmount() {
+    apiHandler.questionService.featherService.off(
+      'created',
+      this.questionSuccessfullyCreated
+    );
+  }
+
+  questionSuccessfullyCreated(q: Question) {
+    this.closeQuestionModal();
   }
 
   openQuestionModal = () => {
