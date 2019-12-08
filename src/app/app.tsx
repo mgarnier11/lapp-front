@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route } from 'react-router';
+import { Switch, Route, Redirect, withRouter } from 'react-router';
+import { RouteComponentProps } from 'react-router';
 
 import Header from './components/header/header.component';
 //import Loading from './components/loading/loading.component';
@@ -13,6 +14,7 @@ import Error from './components/error/error.component';
 import Success from './components/success/success.component';
 import Roles from './pages/roles/roles.page';
 import QuestionTypes from './pages/questionTypes/question-types.page';
+import Questions from './pages/questions/questions.page';
 import QuestionNewComponent from './components/question/new/question.new.component';
 
 import { RootState } from '../store';
@@ -23,6 +25,7 @@ import { roleGetAll } from '../store/role/actions';
 import { UserState } from '../store/user/types';
 import apiHandler from '../api/apiHandler';
 import { Question } from '../api/classes/question.class';
+import apiEventsHandler from '../store/apiEventsHandler';
 
 interface OwnProps {}
 
@@ -35,10 +38,11 @@ interface StateProps {
   userState: UserState;
 }
 
-type Props = StateProps & OwnProps & DispatchProps;
+type Props = StateProps & OwnProps & DispatchProps & RouteComponentProps;
 
 interface State {
   questionModalOpen: boolean;
+  gameModalOpen: boolean;
 }
 
 class App extends React.Component<Props, State> {
@@ -48,7 +52,8 @@ class App extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      questionModalOpen: false
+      questionModalOpen: false,
+      gameModalOpen: false
     };
 
     this.props.relog();
@@ -64,6 +69,8 @@ class App extends React.Component<Props, State> {
       'created',
       this.questionSuccessfullyCreated
     );
+
+    apiEventsHandler.bindEvents();
   }
 
   componentWillUnmount() {
@@ -71,6 +78,8 @@ class App extends React.Component<Props, State> {
       'created',
       this.questionSuccessfullyCreated
     );
+
+    apiEventsHandler.unbindEvents();
   }
 
   questionSuccessfullyCreated(q: Question) {
@@ -85,7 +94,15 @@ class App extends React.Component<Props, State> {
     this.setState({ questionModalOpen: false });
   };
 
-  renderFAB() {
+  openGameModal = () => {
+    this.setState({ gameModalOpen: true });
+  };
+
+  closeGameModal = () => {
+    this.setState({ gameModalOpen: false });
+  };
+
+  renderQuestionFAB() {
     return (
       <Fab
         variant="extended"
@@ -94,6 +111,19 @@ class App extends React.Component<Props, State> {
         onClick={this.openQuestionModal}
       >
         New Question
+      </Fab>
+    );
+  }
+
+  renderGameFAB() {
+    return (
+      <Fab
+        variant="extended"
+        className="floating-action-button"
+        color="primary"
+        onClick={this.openGameModal}
+      >
+        New Game
       </Fab>
     );
   }
@@ -109,6 +139,24 @@ class App extends React.Component<Props, State> {
     );
   }
 
+  renderGameModal() {
+    return (
+      <Modal open={this.state.gameModalOpen} onClose={this.closeGameModal}>
+        <>Game Modal</>
+      </Modal>
+    );
+  }
+
+  renderFAB() {
+    switch (this.props.location.pathname) {
+      case '/questions':
+        return this.renderQuestionFAB();
+
+      default:
+        return this.renderGameFAB();
+    }
+  }
+
   render() {
     const user = this.props.userState.user;
     return (
@@ -117,8 +165,11 @@ class App extends React.Component<Props, State> {
 
         <Header />
         <Switch>
-          <Guard minimalPermission={0} path="/home" redirect="/">
+          <Guard minimalPermission={NaN} path="/home" redirect="/">
             <Home />
+          </Guard>
+          <Guard minimalPermission={0} path="/questions" redirect="/">
+            <Questions />
           </Guard>
           <Guard minimalPermission={100} path="/roles" redirect="/home">
             <Roles />
@@ -132,6 +183,7 @@ class App extends React.Component<Props, State> {
           <Route exact path="/register">
             <Register />
           </Route>
+          <Redirect from="*" to="/home" />
         </Switch>
         <Footer />
         <Success />
@@ -140,6 +192,7 @@ class App extends React.Component<Props, State> {
           <>
             {this.renderFAB()}
             {this.renderQuestionModal()}
+            {this.renderGameModal()}
           </>
         ) : (
           <></>
@@ -169,7 +222,9 @@ const mapDispatchToProps = (
   };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, RootState>(
-  mapStateToProps,
-  mapDispatchToProps
-)(App);
+export default withRouter(
+  connect<StateProps, DispatchProps, OwnProps, RootState>(
+    mapStateToProps,
+    mapDispatchToProps
+  )(App)
+);

@@ -8,14 +8,21 @@ import IconButton from '@material-ui/core/IconButton';
 import HouseIcon from '@material-ui/icons/Home';
 import { ThunkDispatch } from 'redux-thunk';
 import { Link } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Hidden, CssBaseline } from '@material-ui/core';
 
 import { UserState } from '../../../store/user/types';
 import { RootState } from '../../../store';
 import { logout } from '../../../store/user/actions';
-import { User } from '../../../api/classes/user.class';
+import ToolbarDesktop from './toolbar.desktop';
+import ToolbarMobile from './toolbar.mobile';
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    display: 'flex'
+  },
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1000
+  },
   title: {
     flexGrow: 1
   },
@@ -27,7 +34,16 @@ const useStyles = makeStyles(theme => ({
     marginLeft: '5px',
     color: 'inherit',
     textDecoration: 'none'
-  }
+  },
+  drawerPaper: {
+    background: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText
+  },
+  listItem: {
+    paddingTop: 0,
+    paddingBottom: 0
+  },
+  toolbar: theme.mixins.toolbar
 }));
 
 interface OwnProps {}
@@ -47,78 +63,39 @@ const Header: React.FunctionComponent<Props> = (props: Props) => {
 
   const user = props.userState.user;
 
-  const userStateLogged = (user: User) => {
-    return (
-      <React.Fragment>
-        <Typography className={classes.userName}>{user.name}</Typography>
-        <Button
-          color="inherit"
-          onClick={props.logout}
-          className={classes.button}
-        >
-          Logout
-        </Button>
-      </React.Fragment>
-    );
-  };
-
-  const userStateNotLogged = () => {
-    return (
-      <Link to="/login" className={classes.button}>
-        <Button className={classes.button}>Login</Button>
-      </Link>
-    );
-  };
-
-  const userLogged = () => {
-    return (
-      <Link to="/questions" className={classes.button}>
-        <Button className={classes.button}>Questions</Button>
-      </Link>
-    );
-  };
-
-  const adminLogged = (user: User) => {
-    return (
-      <>
-        <Link to="/roles" className={classes.button}>
-          <Button className={classes.button}>Roles</Button>
-        </Link>
-        <Link to="/questionTypes" className={classes.button}>
-          <Button className={classes.button}>Question Types</Button>
-        </Link>
-      </>
-    );
-  };
-
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <IconButton
-          edge="start"
-          className={classes.button}
-          color="inherit"
-          aria-label="menu"
-        >
-          <Link to="/home" className={classes.button}>
-            <HouseIcon />
-          </Link>
-        </IconButton>
-        <Typography variant="h6" className={classes.title}>
-          Patate
-          {user ? (
-            <>
-              {userLogged()}
-              {user.role.permissionLevel >= 100 ? adminLogged(user) : <></>}
-            </>
-          ) : (
-            <></>
-          )}
-        </Typography>
-
-        {user ? userStateLogged(user) : userStateNotLogged()}
-      </Toolbar>
-    </AppBar>
+    <div className={classes.root}>
+      <CssBaseline />
+      <AppBar position="static" className={classes.appBar}>
+        {user ? (
+          <>
+            <Hidden mdUp>
+              <ToolbarMobile
+                user={user}
+                classes={classes}
+                logout={props.logout}
+              />
+            </Hidden>
+            <Hidden smDown>
+              <ToolbarDesktop
+                user={user}
+                classes={classes}
+                logout={props.logout}
+              />
+            </Hidden>
+          </>
+        ) : (
+          <Typography align="center">
+            <Link to="/login" className={classes.button}>
+              <Button className={classes.button}>Login</Button>
+            </Link>
+            <Link to="/register" className={classes.button}>
+              <Button className={classes.button}>Register</Button>
+            </Link>
+          </Typography>
+        )}
+      </AppBar>
+    </div>
   );
 };
 
@@ -143,3 +120,20 @@ export default connect<StateProps, DispatchProps, OwnProps, RootState>(
   mapStateToProps,
   mapDispatchToProps
 )(Header);
+
+export const renderUser = (props: any) => {
+  return (
+    <>
+      <Typography className={props.classes.userName}>
+        {props.user.name}
+      </Typography>
+      <Button
+        color="inherit"
+        onClick={props.logout}
+        className={props.classes.button}
+      >
+        Logout
+      </Button>
+    </>
+  );
+};

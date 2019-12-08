@@ -74,6 +74,7 @@ export const login = (
             type: UserActionTypes.LOGIN,
             user: response.user
           });
+          apiHandler.userservice.ownEvents.emit('logged in');
           resolve(true);
         })
         .catch(error => {
@@ -100,42 +101,47 @@ export const register = (
             type: UserActionTypes.REGISTER,
             user
           });
-
+          apiHandler.userservice.ownEvents.emit('registered');
           resolve(true);
         })
         .catch(error => {
           dispatch(userActionFailureCreator());
           dispatch(addError(error));
-
           resolve(false);
         });
     });
   };
 };
 
-export const logout = (): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
-  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-    return new Promise<void>(resolve => {
+export const logout = (): ThunkAction<Promise<boolean>, {}, {}, AnyAction> => {
+  return async (
+    dispatch: ThunkDispatch<{}, {}, AnyAction>
+  ): Promise<boolean> => {
+    return new Promise<boolean>(resolve => {
       dispatch(userActionStartedCreator());
       apiHandler
         .logout()
         .then(() => {
           dispatch({ type: UserActionTypes.LOGOUT });
+          apiHandler.userservice.ownEvents.emit('logged out');
+          resolve(true);
         })
         .catch(error => {
           dispatch(userActionFailureCreator());
           dispatch(addError(error));
-        })
-        .finally(resolve);
+          resolve(false);
+        });
     });
   };
 };
 
 export const relog = (
   dispatchError: boolean
-): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
-  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-    return new Promise<void>(resolve => {
+): ThunkAction<Promise<boolean>, {}, {}, AnyAction> => {
+  return async (
+    dispatch: ThunkDispatch<{}, {}, AnyAction>
+  ): Promise<boolean> => {
+    return new Promise<boolean>(resolve => {
       dispatch(userActionStartedCreator());
       apiHandler
         .reAuthenticate()
@@ -144,12 +150,14 @@ export const relog = (
             type: UserActionTypes.RELOG,
             user: response.user
           });
+          apiHandler.userservice.ownEvents.emit('logged');
+          resolve(true);
         })
         .catch(error => {
           dispatch(userActionFailureCreator());
           if (dispatchError) dispatch(addError(error));
-        })
-        .finally(resolve);
+          resolve(false);
+        });
     });
   };
 };

@@ -79,7 +79,7 @@ class Login extends React.Component<Props, ComponentState> {
       password: ''
     };
 
-    this.props.logout();
+    if (this.props.userState.user) this.props.logout();
   }
 
   onFormLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {

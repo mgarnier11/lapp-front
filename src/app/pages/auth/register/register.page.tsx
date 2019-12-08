@@ -91,7 +91,7 @@ class Register extends React.Component<Props, ComponentState> {
       gender: 0
     };
 
-    this.props.logout();
+    if (this.props.userState.user) this.props.logout();
   }
 
   onFormRegisterSubmit = (e: React.FormEvent<HTMLFormElement>) => {

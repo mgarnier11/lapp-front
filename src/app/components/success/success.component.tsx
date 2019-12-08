@@ -8,13 +8,14 @@ import { Question } from '../../../api/classes/question.class';
 import { Role } from '../../../api/classes/role.class';
 import { QuestionType } from '../../../api/classes/questionType.class';
 import { Game } from '../../../api/classes/game.class';
+import { ServiceNames } from '../../../api/services/baseService';
 
 interface OwnProps {}
 
 type Props = OwnProps & WithSnackbarProps;
 
 interface State {
-  eventsLinked: { type: string; name: string }[];
+  eventsLinked: { type: string; name: ServiceNames }[];
 }
 
 class Success extends React.Component<Props, State> {
@@ -25,23 +26,29 @@ class Success extends React.Component<Props, State> {
     super(props);
 
     let eventsLinkedTmp = [
-      this.addEvent('created', 'Question'),
-      this.addEvent('created', 'Role'),
-      this.addEvent('updated', 'Role'),
-      this.addEvent('removed', 'Role'),
-      this.addEvent('created', 'QuestionType'),
-      this.addEvent('updated', 'QuestionType'),
-      this.addEvent('removed', 'QuestionType')
+      this.addEvent('logged in', ServiceNames.User),
+      this.addEvent('logged out', ServiceNames.User),
+      this.addEvent('registered', ServiceNames.User),
+      this.addEvent('created', ServiceNames.Question),
+      this.addEvent('updated', ServiceNames.Question),
+      this.addEvent('removed', ServiceNames.Question),
+      this.addEvent('created', ServiceNames.Role),
+      this.addEvent('updated', ServiceNames.Role),
+      this.addEvent('removed', ServiceNames.Role),
+      this.addEvent('created', ServiceNames.QuestionType),
+      this.addEvent('updated', ServiceNames.QuestionType),
+      this.addEvent('removed', ServiceNames.QuestionType),
+      this.addEvent('created', ServiceNames.Game),
+      this.addEvent('updated', ServiceNames.Game),
+      this.addEvent('removed', ServiceNames.Game)
     ];
 
     this.state = {
       eventsLinked: eventsLinkedTmp.filter(e => e.type !== 'none')
     };
-
-    this.onQuestion = this.onQuestion.bind(this);
   }
 
-  addEvent(type: string, name: string) {
+  addEvent(type: string, name: ServiceNames) {
     let service = apiHandler.service(name);
 
     if (service) {
@@ -53,7 +60,7 @@ class Success extends React.Component<Props, State> {
     return { type: 'none', name };
   }
 
-  removeEvent(type: string, name: string) {
+  removeEvent(type: string, name: ServiceNames) {
     let service = apiHandler.service(name);
 
     if (service) {
@@ -85,13 +92,16 @@ class Success extends React.Component<Props, State> {
     };
   }
 
+  onUser(type: string) {
+    return () => {
+      this.displaySnackbar(`Succesfully ${type}`);
+    };
+  }
+
   componentWillUnmount() {
-    /*
-    apiHandler.questionService.ownEvents.off(
-      'created',
-      this.onQuestion('created')
-    );
-    */
+    this.state.eventsLinked.forEach(e => {
+      this.removeEvent(e.type, e.name);
+    });
   }
 
   displaySnackbar(message: string) {

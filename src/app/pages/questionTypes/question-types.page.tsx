@@ -28,7 +28,8 @@ import { Loading } from '../../components/loading/loading.component';
 const styles = (theme: Theme): StyleRules =>
   createStyles({
     root: {
-      paddingTop: theme.spacing(2)
+      paddingTop: theme.spacing(2),
+      paddingBottom: theme.spacing(12)
     }
   });
 
@@ -117,7 +118,7 @@ class QuestionTypes extends React.Component<Props, ComponentState> {
   renderTable(questionTypes: QuestionType[]) {
     return (
       <MaterialTable
-        title="QuestionType Table"
+        title="Types Table"
         columns={this.state.columns}
         data={questionTypes}
         editable={{

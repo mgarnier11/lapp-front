@@ -54,6 +54,7 @@ const Guard: React.FunctionComponent<Props> = (props: Props) => {
       path={props.path}
       render={() =>
         user ? (
+          isNaN(props.minimalPermission) ||
           user.role.permissionLevel >= props.minimalPermission ? (
             <>{props.children}</>
           ) : (

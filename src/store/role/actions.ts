@@ -62,10 +62,12 @@ export const roleCreate = (
       apiHandler.roleService.featherService
         .create(role)
         .then(role => {
+          /*
           dispatch({
             type: RoleActionTypes.CREATE,
             role: role
           });
+          */
           apiHandler.roleService.ownEvents.emit('created', role);
           resolve(true);
         })
@@ -87,12 +89,14 @@ export const roleUpdate = (
     return new Promise<boolean>(resolve => {
       dispatch(roleActionStartedCreator());
       apiHandler.roleService.featherService
-        .update(role.id, role)
+        .patch(role.id, role)
         .then(role => {
+          /*
           dispatch({
             type: RoleActionTypes.UPDATE,
             role: role
           });
+          */
           apiHandler.roleService.ownEvents.emit('updated', role);
 
           resolve(true);
@@ -117,10 +121,12 @@ export const roleRemove = (
       apiHandler.roleService.featherService
         .remove(roleId)
         .then(role => {
+          /*
           dispatch({
             type: RoleActionTypes.REMOVE,
             role: role
           });
+          */
           apiHandler.roleService.ownEvents.emit('removed', role);
 
           resolve(true);

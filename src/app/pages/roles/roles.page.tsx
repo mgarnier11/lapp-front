@@ -28,7 +28,8 @@ import { Loading } from '../../components/loading/loading.component';
 const styles = (theme: Theme): StyleRules =>
   createStyles({
     root: {
-      paddingTop: theme.spacing(2)
+      paddingTop: theme.spacing(2),
+      paddingBottom: theme.spacing(12)
     }
   });
 
@@ -72,7 +73,7 @@ class Roles extends React.Component<Props, ComponentState> {
           title: 'Permission Level',
           field: 'permissionLevel',
           type: 'numeric',
-          emptyValue: '0'
+          initialEditValue: 0
         }
       ],
       roles: []

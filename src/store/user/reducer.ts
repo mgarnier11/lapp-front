@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { Action } from './actions';
 import { UserState, defaultUserState, UserActionTypes } from './types';
+import apiHandler from '../../api/apiHandler';
 // States' definition
 
 export interface State {
@@ -34,6 +35,8 @@ const user = (
     }
 
     case UserActionTypes.LOGOUT: {
+      apiHandler.userservice.ownEvents.emit('logged out');
+
       return {
         ...userState,
         user: undefined,

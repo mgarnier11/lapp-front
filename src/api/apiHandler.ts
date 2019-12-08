@@ -11,7 +11,7 @@ import { QuestionTypeService } from './services/questionType.service';
 import { RoleService } from './services/role.service';
 import { User, LoginCredentials } from './classes/user.class';
 import { EventEmitter } from 'events';
-import { BaseService } from './services/baseService';
+import { BaseService, ServiceNames } from './services/baseService';
 
 class ApiHandler {
   //api initialization
@@ -52,21 +52,17 @@ class ApiHandler {
   public gameService: GameService;
   public questionTypeService: QuestionTypeService;
 
-  public service(serviceName: string) {
+  public service(serviceName: ServiceNames) {
     switch (serviceName) {
-      case 'Question':
+      case ServiceNames.Question:
         return this.questionService;
-
-      case 'User':
+      case ServiceNames.User:
         return this.userservice;
-
-      case 'Game':
+      case ServiceNames.Game:
         return this.gameService;
-
-      case 'Role':
+      case ServiceNames.Role:
         return this.roleService;
-
-      case 'QuestionType':
+      case ServiceNames.QuestionType:
         return this.questionTypeService;
     }
   }

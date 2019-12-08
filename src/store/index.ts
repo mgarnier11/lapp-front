@@ -24,7 +24,7 @@ export interface RootState {
   questionState: QuestionState;
 }
 
-export default createStore(
+export const store = createStore(
   combineReducers<RootState>({
     userState: user,
     errorState: error,

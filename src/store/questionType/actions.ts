@@ -91,7 +91,7 @@ export const questionTypeUpdate = (
     return new Promise<boolean>(resolve => {
       dispatch(questionTypeActionStartedCreator());
       apiHandler.questionTypeService.featherService
-        .update(questionType.id, questionType)
+        .patch(questionType.id, questionType)
         .then(questionType => {
           dispatch({
             type: QuestionTypeActionTypes.UPDATE,
