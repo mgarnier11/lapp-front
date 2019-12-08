@@ -1,15 +1,15 @@
 import { Service } from '@feathersjs/feathers';
 import { afterAllHook } from '../hooks/game.hooks';
 import { Game } from '../classes/game.class';
+import { EventEmitter } from 'events';
+import { BaseService } from './baseService';
 
-export class GameService {
-  public featherService: Service<Game>;
-
+export class GameService extends BaseService<Game> {
   /**
    *
    */
   constructor(service: Service<Game>) {
-    this.featherService = service;
+    super(service);
 
     this.featherService.hooks({
       after: {

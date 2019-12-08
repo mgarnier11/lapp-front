@@ -168,7 +168,9 @@ class QuestionNewComponent extends React.Component<Props, ComponentState> {
     e.preventDefault();
 
     if (!this.isDenied()) {
-      this.props.questionCreate(this.state.question);
+      this.props
+        .questionCreate(this.state.question)
+        .then((question: Question) => {});
     }
   };
 

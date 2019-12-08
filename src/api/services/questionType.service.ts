@@ -1,15 +1,15 @@
 import { Service } from '@feathersjs/feathers';
 import { afterAllHook } from '../hooks/questionType.hooks';
 import { QuestionType } from '../classes/questionType.class';
+import { EventEmitter } from 'events';
+import { BaseService } from './baseService';
 
-export class QuestionTypeService {
-  public featherService: Service<QuestionType>;
-
+export class QuestionTypeService extends BaseService<QuestionType> {
   /**
    *
    */
   constructor(service: Service<QuestionType>) {
-    this.featherService = service;
+    super(service);
 
     this.featherService.hooks({
       after: {

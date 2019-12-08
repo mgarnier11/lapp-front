@@ -66,6 +66,8 @@ export const questionCreate = (
             type: QuestionActionTypes.CREATE,
             question: question
           });
+          apiHandler.questionService.ownEvents.emit('created', question);
+
           resolve(true);
         })
         .catch(error => {
@@ -88,12 +90,11 @@ export const questionUpdate = (
       apiHandler.questionService.featherService
         .update(question.id, question)
         .then(question => {
-          console.log(question);
-
           dispatch({
             type: QuestionActionTypes.UPDATE,
             question: question
           });
+          apiHandler.questionService.ownEvents.emit('updated', question);
           resolve(true);
         })
         .catch(error => {
@@ -120,6 +121,8 @@ export const questionRemove = (
             type: QuestionActionTypes.REMOVE,
             question: question
           });
+          apiHandler.questionService.ownEvents.emit('removed', question);
+
           resolve(true);
         })
         .catch(error => {

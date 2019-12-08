@@ -66,6 +66,11 @@ export const questionTypeCreate = (
             type: QuestionTypeActionTypes.CREATE,
             questionType: questionType
           });
+          apiHandler.questionTypeService.ownEvents.emit(
+            'created',
+            questionType
+          );
+
           resolve(true);
         })
         .catch(error => {
@@ -88,12 +93,15 @@ export const questionTypeUpdate = (
       apiHandler.questionTypeService.featherService
         .update(questionType.id, questionType)
         .then(questionType => {
-          console.log(questionType);
-
           dispatch({
             type: QuestionTypeActionTypes.UPDATE,
             questionType: questionType
           });
+          apiHandler.questionTypeService.ownEvents.emit(
+            'updated',
+            questionType
+          );
+
           resolve(true);
         })
         .catch(error => {
@@ -120,6 +128,10 @@ export const questionTypeRemove = (
             type: QuestionTypeActionTypes.REMOVE,
             questionType: questionType
           });
+          apiHandler.questionTypeService.ownEvents.emit(
+            'removed',
+            questionType
+          );
           resolve(true);
         })
         .catch(error => {

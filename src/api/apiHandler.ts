@@ -10,6 +10,8 @@ import { GameService } from './services/game.service';
 import { QuestionTypeService } from './services/questionType.service';
 import { RoleService } from './services/role.service';
 import { User, LoginCredentials } from './classes/user.class';
+import { EventEmitter } from 'events';
+import { BaseService } from './services/baseService';
 
 class ApiHandler {
   //api initialization
@@ -42,12 +44,6 @@ class ApiHandler {
     this.questionTypeService = new QuestionTypeService(
       this._feathers.service('question-types')
     );
-
-    this.services = [
-      {
-        roleService: this.roleService
-      }
-    ];
   }
 
   public roleService: RoleService;
@@ -56,9 +52,24 @@ class ApiHandler {
   public gameService: GameService;
   public questionTypeService: QuestionTypeService;
 
-  public services: {
-    [key: string]: RoleService;
-  }[];
+  public service(serviceName: string) {
+    switch (serviceName) {
+      case 'Question':
+        return this.questionService;
+
+      case 'User':
+        return this.userservice;
+
+      case 'Game':
+        return this.gameService;
+
+      case 'Role':
+        return this.roleService;
+
+      case 'QuestionType':
+        return this.questionTypeService;
+    }
+  }
 
   //authentication
   public async reAuthenticate() {

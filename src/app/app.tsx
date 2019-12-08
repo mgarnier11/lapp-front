@@ -60,14 +60,14 @@ class App extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    apiHandler.questionService.featherService.on(
+    apiHandler.questionService.ownEvents.on(
       'created',
       this.questionSuccessfullyCreated
     );
   }
 
   componentWillUnmount() {
-    apiHandler.questionService.featherService.off(
+    apiHandler.questionService.ownEvents.off(
       'created',
       this.questionSuccessfullyCreated
     );
@@ -134,6 +134,7 @@ class App extends React.Component<Props, State> {
           </Route>
         </Switch>
         <Footer />
+        <Success />
         <Error />
         {user ? (
           <>

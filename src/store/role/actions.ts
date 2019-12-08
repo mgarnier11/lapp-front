@@ -66,6 +66,7 @@ export const roleCreate = (
             type: RoleActionTypes.CREATE,
             role: role
           });
+          apiHandler.roleService.ownEvents.emit('created', role);
           resolve(true);
         })
         .catch(error => {
@@ -88,12 +89,12 @@ export const roleUpdate = (
       apiHandler.roleService.featherService
         .update(role.id, role)
         .then(role => {
-          console.log(role);
-
           dispatch({
             type: RoleActionTypes.UPDATE,
             role: role
           });
+          apiHandler.roleService.ownEvents.emit('updated', role);
+
           resolve(true);
         })
         .catch(error => {
@@ -120,6 +121,8 @@ export const roleRemove = (
             type: RoleActionTypes.REMOVE,
             role: role
           });
+          apiHandler.roleService.ownEvents.emit('removed', role);
+
           resolve(true);
         })
         .catch(error => {
