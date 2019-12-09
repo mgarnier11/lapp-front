@@ -8,14 +8,14 @@ import { Question } from '../../../api/classes/question.class';
 import { Role } from '../../../api/classes/role.class';
 import { QuestionType } from '../../../api/classes/questionType.class';
 import { Game } from '../../../api/classes/game.class';
-import { ServiceNames } from '../../../api/services/baseService';
+import { ServiceNames, ServiceEvent } from '../../../api/services/baseService';
 
 interface OwnProps {}
 
 type Props = OwnProps & WithSnackbarProps;
 
 interface State {
-  eventsLinked: { type: string; name: ServiceNames }[];
+  eventsLinked: ServiceEvent[];
 }
 
 class Success extends React.Component<Props, State> {

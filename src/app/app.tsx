@@ -21,11 +21,12 @@ import { RootState } from '../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { relog } from '../store/user/actions';
 import { CssBaseline, Fab, Modal } from '@material-ui/core';
-import { roleGetAll } from '../store/role/actions';
+import { RoleActions, roleActionsInstance } from '../store/role/actions';
+import { questionActionsInstance } from '../store/question/actions';
+import { questionTypeActionsInstance } from '../store/questionType/actions';
 import { UserState } from '../store/user/types';
 import apiHandler from '../api/apiHandler';
 import { Question } from '../api/classes/question.class';
-import apiEventsHandler from '../store/apiEventsHandler';
 
 interface OwnProps {}
 
@@ -70,7 +71,9 @@ class App extends React.Component<Props, State> {
       this.questionSuccessfullyCreated
     );
 
-    apiEventsHandler.bindEvents();
+    roleActionsInstance.bindBaseEvents();
+    questionActionsInstance.bindBaseEvents();
+    questionTypeActionsInstance.bindBaseEvents();
   }
 
   componentWillUnmount() {
@@ -79,7 +82,9 @@ class App extends React.Component<Props, State> {
       this.questionSuccessfullyCreated
     );
 
-    apiEventsHandler.unbindEvents();
+    roleActionsInstance.unbindEvents();
+    questionActionsInstance.unbindEvents();
+    questionTypeActionsInstance.unbindEvents();
   }
 
   questionSuccessfullyCreated(q: Question) {
@@ -217,7 +222,7 @@ const mapDispatchToProps = (
       await dispatch(relog(false));
     },
     roleGetAll: async () => {
-      await dispatch(roleGetAll());
+      await dispatch(RoleActions.roleGetAll());
     }
   };
 };

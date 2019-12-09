@@ -61,17 +61,16 @@ const ToolbarMobile: React.FunctionComponent<Props> = (props: Props) => {
         className={classes.button}
         color="inherit"
         onClick={() => toggleDrawer(!state.drawerOpen)}
+        style={{ zIndex: 1200 }}
       >
         {state.drawerOpen ? <CloseIcon /> : <MenuIcon />}
       </IconButton>
-      <Typography variant="h6" className={classes.title}>
-        <Link to="/home" className={classes.button}>
-          Name not defined
-        </Link>
-      </Typography>
+      <Typography style={{ flexGrow: 1 }} />
+
       {renderUser(props)}
 
       <SwipeableDrawer
+        swipeAreaWidth={56}
         className={classes.drawer}
         anchor="top"
         open={state.drawerOpen}
@@ -80,7 +79,16 @@ const ToolbarMobile: React.FunctionComponent<Props> = (props: Props) => {
         classes={{ paper: classes.drawerPaper }}
       >
         <div className={classes.toolbar} />
-
+        <Typography
+          variant="h6"
+          className={classes.title}
+          align="center"
+          style={{ paddingTop: '5px' }}
+        >
+          <Link to="/home" className={classes.button}>
+            Name not defined
+          </Link>
+        </Typography>
         <List component="nav">
           <Link to="/questions" onClick={() => toggleDrawer(false)}>
             <ListItem button className={classes.listItem}>

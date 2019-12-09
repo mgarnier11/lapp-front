@@ -15,12 +15,7 @@ import {
 
 import { QuestionTypeState } from '../../../store/questionType/types';
 import { RootState } from '../../../store';
-import {
-  questionTypeGetAll,
-  questionTypeCreate,
-  questionTypeUpdate,
-  questionTypeRemove
-} from '../../../store/questionType/actions';
+import { QuestionTypeActions } from '../../../store/questionType/actions';
 import { addError } from '../../../store/error/actions';
 import { QuestionType } from '../../../api/classes/questionType.class';
 import { Loading } from '../../components/loading/loading.component';
@@ -169,16 +164,22 @@ const mapDispatchToProps = (
 ): DispatchProps => {
   return {
     questionTypeCreate: async (questionType: Partial<QuestionType>) => {
-      return await dispatch(questionTypeCreate(questionType));
+      return await dispatch(
+        QuestionTypeActions.questionTypeCreate(questionType)
+      );
     },
     questionTypeUpdate: async (questionType: QuestionType) => {
-      return await dispatch(questionTypeUpdate(questionType));
+      return await dispatch(
+        QuestionTypeActions.questionTypeUpdate(questionType)
+      );
     },
     questionTypeRemove: async (questionTypeId: string) => {
-      return await dispatch(questionTypeRemove(questionTypeId));
+      return await dispatch(
+        QuestionTypeActions.questionTypeRemove(questionTypeId)
+      );
     },
     questionTypeGetAll: async () => {
-      await dispatch(questionTypeGetAll());
+      await dispatch(QuestionTypeActions.questionTypeGetAll());
     },
     addError: async (error: any) => {
       await dispatch(addError(error));

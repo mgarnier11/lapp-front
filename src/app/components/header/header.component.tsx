@@ -5,7 +5,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import HouseIcon from '@material-ui/icons/Home';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import PermIdentityIcon from '@material-ui/icons/PermIdentity';
 import { ThunkDispatch } from 'redux-thunk';
 import { Link } from 'react-router-dom';
 import { makeStyles, Hidden, CssBaseline } from '@material-ui/core';
@@ -124,16 +125,21 @@ export default connect<StateProps, DispatchProps, OwnProps, RootState>(
 export const renderUser = (props: any) => {
   return (
     <>
-      <Typography className={props.classes.userName}>
-        {props.user.name}
-      </Typography>
-      <Button
+      <Link to="/me" style={{ zIndex: 1200 }}>
+        <IconButton color="inherit" className={props.classes.button} edge="end">
+          <PermIdentityIcon />
+        </IconButton>
+      </Link>
+
+      <IconButton
+        edge="end"
         color="inherit"
         onClick={props.logout}
         className={props.classes.button}
+        style={{ zIndex: 1200 }}
       >
-        Logout
-      </Button>
+        <ExitToAppIcon />
+      </IconButton>
     </>
   );
 };

@@ -15,12 +15,7 @@ import {
 
 import { RoleState } from '../../../store/role/types';
 import { RootState } from '../../../store';
-import {
-  roleGetAll,
-  roleCreate,
-  roleUpdate,
-  roleRemove
-} from '../../../store/role/actions';
+import { RoleActions } from '../../../store/role/actions';
 import { addError } from '../../../store/error/actions';
 import { Role } from '../../../api/classes/role.class';
 import { Loading } from '../../components/loading/loading.component';
@@ -175,16 +170,16 @@ const mapDispatchToProps = (
 ): DispatchProps => {
   return {
     roleCreate: async (role: Partial<Role>) => {
-      return await dispatch(roleCreate(role));
+      return await dispatch(RoleActions.roleCreate(role));
     },
     roleUpdate: async (role: Role) => {
-      return await dispatch(roleUpdate(role));
+      return await dispatch(RoleActions.roleUpdate(role));
     },
     roleRemove: async (roleId: string) => {
-      return await dispatch(roleRemove(roleId));
+      return await dispatch(RoleActions.roleRemove(roleId));
     },
     roleGetAll: async () => {
-      await dispatch(roleGetAll());
+      await dispatch(RoleActions.roleGetAll());
     },
     addError: async (error: any) => {
       await dispatch(addError(error));

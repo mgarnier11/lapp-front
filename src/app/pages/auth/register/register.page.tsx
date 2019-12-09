@@ -21,7 +21,7 @@ import { User } from '../../../../api/classes/user.class';
 import { logout, register } from '../../../../store/user/actions';
 import { RouterProps } from 'react-router';
 import { Role } from '../../../../api/classes/role.class';
-import { roleGetAll } from '../../../../store/role/actions';
+import { RoleActions } from '../../../../store/role/actions';
 import { RoleState } from '../../../../store/role/types';
 import { addError } from '../../../../store/error/actions';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
@@ -271,7 +271,7 @@ const mapDispatchToProps = (
       await dispatch(logout());
     },
     roleGetAll: async () => {
-      await dispatch(roleGetAll());
+      await dispatch(RoleActions.roleGetAll());
     },
     addError: async (error: any) => {
       await dispatch(addError(error));

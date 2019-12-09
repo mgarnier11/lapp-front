@@ -9,6 +9,12 @@ export enum ServiceNames {
   Game = 'Game'
 }
 
+export interface ServiceEvent {
+  type: string;
+  name: ServiceNames;
+  callback?: Function;
+}
+
 export class BaseService<T> {
   public featherService: Service<T>;
   public ownEvents: EventEmitter;

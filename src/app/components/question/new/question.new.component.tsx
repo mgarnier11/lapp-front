@@ -30,11 +30,11 @@ import Rating from '@material-ui/lab/Rating';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import { RootState } from '../../../../store';
-import { questionCreate } from '../../../../store/question/actions';
+import { QuestionActions } from '../../../../store/question/actions';
 import { addError } from '../../../../store/error/actions';
 import { Question } from '../../../../api/classes/question.class';
 import { Loading } from '../../loading/loading.component';
-import { questionTypeGetAll } from '../../../../store/questionType/actions';
+import { QuestionTypeActions } from '../../../../store/questionType/actions';
 import { QuestionTypeState } from '../../../../store/questionType/types';
 import { QuestionState } from '../../../../store/question/types';
 
@@ -282,10 +282,10 @@ const mapDispatchToProps = (
 ): DispatchProps => {
   return {
     questionCreate: async (question: Partial<Question>) => {
-      return await dispatch(questionCreate(question));
+      return await dispatch(QuestionActions.questionCreate(question));
     },
     questionTypeGetAll: async () => {
-      await dispatch(questionTypeGetAll());
+      await dispatch(QuestionTypeActions.questionTypeGetAll());
     },
     addError: async (error: any) => {
       await dispatch(addError(error));
