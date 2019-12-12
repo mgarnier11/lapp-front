@@ -15,7 +15,7 @@ import Success from './components/success/success.component';
 import Roles from './pages/roles/roles.page';
 import QuestionTypes from './pages/questionTypes/question-types.page';
 import Questions from './pages/questions/questions.page';
-import QuestionNewComponent from './components/question/new/question.new.component';
+import QuestionNewComponent from './components/question/question.new.component';
 
 import { RootState } from '../store';
 import { ThunkDispatch } from 'redux-thunk';

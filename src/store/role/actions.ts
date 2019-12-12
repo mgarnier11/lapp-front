@@ -7,7 +7,6 @@ import { RoleActionTypes } from './types';
 import apiHandler from '../../api/apiHandler';
 import { addError } from '../error/actions';
 import { Role, RoleBackModel } from '../../api/classes/role.class';
-import { ServiceEvent, ServiceNames } from '../../api/services/baseService';
 
 // Action Definition
 export interface ActionStarted {

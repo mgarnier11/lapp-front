@@ -1,4 +1,3 @@
-import { combineReducers } from 'redux';
 import { Action } from './actions';
 import { UserState, defaultUserState, UserActionTypes } from './types';
 import apiHandler from '../../api/apiHandler';

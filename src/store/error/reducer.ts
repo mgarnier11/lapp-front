@@ -1,4 +1,3 @@
-import { combineReducers } from 'redux';
 import { Action } from './actions';
 import { ErrorState, defaultErrorState, ErrorActionTypes } from './types';
 // States' definition

@@ -7,7 +7,6 @@ import { QuestionActionTypes } from './types';
 import apiHandler from '../../api/apiHandler';
 import { addError } from '../error/actions';
 import { Question, QuestionBackModel } from '../../api/classes/question.class';
-import { ServiceEvent, ServiceNames } from '../../api/services/baseService';
 
 // Action Definition
 export interface ActionStarted {

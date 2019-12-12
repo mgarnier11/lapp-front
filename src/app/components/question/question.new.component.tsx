@@ -29,14 +29,14 @@ import {
 import Rating from '@material-ui/lab/Rating';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
-import { RootState } from '../../../../store';
-import { QuestionActions } from '../../../../store/question/actions';
-import { addError } from '../../../../store/error/actions';
-import { Question } from '../../../../api/classes/question.class';
-import { Loading } from '../../loading/loading.component';
-import { QuestionTypeActions } from '../../../../store/questionType/actions';
-import { QuestionTypeState } from '../../../../store/questionType/types';
-import { QuestionState } from '../../../../store/question/types';
+import { RootState } from '../../../store';
+import { QuestionActions } from '../../../store/question/actions';
+import { addError } from '../../../store/error/actions';
+import { Question } from '../../../api/classes/question.class';
+import { Loading } from '../loading/loading.component';
+import { QuestionTypeActions } from '../../../store/questionType/actions';
+import { QuestionTypeState } from '../../../store/questionType/types';
+import { QuestionState } from '../../../store/question/types';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
