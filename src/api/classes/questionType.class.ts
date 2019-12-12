@@ -27,7 +27,14 @@ export class QuestionType {
   ): boolean {
     return (
       arr1.length === arr2.length &&
-      arr1.every((e, i) => e.id === arr2[i].id && e.name === arr2[i].name)
+      arr1.every((e, i) => QuestionType.CompareObjects(e, arr2[i]))
     );
+  }
+
+  public static CompareObjects(
+    obj1: QuestionType,
+    obj2: QuestionType
+  ): boolean {
+    return obj1.id === obj2.id && obj1.name === obj2.name;
   }
 }

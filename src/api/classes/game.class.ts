@@ -1,5 +1,6 @@
 import { QuestionType, QuestionTypeBackModel } from './questionType.class';
 import { User, UserBackModel } from './user.class';
+import { GameType, GameTypeBackModel } from './gameType.class';
 
 export interface GameBackModel {
   _id: string;
@@ -12,6 +13,7 @@ export interface GameBackModel {
   _maxDifficulty: number;
   _maxHotLevel: number;
   _creator: UserBackModel;
+  _type: GameTypeBackModel;
 }
 
 export class Game {
@@ -35,6 +37,8 @@ export class Game {
 
   public creator: User = new User();
 
+  public type: GameType = new GameType();
+
   public static New(datas: Partial<Game>): Game {
     return Object.assign(new Game(), datas);
   }
@@ -56,6 +60,7 @@ export class Game {
     newObj.maxDifficulty = datas._maxDifficulty;
     newObj.maxHotLevel = datas._maxHotLevel;
     newObj.creator = User.fromBack(datas._creator);
+    newObj.type = GameType.fromBack(datas._type);
 
     Object.keys(datas).forEach(key => {
       console.log(typeof datas[key]);

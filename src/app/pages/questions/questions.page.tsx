@@ -228,8 +228,6 @@ class Questions extends React.Component<Props, ComponentState> {
         editable={{
           onRowUpdate: (newData, oldData) =>
             new Promise(async (resolve, reject) => {
-              console.log(newData);
-
               let updatedQuestion = Question.New(newData);
               let updated = await this.props.questionUpdate(updatedQuestion);
               if (updated) resolve();

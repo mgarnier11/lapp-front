@@ -12,6 +12,8 @@ import { RoleService } from './services/role.service';
 import { User, LoginCredentials } from './classes/user.class';
 import { EventEmitter } from 'events';
 import { BaseService, ServiceNames } from './services/baseService';
+import { GameType } from './classes/gameType.class';
+import { GameTypeService } from './services/gameType.service';
 
 class ApiHandler {
   //api initialization
@@ -44,6 +46,9 @@ class ApiHandler {
     this.questionTypeService = new QuestionTypeService(
       this._feathers.service('question-types')
     );
+    this.gameTypeService = new GameTypeService(
+      this._feathers.service('game-types')
+    );
   }
 
   public roleService: RoleService;
@@ -51,6 +56,7 @@ class ApiHandler {
   public questionService: QuestionService;
   public gameService: GameService;
   public questionTypeService: QuestionTypeService;
+  public gameTypeService: GameTypeService;
 
   public service(serviceName: ServiceNames) {
     switch (serviceName) {
@@ -64,6 +70,8 @@ class ApiHandler {
         return this.roleService;
       case ServiceNames.QuestionType:
         return this.questionTypeService;
+      case ServiceNames.GameType:
+        return this.gameTypeService;
     }
   }
 

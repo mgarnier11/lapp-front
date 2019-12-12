@@ -49,8 +49,8 @@ export class Question {
           e.difficulty === arr2[i].difficulty &&
           e.hotLevel === arr2[i].hotLevel &&
           e.text === arr2[i].text &&
-          e.type === arr2[i].type &&
-          e.creator === arr2[i].creator
+          QuestionType.CompareObjects(e.type, arr2[i].type) &&
+          User.CompareObjects(e.creator, arr2[i].creator)
       )
     );
   }

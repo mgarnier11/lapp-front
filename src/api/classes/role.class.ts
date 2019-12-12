@@ -29,13 +29,16 @@ export class Role {
   public static CompareArrays(arr1: Role[], arr2: Role[]): boolean {
     return (
       arr1.length === arr2.length &&
-      arr1.every(
-        (e, i) =>
-          e.id === arr2[i].id &&
-          e.name === arr2[i].name &&
-          e.icon === arr2[i].icon &&
-          e.permissionLevel === arr2[i].permissionLevel
-      )
+      arr1.every((e, i) => Role.CompareObjects(e, arr2[i]))
+    );
+  }
+
+  public static CompareObjects(obj1: Role, obj2: Role): boolean {
+    return (
+      obj1.id === obj2.id &&
+      obj1.icon === obj2.icon &&
+      obj1.name === obj2.name &&
+      obj1.permissionLevel === obj2.permissionLevel
     );
   }
 }

@@ -25,10 +25,10 @@ export interface Register {
 }
 export interface Update {
   type: UserActionTypes.UPDATE;
-  userDatas: Partial<User>;
+  user: User;
 }
-export interface Delete {
-  type: UserActionTypes.DELETE;
+export interface Remove {
+  type: UserActionTypes.REMOVE;
 }
 export interface Relog {
   type: UserActionTypes.RELOG;
@@ -43,7 +43,7 @@ export type Action =
   | Logout
   | Register
   | Update
-  | Delete
+  | Remove
   | Relog;
 
 const userActionStartedCreator = (): ActionStarted => {
@@ -156,6 +156,63 @@ export const relog = (
         .catch(error => {
           dispatch(userActionFailureCreator());
           if (dispatchError) dispatch(addError(error));
+          resolve(false);
+        });
+    });
+  };
+};
+
+export const userUpdate = (
+  user: User
+): ThunkAction<Promise<boolean>, {}, {}, AnyAction> => {
+  return async (
+    dispatch: ThunkDispatch<{}, {}, AnyAction>
+  ): Promise<boolean> => {
+    return new Promise<boolean>(resolve => {
+      dispatch(userActionStartedCreator());
+      apiHandler.roleService.featherService
+        .patch(user.id, user)
+        .then(user => {
+          dispatch({
+            type: UserActionTypes.UPDATE,
+            user: user
+          });
+
+          apiHandler.userservice.ownEvents.emit('updated', user);
+
+          resolve(true);
+        })
+        .catch(error => {
+          dispatch(userActionFailureCreator());
+          dispatch(addError(error));
+          resolve(false);
+        });
+    });
+  };
+};
+
+export const userRemove = (
+  userId: string
+): ThunkAction<Promise<boolean>, {}, {}, AnyAction> => {
+  return async (
+    dispatch: ThunkDispatch<{}, {}, AnyAction>
+  ): Promise<boolean> => {
+    return new Promise<boolean>(resolve => {
+      dispatch(userActionStartedCreator());
+      apiHandler.userservice.featherService
+        .remove(userId)
+        .then(user => {
+          dispatch({
+            type: UserActionTypes.REMOVE,
+            role: user
+          });
+          apiHandler.userservice.ownEvents.emit('removed', user);
+
+          resolve(true);
+        })
+        .catch(error => {
+          dispatch(userActionFailureCreator());
+          dispatch(addError(error));
           resolve(false);
         });
     });

@@ -6,7 +6,8 @@ export enum ServiceNames {
   User = 'User',
   Role = 'Role',
   QuestionType = 'QuestionType',
-  Game = 'Game'
+  Game = 'Game',
+  GameType = 'GameType'
 }
 
 export interface ServiceEvent {

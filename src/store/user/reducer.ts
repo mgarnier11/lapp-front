@@ -51,6 +51,23 @@ const user = (
         loading: false
       };
     }
+
+    case UserActionTypes.UPDATE: {
+      return {
+        ...userState,
+        user: action.user,
+        loading: false
+      };
+    }
+
+    case UserActionTypes.REMOVE: {
+      return {
+        ...userState,
+        user: undefined,
+        loading: false
+      };
+    }
+
     default:
       return userState;
   }

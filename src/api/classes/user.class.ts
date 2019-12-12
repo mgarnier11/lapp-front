@@ -42,4 +42,21 @@ export class User {
 
     return newObj;
   }
+
+  public static CompareArrays(arr1: User[], arr2: User[]): boolean {
+    return (
+      arr1.length === arr2.length &&
+      arr1.every((e, i) => User.CompareObjects(e, arr2[i]))
+    );
+  }
+  public static CompareObjects(obj1: User, obj2: User): boolean {
+    return (
+      obj1.name === obj2.name &&
+      obj1.email === obj2.email &&
+      obj1.gender === obj2.gender &&
+      obj1.password === obj2.password &&
+      obj1.id === obj2.id &&
+      Role.CompareObjects(obj1.role, obj2.role)
+    );
+  }
 }
