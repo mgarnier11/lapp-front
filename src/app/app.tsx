@@ -16,6 +16,7 @@ import Roles from './pages/roles/roles.page';
 import QuestionTypes from './pages/questionTypes/question-types.page';
 import Questions from './pages/questions/questions.page';
 import QuestionNewComponent from './components/question/question.new.component';
+import GameNewComponent from './components/game/game.new.component';
 
 import { RootState } from '../store';
 import { ThunkDispatch } from 'redux-thunk';
@@ -147,7 +148,7 @@ class App extends React.Component<Props, State> {
   renderGameModal() {
     return (
       <Modal open={this.state.gameModalOpen} onClose={this.closeGameModal}>
-        <>Game Modal</>
+        <GameNewComponent />
       </Modal>
     );
   }

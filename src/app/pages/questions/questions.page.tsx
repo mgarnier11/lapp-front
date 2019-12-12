@@ -114,12 +114,7 @@ class Questions extends React.Component<Props, ComponentState> {
           title: 'Difficulty',
           field: 'difficulty',
           render: rowData => (
-            <Rating
-              name="difficulty"
-              value={rowData.difficulty}
-              disabled={true}
-              style={{ opacity: '1' }}
-            />
+            <Rating name="difficulty" value={rowData.difficulty} readOnly />
           ),
           editComponent: rowData => (
             <Rating
@@ -135,9 +130,9 @@ class Questions extends React.Component<Props, ComponentState> {
           render: rowData => (
             <Rating
               name="hotLevel"
-              style={{ color: '#FD6C9E', opacity: '1' }}
+              style={{ color: '#FD6C9E' }}
               value={rowData.hotLevel}
-              disabled={true}
+              readOnly
               icon={<FavoriteIcon fontSize="inherit" />}
             />
           ),

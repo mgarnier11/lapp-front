@@ -3,6 +3,10 @@ export interface GameTypeBackModel {
   _name: string;
 }
 
+export enum multiplayerGameTypeNames {
+  Online = 'Online'
+}
+
 export class GameType {
   public id: number = 0;
 

@@ -66,13 +66,6 @@ const styles = (theme: Theme): StyleRules =>
     formControl: {
       paddingBottom: theme.spacing(1)
     },
-    textField: {
-      width: '100%',
-      marginTop: '1px'
-    },
-    select: {
-      width: '100%'
-    },
     hotLevelRating: {
       color: '#FD6C9E'
     }
@@ -205,7 +198,7 @@ class QuestionNewComponent extends React.Component<Props, ComponentState> {
                   labelId="type-select-label"
                   id="type-select"
                   value={type.id}
-                  className={classes.select}
+                  fullWidth
                   onChange={this.handleTypeChange}
                 >
                   {questionTypes ? (
@@ -224,7 +217,7 @@ class QuestionNewComponent extends React.Component<Props, ComponentState> {
                   label="Text"
                   multiline
                   rows="3"
-                  className={classes.textField}
+                  fullWidth
                   margin="normal"
                   variant="outlined"
                   value={text}

@@ -16,7 +16,8 @@ import {
   Button,
   TextField,
   InputLabel,
-  FormControl
+  FormControl,
+  FormLabel
 } from '@material-ui/core';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import {
@@ -37,6 +38,7 @@ import { Loading } from '../loading/loading.component';
 import { GameTypeActions } from '../../../store/gameType/actions';
 import { GameTypeState } from '../../../store/gameType/types';
 import { GameState } from '../../../store/game/types';
+import { multiplayerGameTypeNames } from '../../../api/classes/gameType.class';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
@@ -66,12 +68,12 @@ const styles = (theme: Theme): StyleRules =>
     formControl: {
       paddingBottom: theme.spacing(1)
     },
-    textField: {
-      width: '100%',
-      marginTop: '1px'
+    ratingFormControl: {
+      padding: theme.spacing(1),
+      flexDirection: 'row'
     },
-    select: {
-      width: '100%'
+    ratingComponent: {
+      marginLeft: theme.spacing(2)
     },
     hotLevelRating: {
       color: '#FD6C9E'
@@ -132,24 +134,40 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
     this.reloadDatas();
   }
 
-  handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    // this.setState({
-    //   game: { ...this.state.game, text: e.target.value }
-    // });
+  handleNameChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    this.setState({
+      game: { ...this.state.game, name: e.target.value }
+    });
+  };
+
+  handleMaxDifficultyChange = (e: any, value: number) => {
+    this.setState({ game: { ...this.state.game, maxDifficulty: value } });
+  };
+
+  handleMaxHotLevelChange = (e: any, value: number) => {
+    this.setState({ game: { ...this.state.game, maxHotLevel: value } });
+  };
+
+  handleNbTurnsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({
+      game: { ...this.state.game, nbTurns: parseInt(e.target.value) }
+    });
   };
 
   handleTypeChange = (e: React.ChangeEvent<{ value: unknown }>) => {
-    // const gameTypes = this.props.gameTypeState.gameTypes;
-    // if (gameTypes) {
-    //   this.setState({
-    //     game: {
-    //       ...this.state.game,
-    //       type: gameTypes.find(t => t.id === (e.target.value as string))!
-    //     }
-    //   });
-    // } else {
-    //   console.error('Game types not loaded yet !', 'How did you get here ?');
-    // }
+    const gameTypes = this.props.gameTypeState.gameTypes;
+    if (gameTypes) {
+      this.setState({
+        game: {
+          ...this.state.game,
+          type: gameTypes.find(
+            t => t.id === parseInt(e.target.value as string)
+          )!
+        }
+      });
+    } else {
+      console.error('Game types not loaded yet !', 'How did you get here ?');
+    }
   };
 
   handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -161,21 +179,39 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
   };
 
   isDenied(): boolean {
-    //const { difficulty, hotLevel, text, type } = this.state.game;
+    const {
+      maxDifficulty,
+      maxHotLevel,
+      name,
+      nbTurns,
+      type,
+      users
+    } = this.state.game;
     const gameTypes = this.props.gameTypeState.gameTypes;
     const gameLoading = this.props.gameState.loading;
+    console.log(type.name in multiplayerGameTypeNames && users.length === 0);
+
     return (
       gameLoading ||
       (gameTypes ? !gameTypes.includes(type) : true) ||
-      difficulty === 0 ||
-      hotLevel === 0 ||
-      text.length === 0
+      maxDifficulty === 0 ||
+      maxHotLevel === 0 ||
+      name.length === 0 ||
+      nbTurns <= 0 ||
+      (type.name in multiplayerGameTypeNames && users.length === 0)
     );
   }
 
   render() {
     const classes = this.props.classes;
-    //const { difficulty, hotLevel, text, type } = this.state.game;
+    const {
+      maxDifficulty,
+      maxHotLevel,
+      name,
+      nbTurns,
+      type,
+      users
+    } = this.state.game;
     const gameTypes = this.props.gameTypeState.gameTypes;
 
     return (
@@ -185,13 +221,13 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
           <CardContent className={classes.cardContent}>
             <form className={classes.form} onSubmit={this.handleFormSubmit}>
               <FormControl className={classes.formControl}>
-                <InputLabel id="type-select-label">Type</InputLabel>
-                <Select
+                <TextField
                   style={{ textAlign: 'left' }}
-                  labelId="type-select-label"
+                  select
+                  label="Game Type"
                   id="type-select"
                   value={type.id}
-                  className={classes.select}
+                  fullWidth
                   onChange={this.handleTypeChange}
                 >
                   {gameTypes ? (
@@ -203,41 +239,51 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
                   ) : (
                     <MenuItem disabled>Loading...</MenuItem>
                   )}
-                </Select>
+                </TextField>
               </FormControl>
               <FormControl className={classes.formControl}>
                 <TextField
-                  label="Text"
-                  multiline
-                  rows="3"
-                  className={classes.textField}
+                  label="Name"
+                  fullWidth
                   margin="normal"
                   variant="outlined"
-                  value={text}
-                  onChange={this.handleTextChange}
+                  value={name}
+                  onChange={this.handleNameChange}
+                />
+              </FormControl>
+              <FormControl className={classes.ratingFormControl}>
+                <Typography component="legend">
+                  Maximum&nbsp;Difficulty
+                </Typography>
+                <Rating
+                  className={classes.ratingComponent}
+                  name="difficulty"
+                  value={maxDifficulty}
+                  onChange={this.handleMaxDifficultyChange}
+                />
+              </FormControl>
+              <FormControl className={classes.ratingFormControl}>
+                <Typography component="legend">
+                  Maximum&nbsp;Hot&nbsp;Level
+                </Typography>
+                <Rating
+                  name="hotLevel"
+                  value={maxHotLevel}
+                  onChange={this.handleMaxHotLevelChange}
+                  className={`${classes.ratingComponent} ${classes.hotLevelRating}`}
+                  icon={<FavoriteIcon fontSize="inherit" />}
                 />
               </FormControl>
               <FormControl className={classes.formControl}>
-                <Grid container spacing={3}>
-                  <Grid item xs={6}>
-                    <Typography component="legend">Difficulty</Typography>
-                    <Rating
-                      name="difficulty"
-                      value={difficulty}
-                      onChange={this.handleDifficultyChange}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography component="legend">Hot Level</Typography>
-                    <Rating
-                      name="hotLevel"
-                      className={classes.hotLevelRating}
-                      value={hotLevel}
-                      onChange={this.handleHotLevelChange}
-                      icon={<FavoriteIcon fontSize="inherit" />}
-                    />
-                  </Grid>
-                </Grid>
+                <TextField
+                  label="Nb Turns"
+                  fullWidth
+                  margin="normal"
+                  variant="outlined"
+                  type="number"
+                  value={nbTurns}
+                  onChange={this.handleNbTurnsChange}
+                />
               </FormControl>
               <Button
                 type="submit"
