@@ -4,10 +4,6 @@ import { UserState, defaultUserState, UserActionTypes } from './types';
 import apiHandler from '../../api/apiHandler';
 // States' definition
 
-export interface State {
-  user: UserState;
-}
-
 const user = (
   userState: UserState = defaultUserState,
   action: Action
@@ -73,6 +69,4 @@ const user = (
   }
 };
 
-export default combineReducers<State>({
-  user
-});
+export default user;

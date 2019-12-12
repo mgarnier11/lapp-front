@@ -254,8 +254,8 @@ class Register extends React.Component<Props, ComponentState> {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    userState: states.userState.user,
-    roleState: states.roleState.role
+    userState: states.userState,
+    roleState: states.roleState
   };
 };
 

@@ -3,10 +3,6 @@ import { Action } from './actions';
 import { ErrorState, defaultErrorState, ErrorActionTypes } from './types';
 // States' definition
 
-export interface State {
-  error: ErrorState;
-}
-
 const error = (
   errorState: ErrorState = defaultErrorState,
   action: Action
@@ -32,6 +28,4 @@ const error = (
   }
 };
 
-export default combineReducers<State>({
-  error
-});
+export default error;

@@ -102,7 +102,7 @@ const Header: React.FunctionComponent<Props> = (props: Props) => {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    userState: states.userState.user
+    userState: states.userState
   };
 };
 

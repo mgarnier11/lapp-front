@@ -175,7 +175,7 @@ class Login extends React.Component<Props, ComponentState> {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    userState: states.userState.user
+    userState: states.userState
   };
 };
 

@@ -271,8 +271,8 @@ class QuestionNewComponent extends React.Component<Props, ComponentState> {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    questionTypeState: states.questionTypeState.questionType,
-    questionState: states.questionState.question
+    questionTypeState: states.questionTypeState,
+    questionState: states.questionState
   };
 };
 

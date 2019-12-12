@@ -160,7 +160,7 @@ class Roles extends React.Component<Props, ComponentState> {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    roleState: states.roleState.role
+    roleState: states.roleState
   };
 };
 

@@ -3,10 +3,6 @@ import { Action } from './actions';
 import { RoleState, defaultRoleState, RoleActionTypes } from './types';
 // States' definition
 
-export interface State {
-  role: RoleState;
-}
-
 const role = (
   roleState: RoleState = defaultRoleState,
   action: Action
@@ -84,6 +80,4 @@ const role = (
   }
 };
 
-export default combineReducers<State>({
-  role
-});
+export default role;

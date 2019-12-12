@@ -81,7 +81,7 @@ class Error extends React.Component<Props, State> {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    errorState: states.errorState.error
+    errorState: states.errorState
   };
 };
 

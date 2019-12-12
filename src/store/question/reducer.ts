@@ -7,10 +7,6 @@ import {
 } from './types';
 // States' definition
 
-export interface State {
-  question: QuestionState;
-}
-
 const question = (
   questionState: QuestionState = defaultQuestionState,
   action: Action
@@ -90,6 +86,4 @@ const question = (
   }
 };
 
-export default combineReducers<State>({
-  question
-});
+export default question;

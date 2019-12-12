@@ -209,7 +209,7 @@ class App extends React.Component<Props, State> {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    userState: states.userState.user
+    userState: states.userState
   };
 };
 

@@ -7,10 +7,6 @@ import {
 } from './types';
 // States' definition
 
-export interface State {
-  gameType: GameTypeState;
-}
-
 const gameType = (
   gameTypeState: GameTypeState = defaultGameTypeState,
   action: Action
@@ -90,6 +86,4 @@ const gameType = (
   }
 };
 
-export default combineReducers<State>({
-  gameType
-});
+export default gameType;

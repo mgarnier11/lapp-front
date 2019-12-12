@@ -1,14 +1,18 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import user, { State as UserState } from './user/reducer';
-import error, { State as ErrorState } from './error/reducer';
-import role, { State as RoleState } from './role/reducer';
-import questionType, {
-  State as QuestionTypeState
-} from './questionType/reducer';
-import question, { State as QuestionState } from './question/reducer';
-import gameType, { State as GameTypeState } from './gameType/reducer';
+import user from './user/reducer';
+import error from './error/reducer';
+import role from './role/reducer';
+import questionType from './questionType/reducer';
+import question from './question/reducer';
+import gameType from './gameType/reducer';
 
 import thunk from 'redux-thunk';
+import { UserState } from './user/types';
+import { ErrorState } from './error/types';
+import { QuestionTypeState } from './questionType/types';
+import { QuestionState } from './question/types';
+import { GameTypeState } from './gameType/types';
+import { RoleState } from './role/types';
 
 declare global {
   interface Window {
@@ -27,7 +31,7 @@ export interface RootState {
   gameTypeState: GameTypeState;
 }
 
-const rootReducer = combineReducers({
+const rootReducer = combineReducers<RootState>({
   userState: user,
   errorState: error,
   roleState: role,
@@ -37,15 +41,6 @@ const rootReducer = combineReducers({
 });
 
 export const store = createStore(
-  /*
-  combineReducers<RootState>({
-    userState: user,
-    errorState: error,
-    roleState: role,
-    questionTypeState: questionType,
-    questionState: question,
-    gameTypeState: gameType
-  })*/
   rootReducer,
   composeEnhancers(applyMiddleware(thunk))
 );
