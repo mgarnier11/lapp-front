@@ -94,7 +94,8 @@ const styles = (theme: Theme): StyleRules =>
       flexWrap: 'wrap'
     },
     chip: {
-      margin: 2
+      margin: '2px',
+      width: `calc(33% - 4px)`
     }
   });
 
@@ -176,8 +177,10 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
   };
 
   handleNbTurnsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let v = parseInt(e.target.value);
+    v = v >= 1 ? v : 1;
     this.setState({
-      game: { ...this.state.game, nbTurns: parseInt(e.target.value) }
+      game: { ...this.state.game, nbTurns: v }
     });
   };
 
@@ -207,12 +210,11 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
       const clickedId: string = e.target.value.filter(
         (v: any) => typeof v === 'string'
       )[0];
-      console.log(e.target.value);
 
-      const idToRemove = selectedTypes.findIndex(t => t.id === clickedId);
-      if (idToRemove === -1)
+      const indexToRemove = selectedTypes.findIndex(t => t.id === clickedId);
+      if (indexToRemove === -1)
         selectedTypes.push(questionTypes.find(t => t.id === clickedId)!);
-      else selectedTypes.splice(idToRemove, 1);
+      else selectedTypes.splice(indexToRemove, 1);
 
       this.setState({
         game: {
@@ -226,6 +228,18 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
         'How did you get here ?'
       );
     }
+  };
+
+  removeQuestionType = (typeId: string) => {
+    this.setState({
+      game: {
+        ...this.state.game,
+        questionTypes: lodash.reject(
+          this.state.game.questionTypes,
+          t => t.id === typeId
+        )
+      }
+    });
   };
 
   handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -344,6 +358,7 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
                   margin="normal"
                   variant="outlined"
                   type="number"
+                  defaultValue="1"
                   value={nbTurns}
                   onChange={this.handleNbTurnsChange}
                 />
@@ -365,10 +380,21 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
                           key={value.id}
                           label={value.name}
                           className={classes.chip}
+                          onDelete={() => this.removeQuestionType(value.id)}
                         />
                       ))}
                     </div>
                   )}
+                  MenuProps={{
+                    anchorOrigin: {
+                      vertical: 'bottom',
+                      horizontal: 'left'
+                    },
+                    transformOrigin: {
+                      vertical: 'bottom',
+                      horizontal: 'left'
+                    }
+                  }}
                 >
                   {allQuestionTypes ? (
                     allQuestionTypes.map(questionType => (
