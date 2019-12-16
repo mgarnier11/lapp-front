@@ -19,7 +19,9 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Chip
+  Chip,
+  Checkbox,
+  ListItemText
 } from '@material-ui/core';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import {
@@ -53,7 +55,8 @@ const styles = (theme: Theme): StyleRules =>
       top: '50%',
       transform: 'translate(-50%, -50%)',
       width: 'fit-content',
-      outline: 'none'
+      outline: 'none',
+      maxWidth: '400px'
     },
     form: {
       display: 'flex',
@@ -194,15 +197,27 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
     }
   };
 
-  handleQuestionTypeChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+  handleQuestionTypeChange = (e: React.ChangeEvent<{ value: any }>) => {
     const questionTypes = this.props.questionTypeState.questionTypes;
-    console.log(e.target.value);
 
     if (questionTypes) {
+      let selectedTypes: QuestionType[] = e.target.value.filter(
+        (v: any) => v instanceof QuestionType
+      );
+      const clickedId: string = e.target.value.filter(
+        (v: any) => typeof v === 'string'
+      )[0];
+      console.log(e.target.value);
+
+      const idToRemove = selectedTypes.findIndex(t => t.id === clickedId);
+      if (idToRemove === -1)
+        selectedTypes.push(questionTypes.find(t => t.id === clickedId)!);
+      else selectedTypes.splice(idToRemove, 1);
+
       this.setState({
         game: {
-          ...this.state.game
-          //questionTypes: questionTypes.filter(t => value.includes(t.id))
+          ...this.state.game,
+          questionTypes: selectedTypes
         }
       });
     } else {
@@ -357,16 +372,11 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
                 >
                   {allQuestionTypes ? (
                     allQuestionTypes.map(questionType => (
-                      <MenuItem
-                        key={questionType.id}
-                        value={questionType.id}
-                        className={
-                          this.isQuestionTypeSelected(questionType)
-                            ? classes.questionTypeSelected
-                            : ''
-                        }
-                      >
-                        {questionType.name}
+                      <MenuItem key={questionType.id} value={questionType.id}>
+                        <Checkbox
+                          checked={questionTypes.indexOf(questionType) > -1}
+                        />
+                        <ListItemText primary={questionType.name} />
                       </MenuItem>
                     ))
                   ) : (
