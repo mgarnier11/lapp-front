@@ -16,6 +16,12 @@ export interface GameBackModel {
   _type: GameTypeBackModel;
 }
 
+export enum GameStatus {
+  created = 'Created',
+  started = 'Started',
+  finished = 'Finished'
+}
+
 export class Game {
   public id: string = '';
 
@@ -39,6 +45,8 @@ export class Game {
 
   public type: GameType = new GameType();
 
+  public status: GameStatus = GameStatus.created;
+
   public static New(datas: Partial<Game>): Game {
     return Object.assign(new Game(), datas);
   }
@@ -61,10 +69,7 @@ export class Game {
     newObj.maxHotLevel = datas._maxHotLevel;
     newObj.creator = User.fromBack(datas._creator);
     newObj.type = GameType.fromBack(datas._type);
-
-    Object.keys(datas).forEach(key => {
-      console.log(typeof datas[key]);
-    });
+    newObj.status = datas._status;
 
     return newObj;
   }

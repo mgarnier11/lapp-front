@@ -17,7 +17,9 @@ import {
   TextField,
   InputLabel,
   FormControl,
-  FormLabel
+  FormLabel,
+  Input,
+  Chip
 } from '@material-ui/core';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import {
@@ -39,6 +41,9 @@ import { GameTypeActions } from '../../../store/gameType/actions';
 import { GameTypeState } from '../../../store/gameType/types';
 import { GameState } from '../../../store/game/types';
 import { multiplayerGameTypeNames } from '../../../api/classes/gameType.class';
+import { QuestionTypeActions } from '../../../store/questionType/actions';
+import { QuestionTypeState } from '../../../store/questionType/types';
+import { QuestionType } from '../../../api/classes/questionType.class';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
@@ -77,6 +82,16 @@ const styles = (theme: Theme): StyleRules =>
     },
     hotLevelRating: {
       color: '#FD6C9E'
+    },
+    questionTypeSelected: {
+      fontWeight: theme.typography.fontWeightMedium
+    },
+    chips: {
+      display: 'flex',
+      flexWrap: 'wrap'
+    },
+    chip: {
+      margin: 2
     }
   });
 
@@ -85,12 +100,14 @@ interface OwnProps {}
 interface DispatchProps {
   gameCreate: (game: Partial<Game>) => Promise<any>;
   gameTypeGetAll: () => void;
+  questionTypeGetAll: () => void;
   addError: (error: any) => void;
 }
 
 interface StateProps {
   gameTypeState: GameTypeState;
   gameState: GameState;
+  questionTypeState: QuestionTypeState;
 }
 
 type Props = StateProps &
@@ -124,6 +141,13 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
     ) {
       this.props.gameTypeGetAll();
     }
+
+    if (
+      !this.props.questionTypeState.questionTypes &&
+      !this.props.questionTypeState.loading
+    ) {
+      this.props.questionTypeGetAll();
+    }
   }
 
   componentDidMount() {
@@ -154,7 +178,7 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
     });
   };
 
-  handleTypeChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+  handleGameTypeChange = (e: React.ChangeEvent<{ value: unknown }>) => {
     const gameTypes = this.props.gameTypeState.gameTypes;
     if (gameTypes) {
       this.setState({
@@ -167,6 +191,25 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
       });
     } else {
       console.error('Game types not loaded yet !', 'How did you get here ?');
+    }
+  };
+
+  handleQuestionTypeChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+    const questionTypes = this.props.questionTypeState.questionTypes;
+    console.log(e.target.value);
+
+    if (questionTypes) {
+      this.setState({
+        game: {
+          ...this.state.game
+          //questionTypes: questionTypes.filter(t => value.includes(t.id))
+        }
+      });
+    } else {
+      console.error(
+        'Question types not loaded yet !',
+        'How did you get here ?'
+      );
     }
   };
 
@@ -202,6 +245,10 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
     );
   }
 
+  isQuestionTypeSelected(questionType: QuestionType) {
+    return this.state.game.questionTypes.includes(questionType);
+  }
+
   render() {
     const classes = this.props.classes;
     const {
@@ -210,9 +257,10 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
       name,
       nbTurns,
       type,
-      users
+      questionTypes
     } = this.state.game;
-    const gameTypes = this.props.gameTypeState.gameTypes;
+    const allGameTypes = this.props.gameTypeState.gameTypes;
+    const allQuestionTypes = this.props.questionTypeState.questionTypes;
 
     return (
       <Container component="main" className={classes.root} tabIndex={-1}>
@@ -228,10 +276,10 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
                   id="type-select"
                   value={type.id}
                   fullWidth
-                  onChange={this.handleTypeChange}
+                  onChange={this.handleGameTypeChange}
                 >
-                  {gameTypes ? (
-                    gameTypes.map(t => (
+                  {allGameTypes ? (
+                    allGameTypes.map(t => (
                       <MenuItem value={t.id} key={t.id}>
                         {t.name}
                       </MenuItem>
@@ -285,13 +333,54 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
                   onChange={this.handleNbTurnsChange}
                 />
               </FormControl>
+              <FormControl className={classes.formControl}>
+                <InputLabel id="question-type-select">
+                  Question Types
+                </InputLabel>
+                <Select
+                  labelId="question-type-select"
+                  multiple
+                  input={<Input />}
+                  value={questionTypes}
+                  onChange={this.handleQuestionTypeChange}
+                  renderValue={selected => (
+                    <div className={classes.chips}>
+                      {(selected as QuestionType[]).map(value => (
+                        <Chip
+                          key={value.id}
+                          label={value.name}
+                          className={classes.chip}
+                        />
+                      ))}
+                    </div>
+                  )}
+                >
+                  {allQuestionTypes ? (
+                    allQuestionTypes.map(questionType => (
+                      <MenuItem
+                        key={questionType.id}
+                        value={questionType.id}
+                        className={
+                          this.isQuestionTypeSelected(questionType)
+                            ? classes.questionTypeSelected
+                            : ''
+                        }
+                      >
+                        {questionType.name}
+                      </MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem disabled>Loading...</MenuItem>
+                  )}
+                </Select>
+              </FormControl>
               <Button
                 type="submit"
                 variant="contained"
                 color="primary"
                 disabled={this.isDenied()}
               >
-                {gameTypes ? 'Create game' : 'Loading'}
+                {allGameTypes && allQuestionTypes ? 'Create game' : 'Loading'}
               </Button>
             </form>
           </CardContent>
@@ -304,7 +393,8 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
     gameTypeState: states.gameTypeState,
-    gameState: states.gameState
+    gameState: states.gameState,
+    questionTypeState: states.questionTypeState
   };
 };
 
@@ -318,6 +408,9 @@ const mapDispatchToProps = (
     },
     gameTypeGetAll: async () => {
       await dispatch(GameTypeActions.gameTypeGetAll());
+    },
+    questionTypeGetAll: async () => {
+      await dispatch(QuestionTypeActions.questionTypeGetAll());
     },
     addError: async (error: any) => {
       await dispatch(addError(error));
