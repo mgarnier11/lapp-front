@@ -1,4 +1,3 @@
-import { combineReducers } from 'redux';
 import { Action } from './actions';
 import { GameState, defaultGameState, GameActionTypes } from './types';
 // States' definition

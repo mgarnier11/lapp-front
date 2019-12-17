@@ -17,6 +17,7 @@ import QuestionTypes from './pages/questionTypes/question-types.page';
 import Questions from './pages/questions/questions.page';
 import QuestionNewComponent from './components/question/question.new.component';
 import GameNewComponent from './components/game/game.new.component';
+import GameMiddlewareComponent from './components/game/game.middleware.component';
 
 import { RootState } from '../store';
 import { ThunkDispatch } from 'redux-thunk';
@@ -188,9 +189,15 @@ class App extends React.Component<Props, State> {
           <Guard minimalPermission={0} path="/questions" redirect="/">
             <Questions />
           </Guard>
-          <Guard minimalPermission={0} path="/games/:displayId" redirect="/">
-            <Questions />
-          </Guard>
+          <Guard
+            minimalPermission={0}
+            path="/games/:displayId"
+            redirect="/"
+            children={(displayId: string): React.FunctionComponent<any> => {
+              console.log(displayId);
+              return <GameMiddlewareComponent />;
+            }}
+          />
           <Guard minimalPermission={100} path="/roles" redirect="/home">
             <Roles />
           </Guard>

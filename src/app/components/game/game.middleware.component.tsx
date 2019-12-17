@@ -8,11 +8,11 @@ import { GameState } from '../../../store/game/types';
 import { GameActions } from '../../../store/game/actions';
 
 interface OwnProps {
-  displayId: string;
+  displayId?: string;
 }
 
 interface DispatchProps {
-  gameGetAll: () => Promise<any>;
+  gameGetByDisplayId: (displayId: string) => Promise<any>;
 }
 
 interface StateProps {
@@ -22,6 +22,8 @@ interface StateProps {
 type Props = StateProps & OwnProps & DispatchProps;
 
 const GameMiddleware: React.FunctionComponent<Props> = (props: Props) => {
+  console.log(props.displayId);
+
   let { game, loading } = props.gameState;
   //const classes = useStyles();
 
@@ -39,8 +41,8 @@ const mapDispatchToProps = (
   ownProps: OwnProps
 ): DispatchProps => {
   return {
-    gameGetAll: async () => {
-      //dispatch(GameActions.gameGetAll());
+    gameGetByDisplayId: async (displayId: string) => {
+      dispatch(GameActions.gameGetByDisplayId(displayId));
     }
   };
 };

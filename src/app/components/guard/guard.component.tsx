@@ -31,6 +31,7 @@ interface OwnProps {
     | boolean
     | null
     | undefined;
+  component?: JSX.Element;
 }
 
 interface DispatchProps {
