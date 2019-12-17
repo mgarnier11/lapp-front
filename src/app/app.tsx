@@ -28,6 +28,8 @@ import { questionTypeActionsInstance } from '../store/questionType/actions';
 import { UserState } from '../store/user/types';
 import apiHandler from '../api/apiHandler';
 import { Question } from '../api/classes/question.class';
+import { Game } from '../api/classes/game.class';
+import { ServiceEvents } from '../api/services/baseService';
 
 interface OwnProps {}
 
@@ -64,12 +66,17 @@ class App extends React.Component<Props, State> {
     this.questionSuccessfullyCreated = this.questionSuccessfullyCreated.bind(
       this
     );
+    this.gameSuccessfullyCreated = this.gameSuccessfullyCreated.bind(this);
   }
 
   componentDidMount() {
     apiHandler.questionService.ownEvents.on(
-      'created',
+      ServiceEvents.created,
       this.questionSuccessfullyCreated
+    );
+    apiHandler.gameService.ownEvents.on(
+      ServiceEvents.created,
+      this.gameSuccessfullyCreated
     );
 
     roleActionsInstance.bindBaseEvents();
@@ -79,7 +86,7 @@ class App extends React.Component<Props, State> {
 
   componentWillUnmount() {
     apiHandler.questionService.ownEvents.off(
-      'created',
+      ServiceEvents.created,
       this.questionSuccessfullyCreated
     );
 
@@ -90,6 +97,10 @@ class App extends React.Component<Props, State> {
 
   questionSuccessfullyCreated(q: Question) {
     this.closeQuestionModal();
+  }
+
+  gameSuccessfullyCreated(g: Game) {
+    this.closeGameModal();
   }
 
   openQuestionModal = () => {

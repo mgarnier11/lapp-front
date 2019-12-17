@@ -8,7 +8,11 @@ import { Question } from '../../../api/classes/question.class';
 import { Role } from '../../../api/classes/role.class';
 import { QuestionType } from '../../../api/classes/questionType.class';
 import { Game } from '../../../api/classes/game.class';
-import { ServiceNames, ServiceEvent } from '../../../api/services/baseService';
+import {
+  ServiceNames,
+  ServiceEvent,
+  ServiceEvents
+} from '../../../api/services/baseService';
 
 interface OwnProps {}
 
@@ -29,18 +33,18 @@ class Success extends React.Component<Props, State> {
       this.addEvent('logged in', ServiceNames.User),
       this.addEvent('logged out', ServiceNames.User),
       this.addEvent('registered', ServiceNames.User),
-      this.addEvent('created', ServiceNames.Question),
-      this.addEvent('updated', ServiceNames.Question),
-      this.addEvent('removed', ServiceNames.Question),
-      this.addEvent('created', ServiceNames.Role),
-      this.addEvent('updated', ServiceNames.Role),
-      this.addEvent('removed', ServiceNames.Role),
-      this.addEvent('created', ServiceNames.QuestionType),
-      this.addEvent('updated', ServiceNames.QuestionType),
-      this.addEvent('removed', ServiceNames.QuestionType),
-      this.addEvent('created', ServiceNames.Game),
-      this.addEvent('updated', ServiceNames.Game),
-      this.addEvent('removed', ServiceNames.Game)
+      this.addEvent(ServiceEvents.created, ServiceNames.Question),
+      this.addEvent(ServiceEvents.updated, ServiceNames.Question),
+      this.addEvent(ServiceEvents.removed, ServiceNames.Question),
+      this.addEvent(ServiceEvents.created, ServiceNames.Role),
+      this.addEvent(ServiceEvents.updated, ServiceNames.Role),
+      this.addEvent(ServiceEvents.removed, ServiceNames.Role),
+      this.addEvent(ServiceEvents.created, ServiceNames.QuestionType),
+      this.addEvent(ServiceEvents.updated, ServiceNames.QuestionType),
+      this.addEvent(ServiceEvents.removed, ServiceNames.QuestionType),
+      this.addEvent(ServiceEvents.created, ServiceNames.Game),
+      this.addEvent(ServiceEvents.updated, ServiceNames.Game),
+      this.addEvent(ServiceEvents.removed, ServiceNames.Game)
     ];
 
     this.state = {

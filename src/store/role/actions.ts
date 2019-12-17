@@ -7,6 +7,7 @@ import { RoleActionTypes } from './types';
 import apiHandler from '../../api/apiHandler';
 import { addError } from '../error/actions';
 import { Role, RoleBackModel } from '../../api/classes/role.class';
+import { ServiceEvents } from '../../api/services/baseService';
 
 // Action Definition
 export interface ActionStarted {
@@ -49,9 +50,18 @@ export class RoleActions {
 
   public bindBaseEvents() {
     if (!this.binded) {
-      apiHandler.roleService.featherService.on('created', this.roleCreated);
-      apiHandler.roleService.featherService.on('patched', this.roleUpdated);
-      apiHandler.roleService.featherService.on('removed', this.roleRemoved);
+      apiHandler.roleService.featherService.on(
+        ServiceEvents.created,
+        this.roleCreated
+      );
+      apiHandler.roleService.featherService.on(
+        ServiceEvents.patched,
+        this.roleUpdated
+      );
+      apiHandler.roleService.featherService.on(
+        ServiceEvents.removed,
+        this.roleRemoved
+      );
 
       this.binded = true;
     } else {
@@ -60,9 +70,18 @@ export class RoleActions {
   }
 
   public unbindEvents() {
-    apiHandler.roleService.featherService.off('created', this.roleCreated);
-    apiHandler.roleService.featherService.off('patched', this.roleUpdated);
-    apiHandler.roleService.featherService.off('removed', this.roleRemoved);
+    apiHandler.roleService.featherService.off(
+      ServiceEvents.created,
+      this.roleCreated
+    );
+    apiHandler.roleService.featherService.off(
+      ServiceEvents.patched,
+      this.roleUpdated
+    );
+    apiHandler.roleService.featherService.off(
+      ServiceEvents.removed,
+      this.roleRemoved
+    );
 
     this.binded = false;
   }
@@ -117,7 +136,7 @@ export class RoleActions {
               role: role
             });
             */
-            apiHandler.roleService.ownEvents.emit('created', role);
+            apiHandler.roleService.ownEvents.emit(ServiceEvents.created, role);
             resolve(true);
           })
           .catch(error => {
@@ -146,7 +165,7 @@ export class RoleActions {
             role: role
           });
           */
-            apiHandler.roleService.ownEvents.emit('updated', role);
+            apiHandler.roleService.ownEvents.emit(ServiceEvents.updated, role);
 
             resolve(true);
           })
@@ -176,7 +195,7 @@ export class RoleActions {
               role: role
             });
             */
-            apiHandler.roleService.ownEvents.emit('removed', role);
+            apiHandler.roleService.ownEvents.emit(ServiceEvents.removed, role);
 
             resolve(true);
           })

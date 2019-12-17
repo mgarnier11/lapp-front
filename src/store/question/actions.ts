@@ -7,6 +7,7 @@ import { QuestionActionTypes } from './types';
 import apiHandler from '../../api/apiHandler';
 import { addError } from '../error/actions';
 import { Question, QuestionBackModel } from '../../api/classes/question.class';
+import { ServiceEvents } from '../../api/services/baseService';
 
 // Action Definition
 export interface ActionStarted {
@@ -50,15 +51,15 @@ export class QuestionActions {
   public bindBaseEvents() {
     if (!this.binded) {
       apiHandler.questionService.featherService.on(
-        'created',
+        ServiceEvents.created,
         this.questionCreated
       );
       apiHandler.questionService.featherService.on(
-        'patched',
+        ServiceEvents.patched,
         this.questionUpdated
       );
       apiHandler.questionService.featherService.on(
-        'removed',
+        ServiceEvents.removed,
         this.questionRemoved
       );
 
@@ -70,15 +71,15 @@ export class QuestionActions {
 
   public unbindEvents() {
     apiHandler.questionService.featherService.off(
-      'created',
+      ServiceEvents.created,
       this.questionCreated
     );
     apiHandler.questionService.featherService.off(
-      'patched',
+      ServiceEvents.patched,
       this.questionUpdated
     );
     apiHandler.questionService.featherService.off(
-      'removed',
+      ServiceEvents.removed,
       this.questionRemoved
     );
 
@@ -135,7 +136,10 @@ export class QuestionActions {
               question: question
             });
             */
-            apiHandler.questionService.ownEvents.emit('created', question);
+            apiHandler.questionService.ownEvents.emit(
+              ServiceEvents.created,
+              question
+            );
             resolve(true);
           })
           .catch(error => {
@@ -164,7 +168,10 @@ export class QuestionActions {
             question: question
           });
           */
-            apiHandler.questionService.ownEvents.emit('updated', question);
+            apiHandler.questionService.ownEvents.emit(
+              ServiceEvents.updated,
+              question
+            );
 
             resolve(true);
           })
@@ -194,7 +201,10 @@ export class QuestionActions {
               question: question
             });
             */
-            apiHandler.questionService.ownEvents.emit('removed', question);
+            apiHandler.questionService.ownEvents.emit(
+              ServiceEvents.removed,
+              question
+            );
 
             resolve(true);
           })

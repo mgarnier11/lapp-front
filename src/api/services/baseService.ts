@@ -1,4 +1,5 @@
 import { Service } from '@feathersjs/feathers';
+import {} from '@feathersjs/feathers';
 import { EventEmitter } from 'events';
 
 export enum ServiceNames {
@@ -8,6 +9,13 @@ export enum ServiceNames {
   QuestionType = 'QuestionType',
   Game = 'Game',
   GameType = 'GameType'
+}
+
+export enum ServiceEvents {
+  created = 'created',
+  updated = 'updated',
+  removed = 'removed',
+  patched = 'patched'
 }
 
 export interface ServiceEvent {

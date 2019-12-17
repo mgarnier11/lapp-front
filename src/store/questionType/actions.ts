@@ -10,6 +10,7 @@ import {
   QuestionType,
   QuestionTypeBackModel
 } from '../../api/classes/questionType.class';
+import { ServiceEvents } from '../../api/services/baseService';
 
 // Action Definition
 export interface ActionStarted {
@@ -53,15 +54,15 @@ export class QuestionTypeActions {
   public bindBaseEvents() {
     if (!this.binded) {
       apiHandler.questionTypeService.featherService.on(
-        'created',
+        ServiceEvents.created,
         this.questionTypeCreated
       );
       apiHandler.questionTypeService.featherService.on(
-        'patched',
+        ServiceEvents.patched,
         this.questionTypeUpdated
       );
       apiHandler.questionTypeService.featherService.on(
-        'removed',
+        ServiceEvents.removed,
         this.questionTypeRemoved
       );
 
@@ -73,15 +74,15 @@ export class QuestionTypeActions {
 
   public unbindEvents() {
     apiHandler.questionTypeService.featherService.off(
-      'created',
+      ServiceEvents.created,
       this.questionTypeCreated
     );
     apiHandler.questionTypeService.featherService.off(
-      'patched',
+      ServiceEvents.patched,
       this.questionTypeUpdated
     );
     apiHandler.questionTypeService.featherService.off(
-      'removed',
+      ServiceEvents.removed,
       this.questionTypeRemoved
     );
 
@@ -139,7 +140,7 @@ export class QuestionTypeActions {
             });
             */
             apiHandler.questionTypeService.ownEvents.emit(
-              'created',
+              ServiceEvents.created,
               questionType
             );
             resolve(true);
@@ -204,7 +205,7 @@ export class QuestionTypeActions {
             });
             */
             apiHandler.questionTypeService.ownEvents.emit(
-              'removed',
+              ServiceEvents.removed,
               questionType
             );
 

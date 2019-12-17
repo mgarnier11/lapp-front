@@ -7,6 +7,7 @@ import { GameActionTypes } from './types';
 import apiHandler from '../../api/apiHandler';
 import { addError } from '../error/actions';
 import { Game, GameBackModel } from '../../api/classes/game.class';
+import { ServiceEvents } from '../../api/services/baseService';
 
 // Action Definition
 export interface ActionStarted {
@@ -49,9 +50,18 @@ export class GameActions {
 
   public bindBaseEvents() {
     if (!this.binded) {
-      apiHandler.gameService.featherService.on('created', this.gameCreated);
-      apiHandler.gameService.featherService.on('patched', this.gameUpdated);
-      apiHandler.gameService.featherService.on('removed', this.gameRemoved);
+      apiHandler.gameService.featherService.on(
+        ServiceEvents.created,
+        this.gameCreated
+      );
+      apiHandler.gameService.featherService.on(
+        ServiceEvents.patched,
+        this.gameUpdated
+      );
+      apiHandler.gameService.featherService.on(
+        ServiceEvents.removed,
+        this.gameRemoved
+      );
 
       this.binded = true;
     } else {
@@ -60,9 +70,18 @@ export class GameActions {
   }
 
   public unbindEvents() {
-    apiHandler.gameService.featherService.off('created', this.gameCreated);
-    apiHandler.gameService.featherService.off('patched', this.gameUpdated);
-    apiHandler.gameService.featherService.off('removed', this.gameRemoved);
+    apiHandler.gameService.featherService.off(
+      ServiceEvents.created,
+      this.gameCreated
+    );
+    apiHandler.gameService.featherService.off(
+      ServiceEvents.patched,
+      this.gameUpdated
+    );
+    apiHandler.gameService.featherService.off(
+      ServiceEvents.removed,
+      this.gameRemoved
+    );
 
     this.binded = false;
   }
@@ -117,7 +136,7 @@ export class GameActions {
               game: game
             });
             */
-            apiHandler.gameService.ownEvents.emit('created', game);
+            apiHandler.gameService.ownEvents.emit(ServiceEvents.created, game);
             resolve(true);
           })
           .catch(error => {
@@ -146,7 +165,7 @@ export class GameActions {
             game: game
           });
           */
-            apiHandler.gameService.ownEvents.emit('updated', game);
+            apiHandler.gameService.ownEvents.emit(ServiceEvents.updated, game);
 
             resolve(true);
           })
@@ -176,7 +195,7 @@ export class GameActions {
               game: game
             });
             */
-            apiHandler.gameService.ownEvents.emit('removed', game);
+            apiHandler.gameService.ownEvents.emit(ServiceEvents.removed, game);
 
             resolve(true);
           })

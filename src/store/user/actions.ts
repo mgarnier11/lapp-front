@@ -5,6 +5,7 @@ import { UserActionTypes } from './types';
 import { LoginCredentials, User } from '../../api/classes/user.class';
 import apiHandler from '../../api/apiHandler';
 import { addError } from '../error/actions';
+import { ServiceEvents } from '../../api/services/baseService';
 
 // Action Definition
 export interface ActionStarted {
@@ -178,7 +179,7 @@ export const userUpdate = (
             user: user
           });
 
-          apiHandler.userservice.ownEvents.emit('updated', user);
+          apiHandler.userservice.ownEvents.emit(ServiceEvents.updated, user);
 
           resolve(true);
         })
@@ -206,7 +207,7 @@ export const userRemove = (
             type: UserActionTypes.REMOVE,
             role: user
           });
-          apiHandler.userservice.ownEvents.emit('removed', user);
+          apiHandler.userservice.ownEvents.emit(ServiceEvents.removed, user);
 
           resolve(true);
         })

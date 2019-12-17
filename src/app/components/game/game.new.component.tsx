@@ -289,6 +289,8 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
     const gameTypes = this.props.gameTypeState.gameTypes;
     const gameLoading = this.props.gameState.loading;
 
+    console.log(type);
+
     return (
       gameLoading ||
       (gameTypes ? !gameTypes.includes(type) : true) ||

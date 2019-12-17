@@ -7,6 +7,7 @@ import { GameTypeActionTypes } from './types';
 import apiHandler from '../../api/apiHandler';
 import { addError } from '../error/actions';
 import { GameType, GameTypeBackModel } from '../../api/classes/gameType.class';
+import { ServiceEvents } from '../../api/services/baseService';
 
 // Action Definition
 export interface ActionStarted {
@@ -50,15 +51,15 @@ export class GameTypeActions {
   public bindBaseEvents() {
     if (!this.binded) {
       apiHandler.gameTypeService.featherService.on(
-        'created',
+        ServiceEvents.created,
         this.gameTypeCreated
       );
       apiHandler.gameTypeService.featherService.on(
-        'patched',
+        ServiceEvents.patched,
         this.gameTypeUpdated
       );
       apiHandler.gameTypeService.featherService.on(
-        'removed',
+        ServiceEvents.removed,
         this.gameTypeRemoved
       );
 
@@ -70,15 +71,15 @@ export class GameTypeActions {
 
   public unbindEvents() {
     apiHandler.gameTypeService.featherService.off(
-      'created',
+      ServiceEvents.created,
       this.gameTypeCreated
     );
     apiHandler.gameTypeService.featherService.off(
-      'patched',
+      ServiceEvents.patched,
       this.gameTypeUpdated
     );
     apiHandler.gameTypeService.featherService.off(
-      'removed',
+      ServiceEvents.removed,
       this.gameTypeRemoved
     );
 
@@ -135,7 +136,10 @@ export class GameTypeActions {
               gameType: gameType
             });
             */
-            apiHandler.gameTypeService.ownEvents.emit('created', gameType);
+            apiHandler.gameTypeService.ownEvents.emit(
+              ServiceEvents.created,
+              gameType
+            );
             resolve(true);
           })
           .catch(error => {
@@ -164,7 +168,10 @@ export class GameTypeActions {
             gameType: gameType
           });
           */
-            apiHandler.gameTypeService.ownEvents.emit('updated', gameType);
+            apiHandler.gameTypeService.ownEvents.emit(
+              ServiceEvents.updated,
+              gameType
+            );
 
             resolve(true);
           })
@@ -194,7 +201,10 @@ export class GameTypeActions {
               gameType: gameType
             });
             */
-            apiHandler.gameTypeService.ownEvents.emit('removed', gameType);
+            apiHandler.gameTypeService.ownEvents.emit(
+              ServiceEvents.removed,
+              gameType
+            );
 
             resolve(true);
           })
