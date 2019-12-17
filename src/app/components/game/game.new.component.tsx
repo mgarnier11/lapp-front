@@ -46,6 +46,7 @@ import { multiplayerGameTypeNames } from '../../../api/classes/gameType.class';
 import { QuestionTypeActions } from '../../../store/questionType/actions';
 import { QuestionTypeState } from '../../../store/questionType/types';
 import { QuestionType } from '../../../api/classes/questionType.class';
+import { EventEmitter } from 'events';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
@@ -103,8 +104,8 @@ interface OwnProps {}
 
 interface DispatchProps {
   gameCreate: (game: Partial<Game>) => Promise<any>;
-  gameTypeGetAll: () => void;
-  questionTypeGetAll: () => void;
+  gameTypeGetAll: () => Promise<any>;
+  questionTypeGetAll: () => Promise<any>;
   addError: (error: any) => void;
 }
 
@@ -132,30 +133,55 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
     super(props);
 
     this.state = {
-      game: new Game()
+      game: Game.New({ nbTurns: 1 })
     };
 
     this.isDenied = this.isDenied.bind(this);
   }
 
-  reloadDatas() {
+  async getGameTypes(setToGame: boolean = false) {
     if (
       !this.props.gameTypeState.gameTypes &&
       !this.props.gameTypeState.loading
     ) {
-      this.props.gameTypeGetAll();
+      await this.props.gameTypeGetAll();
     }
 
+    if (setToGame && this.props.gameTypeState.gameTypes) {
+      this.setState({
+        game: {
+          ...this.state.game,
+          type: this.props.gameTypeState.gameTypes[0]
+        }
+      });
+    }
+  }
+
+  async getQuestionTypes(setToGame: boolean = false) {
     if (
       !this.props.questionTypeState.questionTypes &&
       !this.props.questionTypeState.loading
     ) {
-      this.props.questionTypeGetAll();
+      await this.props.questionTypeGetAll();
+    }
+
+    if (setToGame && this.props.questionTypeState.questionTypes) {
+      this.setState({
+        game: {
+          ...this.state.game,
+          questionTypes: this.props.questionTypeState.questionTypes
+        }
+      });
     }
   }
 
+  reloadDatas(setToGame: boolean = false) {
+    this.getGameTypes(setToGame);
+    this.getQuestionTypes(setToGame);
+  }
+
   componentDidMount() {
-    this.reloadDatas();
+    this.reloadDatas(true);
   }
 
   componentDidUpdate() {
@@ -257,11 +283,11 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
       name,
       nbTurns,
       type,
-      users
+      users,
+      questionTypes
     } = this.state.game;
     const gameTypes = this.props.gameTypeState.gameTypes;
     const gameLoading = this.props.gameState.loading;
-    console.log(type.name in multiplayerGameTypeNames && users.length === 0);
 
     return (
       gameLoading ||
@@ -270,7 +296,8 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
       maxHotLevel === 0 ||
       name.length === 0 ||
       nbTurns <= 0 ||
-      (type.name in multiplayerGameTypeNames && users.length === 0)
+      (type.name in multiplayerGameTypeNames && users.length === 0) ||
+      questionTypes.length === 0
     );
   }
 
@@ -400,6 +427,7 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
                     allQuestionTypes.map(questionType => (
                       <MenuItem key={questionType.id} value={questionType.id}>
                         <Checkbox
+                          color="primary"
                           checked={questionTypes.indexOf(questionType) > -1}
                         />
                         <ListItemText primary={questionType.name} />
@@ -443,10 +471,10 @@ const mapDispatchToProps = (
       return await dispatch(GameActions.gameCreate(game));
     },
     gameTypeGetAll: async () => {
-      await dispatch(GameTypeActions.gameTypeGetAll());
+      return await dispatch(GameTypeActions.gameTypeGetAll());
     },
     questionTypeGetAll: async () => {
-      await dispatch(QuestionTypeActions.questionTypeGetAll());
+      return await dispatch(QuestionTypeActions.questionTypeGetAll());
     },
     addError: async (error: any) => {
       await dispatch(addError(error));
