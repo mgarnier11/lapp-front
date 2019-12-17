@@ -3,7 +3,7 @@ import { UserState, defaultUserState, UserActionTypes } from './types';
 import apiHandler from '../../api/apiHandler';
 // States' definition
 
-const user = (
+export const user = (
   userState: UserState = defaultUserState,
   action: Action
 ): UserState => {

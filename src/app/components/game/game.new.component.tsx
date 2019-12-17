@@ -4,20 +4,16 @@ import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import {
   Container,
-  Box,
   Typography,
   Card,
   CardContent,
   CardHeader,
-  TextareaAutosize,
-  Grid,
   Select,
   MenuItem,
   Button,
   TextField,
   InputLabel,
   FormControl,
-  FormLabel,
   Input,
   Chip,
   Checkbox,
@@ -35,18 +31,16 @@ import Rating from '@material-ui/lab/Rating';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import { RootState } from '../../../store';
-import { GameActions } from '../../../store/game/actions';
-import { addError } from '../../../store/error/actions';
+import { GamesActions } from '../../../store/games/actions';
+import { addError } from '../../../store/errors/actions';
 import { Game } from '../../../api/classes/game.class';
-import { Loading } from '../loading/loading.component';
-import { GameTypeActions } from '../../../store/gameType/actions';
-import { GameTypeState } from '../../../store/gameType/types';
-import { GameState } from '../../../store/game/types';
+import { GameTypesActions } from '../../../store/gameTypes/actions';
+import { GameTypesState } from '../../../store/gameTypes/types';
+import { GamesState } from '../../../store/games/types';
 import { multiplayerGameTypeNames } from '../../../api/classes/gameType.class';
-import { QuestionTypeActions } from '../../../store/questionType/actions';
-import { QuestionTypeState } from '../../../store/questionType/types';
+import { QuestionTypesActions } from '../../../store/questionTypes/actions';
+import { QuestionTypesState } from '../../../store/questionTypes/types';
 import { QuestionType } from '../../../api/classes/questionType.class';
-import { EventEmitter } from 'events';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
@@ -96,7 +90,7 @@ const styles = (theme: Theme): StyleRules =>
     },
     chip: {
       margin: '2px',
-      width: `calc(33% - 4px)`
+      minWidth: `calc(50% - 4px)`
     }
   });
 
@@ -110,9 +104,9 @@ interface DispatchProps {
 }
 
 interface StateProps {
-  gameTypeState: GameTypeState;
-  gameState: GameState;
-  questionTypeState: QuestionTypeState;
+  gameTypesState: GameTypesState;
+  gamesState: GamesState;
+  questionTypesState: QuestionTypesState;
 }
 
 type Props = StateProps &
@@ -141,17 +135,17 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
 
   async getGameTypes(setToGame: boolean = false) {
     if (
-      !this.props.gameTypeState.gameTypes &&
-      !this.props.gameTypeState.loading
+      !this.props.gameTypesState.gameTypes &&
+      !this.props.gameTypesState.loading
     ) {
       await this.props.gameTypeGetAll();
     }
 
-    if (setToGame && this.props.gameTypeState.gameTypes) {
+    if (setToGame && this.props.gameTypesState.gameTypes) {
       this.setState({
         game: {
           ...this.state.game,
-          type: this.props.gameTypeState.gameTypes[0]
+          type: this.props.gameTypesState.gameTypes[0]
         }
       });
     }
@@ -159,17 +153,17 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
 
   async getQuestionTypes(setToGame: boolean = false) {
     if (
-      !this.props.questionTypeState.questionTypes &&
-      !this.props.questionTypeState.loading
+      !this.props.questionTypesState.questionTypes &&
+      !this.props.questionTypesState.loading
     ) {
       await this.props.questionTypeGetAll();
     }
 
-    if (setToGame && this.props.questionTypeState.questionTypes) {
+    if (setToGame && this.props.questionTypesState.questionTypes) {
       this.setState({
         game: {
           ...this.state.game,
-          questionTypes: this.props.questionTypeState.questionTypes
+          questionTypes: this.props.questionTypesState.questionTypes
         }
       });
     }
@@ -211,7 +205,7 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
   };
 
   handleGameTypeChange = (e: React.ChangeEvent<{ value: unknown }>) => {
-    const gameTypes = this.props.gameTypeState.gameTypes;
+    const gameTypes = this.props.gameTypesState.gameTypes;
     if (gameTypes) {
       this.setState({
         game: {
@@ -227,7 +221,7 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
   };
 
   handleQuestionTypeChange = (e: React.ChangeEvent<{ value: any }>) => {
-    const questionTypes = this.props.questionTypeState.questionTypes;
+    const questionTypes = this.props.questionTypesState.questionTypes;
 
     if (questionTypes) {
       let selectedTypes: QuestionType[] = e.target.value.filter(
@@ -286,8 +280,8 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
       users,
       questionTypes
     } = this.state.game;
-    const gameTypes = this.props.gameTypeState.gameTypes;
-    const gameLoading = this.props.gameState.loading;
+    const gameTypes = this.props.gameTypesState.gameTypes;
+    const gameLoading = this.props.gamesState.loading;
 
     console.log(type);
 
@@ -317,8 +311,8 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
       type,
       questionTypes
     } = this.state.game;
-    const allGameTypes = this.props.gameTypeState.gameTypes;
-    const allQuestionTypes = this.props.questionTypeState.questionTypes;
+    const allGameTypes = this.props.gameTypesState.gameTypes;
+    const allQuestionTypes = this.props.questionTypesState.questionTypes;
 
     return (
       <Container component="main" className={classes.root} tabIndex={-1}>
@@ -458,9 +452,9 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    gameTypeState: states.gameTypeState,
-    gameState: states.gameState,
-    questionTypeState: states.questionTypeState
+    gameTypesState: states.gameTypesState,
+    gamesState: states.gamesState,
+    questionTypesState: states.questionTypesState
   };
 };
 
@@ -470,13 +464,13 @@ const mapDispatchToProps = (
 ): DispatchProps => {
   return {
     gameCreate: async (game: Partial<Game>) => {
-      return await dispatch(GameActions.gameCreate(game));
+      return await dispatch(GamesActions.gameCreate(game));
     },
     gameTypeGetAll: async () => {
-      return await dispatch(GameTypeActions.gameTypeGetAll());
+      return await dispatch(GameTypesActions.gameTypeGetAll());
     },
     questionTypeGetAll: async () => {
-      return await dispatch(QuestionTypeActions.questionTypeGetAll());
+      return await dispatch(QuestionTypesActions.questionTypeGetAll());
     },
     addError: async (error: any) => {
       await dispatch(addError(error));

@@ -1,19 +1,21 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import user from './user/reducer';
-import error from './error/reducer';
-import role from './role/reducer';
-import questionType from './questionType/reducer';
-import question from './question/reducer';
-import gameType from './gameType/reducer';
-import game from './game/reducer';
+import { errors } from './errors/reducer';
+import { roles } from './roles/reducer';
+import { questionTypes } from './questionTypes/reducer';
+import { questions } from './questions/reducer';
+import { gameTypes } from './gameTypes/reducer';
+import { games } from './games/reducer';
+import { game } from './game/reducer';
 
 import thunk from 'redux-thunk';
 import { UserState } from './user/types';
-import { ErrorState } from './error/types';
-import { QuestionTypeState } from './questionType/types';
-import { QuestionState } from './question/types';
-import { GameTypeState } from './gameType/types';
-import { RoleState } from './role/types';
+import { ErrorsState } from './errors/types';
+import { QuestionTypesState } from './questionTypes/types';
+import { QuestionsState } from './questions/types';
+import { GameTypesState } from './gameTypes/types';
+import { RolesState } from './roles/types';
+import { GamesState } from './games/types';
 import { GameState } from './game/types';
 
 declare global {
@@ -26,21 +28,23 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export interface RootState {
   userState: UserState;
-  errorState: ErrorState;
-  roleState: RoleState;
-  questionTypeState: QuestionTypeState;
-  questionState: QuestionState;
-  gameTypeState: GameTypeState;
+  errorsState: ErrorsState;
+  rolesState: RolesState;
+  questionTypesState: QuestionTypesState;
+  questionsState: QuestionsState;
+  gameTypesState: GameTypesState;
+  gamesState: GamesState;
   gameState: GameState;
 }
 
 const rootReducer = combineReducers<RootState>({
   userState: user,
-  errorState: error,
-  roleState: role,
-  questionTypeState: questionType,
-  questionState: question,
-  gameTypeState: gameType,
+  errorsState: errors,
+  rolesState: roles,
+  questionTypesState: questionTypes,
+  questionsState: questions,
+  gameTypesState: gameTypes,
+  gamesState: games,
   gameState: game
 });
 

@@ -3,33 +3,33 @@
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import { store } from '../index';
-import { QuestionActionTypes } from './types';
+import { QuestionsActionTypes } from './types';
 import apiHandler from '../../api/apiHandler';
-import { addError } from '../error/actions';
+import { addError } from '../errors/actions';
 import { Question, QuestionBackModel } from '../../api/classes/question.class';
 import { ServiceEvents } from '../../api/services/baseService';
 
 // Action Definition
 export interface ActionStarted {
-  type: QuestionActionTypes.ACTION_STARTED;
+  type: QuestionsActionTypes.ACTION_STARTED;
 }
 export interface ActionFailure {
-  type: QuestionActionTypes.ACTION_FAILURE;
+  type: QuestionsActionTypes.ACTION_FAILURE;
 }
 export interface Create {
-  type: QuestionActionTypes.CREATE;
+  type: QuestionsActionTypes.CREATE;
   question: Question;
 }
 export interface Update {
-  type: QuestionActionTypes.UPDATE;
+  type: QuestionsActionTypes.UPDATE;
   question: Question;
 }
 export interface Remove {
-  type: QuestionActionTypes.REMOVE;
+  type: QuestionsActionTypes.REMOVE;
   question: Question;
 }
 export interface GetAll {
-  type: QuestionActionTypes.GETALL;
+  type: QuestionsActionTypes.GETALL;
   questions: Question[];
 }
 // Union Action Types
@@ -41,12 +41,8 @@ export type Action =
   | Remove
   | GetAll;
 
-export class QuestionActions {
+export class QuestionsActions {
   private binded: boolean = false;
-  /**
-   *
-   */
-  constructor() {}
 
   public bindBaseEvents() {
     if (!this.binded) {
@@ -88,34 +84,34 @@ export class QuestionActions {
 
   private questionCreated(questionModel: QuestionBackModel) {
     store.dispatch({
-      type: QuestionActionTypes.CREATE,
+      type: QuestionsActionTypes.CREATE,
       question: Question.fromBack(questionModel)
     });
   }
 
   private questionUpdated(questionModel: QuestionBackModel) {
     store.dispatch({
-      type: QuestionActionTypes.UPDATE,
+      type: QuestionsActionTypes.UPDATE,
       question: Question.fromBack(questionModel)
     });
   }
 
   private questionRemoved(questionModel: QuestionBackModel) {
     store.dispatch({
-      type: QuestionActionTypes.REMOVE,
+      type: QuestionsActionTypes.REMOVE,
       question: Question.fromBack(questionModel)
     });
   }
 
-  private static questionActionStartedCreator = (): ActionStarted => {
+  private static questionsActionStartedCreator = (): ActionStarted => {
     return {
-      type: QuestionActionTypes.ACTION_STARTED
+      type: QuestionsActionTypes.ACTION_STARTED
     };
   };
 
-  private static questionActionFailureCreator = (): ActionFailure => {
+  private static questionsActionFailureCreator = (): ActionFailure => {
     return {
-      type: QuestionActionTypes.ACTION_FAILURE
+      type: QuestionsActionTypes.ACTION_FAILURE
     };
   };
 
@@ -126,7 +122,7 @@ export class QuestionActions {
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
       return new Promise<boolean>(resolve => {
-        dispatch(QuestionActions.questionActionStartedCreator());
+        dispatch(QuestionsActions.questionsActionStartedCreator());
         apiHandler.questionService.featherService
           .create(question)
           .then(question => {
@@ -143,7 +139,7 @@ export class QuestionActions {
             resolve(true);
           })
           .catch(error => {
-            dispatch(QuestionActions.questionActionFailureCreator());
+            dispatch(QuestionsActions.questionsActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
           });
@@ -158,7 +154,7 @@ export class QuestionActions {
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
       return new Promise<boolean>(resolve => {
-        dispatch(QuestionActions.questionActionStartedCreator());
+        dispatch(QuestionsActions.questionsActionStartedCreator());
         apiHandler.questionService.featherService
           .patch(question.id, question)
           .then(question => {
@@ -176,7 +172,7 @@ export class QuestionActions {
             resolve(true);
           })
           .catch(error => {
-            dispatch(QuestionActions.questionActionFailureCreator());
+            dispatch(QuestionsActions.questionsActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
           });
@@ -191,7 +187,7 @@ export class QuestionActions {
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
       return new Promise<boolean>(resolve => {
-        dispatch(QuestionActions.questionActionStartedCreator());
+        dispatch(QuestionsActions.questionsActionStartedCreator());
         apiHandler.questionService.featherService
           .remove(questionId)
           .then(question => {
@@ -209,7 +205,7 @@ export class QuestionActions {
             resolve(true);
           })
           .catch(error => {
-            dispatch(QuestionActions.questionActionFailureCreator());
+            dispatch(QuestionsActions.questionsActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
           });
@@ -227,18 +223,18 @@ export class QuestionActions {
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
       return new Promise<boolean>(resolve => {
-        dispatch(QuestionActions.questionActionStartedCreator());
+        dispatch(QuestionsActions.questionsActionStartedCreator());
         apiHandler.questionService.featherService
           .find()
           .then(questions => {
             dispatch({
-              type: QuestionActionTypes.GETALL,
+              type: QuestionsActionTypes.GETALL,
               questions: questions
             });
             resolve(true);
           })
           .catch(error => {
-            dispatch(QuestionActions.questionActionFailureCreator());
+            dispatch(QuestionsActions.questionsActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
           });
@@ -247,4 +243,4 @@ export class QuestionActions {
   };
 }
 
-export const questionActionsInstance = new QuestionActions();
+export const questionActionsInstance = new QuestionsActions();

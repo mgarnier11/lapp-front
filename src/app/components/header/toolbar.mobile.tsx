@@ -1,16 +1,13 @@
 import React from 'react';
 import Toolbar from '@material-ui/core/Toolbar';
 import {
-  makeStyles,
   IconButton,
   Typography,
-  Button,
   SwipeableDrawer,
   List,
   ListItem,
   ListItemText
 } from '@material-ui/core';
-import HouseIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
 import CloseIcon from '@material-ui/icons/Close';
 import { Link } from 'react-router-dom';
@@ -27,7 +24,7 @@ interface OwnProps {
 type Props = OwnProps;
 
 const ToolbarMobile: React.FunctionComponent<Props> = (props: Props) => {
-  const { user, classes, logout } = props;
+  const { user, classes } = props;
   const [state, setState] = React.useState({
     drawerOpen: false
   });

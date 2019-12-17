@@ -14,15 +14,14 @@ import {
 } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
-import { QuestionState } from '../../../store/question/types';
+import { QuestionsState } from '../../../store/questions/types';
 import { RootState } from '../../../store';
-import { QuestionActions } from '../../../store/question/actions';
-import { addError } from '../../../store/error/actions';
+import { QuestionsActions } from '../../../store/questions/actions';
+import { addError } from '../../../store/errors/actions';
 import { Question } from '../../../api/classes/question.class';
 import { Loading } from '../../components/loading/loading.component';
-import { QuestionTypeActions } from '../../../store/questionType/actions';
-import { QuestionTypeState } from '../../../store/questionType/types';
-import { QuestionType } from '../../../api/classes/questionType.class';
+import { QuestionTypesActions } from '../../../store/questionTypes/actions';
+import { QuestionTypesState } from '../../../store/questionTypes/types';
 import Rating from '@material-ui/lab/Rating';
 
 const styles = (theme: Theme): StyleRules =>
@@ -44,8 +43,8 @@ interface DispatchProps {
 }
 
 interface StateProps {
-  questionState: QuestionState;
-  questionTypeState: QuestionTypeState;
+  questionsState: QuestionsState;
+  questionTypesState: QuestionTypesState;
 }
 
 type Props = StateProps &
@@ -98,8 +97,8 @@ class Questions extends React.Component<Props, ComponentState> {
                 this.handleTypeChange(e, rowData);
               }}
             >
-              {this.props.questionTypeState.questionTypes ? (
-                this.props.questionTypeState.questionTypes.map(t => (
+              {this.props.questionTypesState.questionTypes ? (
+                this.props.questionTypesState.questionTypes.map(t => (
                   <MenuItem value={t.id} key={t.id}>
                     {t.name}
                   </MenuItem>
@@ -155,7 +154,7 @@ class Questions extends React.Component<Props, ComponentState> {
     e: React.ChangeEvent<{ value: unknown }>,
     rowData: EditComponentProps<Question>
   ) => {
-    const questionTypes = this.props.questionTypeState.questionTypes;
+    const questionTypes = this.props.questionTypesState.questionTypes;
 
     if (questionTypes) {
       rowData.onChange(
@@ -166,14 +165,14 @@ class Questions extends React.Component<Props, ComponentState> {
 
   reloadDatas() {
     if (
-      !this.props.questionState.questions &&
-      !this.props.questionState.loading
+      !this.props.questionsState.questions &&
+      !this.props.questionsState.loading
     ) {
       this.props.questionGetAll();
     }
     if (
-      !this.props.questionTypeState.questionTypes &&
-      !this.props.questionTypeState.loading
+      !this.props.questionTypesState.questionTypes &&
+      !this.props.questionTypesState.loading
     ) {
       this.props.questionTypeGetAll();
     }
@@ -188,7 +187,7 @@ class Questions extends React.Component<Props, ComponentState> {
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: ComponentState) {
-    let nextQuestions = nextProps.questionState.questions;
+    let nextQuestions = nextProps.questionsState.questions;
     if (nextQuestions) {
       let prevQuestions = prevState.questions;
 
@@ -207,7 +206,7 @@ class Questions extends React.Component<Props, ComponentState> {
 
     return (
       <Container component="main" className={classes.root}>
-        {this.props.questionState.questions
+        {this.props.questionsState.questions
           ? this.renderTable(this.state.questions)
           : this.renderLoading()}
       </Container>
@@ -249,8 +248,8 @@ const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   console.log(states);
 
   return {
-    questionState: states.questionState,
-    questionTypeState: states.questionTypeState
+    questionsState: states.questionsState,
+    questionTypesState: states.questionTypesState
   };
 };
 
@@ -260,16 +259,16 @@ const mapDispatchToProps = (
 ): DispatchProps => {
   return {
     questionUpdate: async (question: Question) => {
-      return await dispatch(QuestionActions.questionUpdate(question));
+      return await dispatch(QuestionsActions.questionUpdate(question));
     },
     questionRemove: async (questionId: string) => {
-      return await dispatch(QuestionActions.questionRemove(questionId));
+      return await dispatch(QuestionsActions.questionRemove(questionId));
     },
     questionGetAll: async () => {
-      await dispatch(QuestionActions.questionGetAll());
+      await dispatch(QuestionsActions.questionGetAll());
     },
     questionTypeGetAll: async () => {
-      await dispatch(QuestionTypeActions.questionTypeGetAll());
+      await dispatch(QuestionTypesActions.questionTypeGetAll());
     },
     addError: async (error: any) => {
       await dispatch(addError(error));

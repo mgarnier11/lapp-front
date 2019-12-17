@@ -13,10 +13,10 @@ import {
   Theme
 } from '@material-ui/core/styles';
 
-import { QuestionTypeState } from '../../../store/questionType/types';
+import { QuestionTypesState } from '../../../store/questionTypes/types';
 import { RootState } from '../../../store';
-import { QuestionTypeActions } from '../../../store/questionType/actions';
-import { addError } from '../../../store/error/actions';
+import { QuestionTypesActions } from '../../../store/questionTypes/actions';
+import { addError } from '../../../store/errors/actions';
 import { QuestionType } from '../../../api/classes/questionType.class';
 import { Loading } from '../../components/loading/loading.component';
 
@@ -39,7 +39,7 @@ interface DispatchProps {
 }
 
 interface StateProps {
-  questionTypeState: QuestionTypeState;
+  questionTypesState: QuestionTypesState;
 }
 
 type Props = StateProps &
@@ -68,8 +68,8 @@ class QuestionTypes extends React.Component<Props, ComponentState> {
 
   reloadDatas() {
     if (
-      !this.props.questionTypeState.questionTypes &&
-      !this.props.questionTypeState.loading
+      !this.props.questionTypesState.questionTypes &&
+      !this.props.questionTypesState.loading
     ) {
       this.props.questionTypeGetAll();
     }
@@ -84,7 +84,7 @@ class QuestionTypes extends React.Component<Props, ComponentState> {
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: ComponentState) {
-    let nextQuestionTypes = nextProps.questionTypeState.questionTypes;
+    let nextQuestionTypes = nextProps.questionTypesState.questionTypes;
     if (nextQuestionTypes) {
       let prevQuestionTypes = prevState.questionTypes;
 
@@ -103,7 +103,7 @@ class QuestionTypes extends React.Component<Props, ComponentState> {
 
     return (
       <Container component="main" className={classes.root}>
-        {this.props.questionTypeState.questionTypes
+        {this.props.questionTypesState.questionTypes
           ? this.renderTable(this.state.questionTypes)
           : this.renderLoading()}
       </Container>
@@ -154,7 +154,7 @@ class QuestionTypes extends React.Component<Props, ComponentState> {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    questionTypeState: states.questionTypeState
+    questionTypesState: states.questionTypesState
   };
 };
 
@@ -165,21 +165,21 @@ const mapDispatchToProps = (
   return {
     questionTypeCreate: async (questionType: Partial<QuestionType>) => {
       return await dispatch(
-        QuestionTypeActions.questionTypeCreate(questionType)
+        QuestionTypesActions.questionTypeCreate(questionType)
       );
     },
     questionTypeUpdate: async (questionType: QuestionType) => {
       return await dispatch(
-        QuestionTypeActions.questionTypeUpdate(questionType)
+        QuestionTypesActions.questionTypeUpdate(questionType)
       );
     },
     questionTypeRemove: async (questionTypeId: string) => {
       return await dispatch(
-        QuestionTypeActions.questionTypeRemove(questionTypeId)
+        QuestionTypesActions.questionTypeRemove(questionTypeId)
       );
     },
     questionTypeGetAll: async () => {
-      await dispatch(QuestionTypeActions.questionTypeGetAll());
+      await dispatch(QuestionTypesActions.questionTypeGetAll());
     },
     addError: async (error: any) => {
       await dispatch(addError(error));

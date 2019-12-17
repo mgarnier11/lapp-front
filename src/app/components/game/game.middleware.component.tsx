@@ -22,14 +22,10 @@ interface StateProps {
 type Props = StateProps & OwnProps & DispatchProps;
 
 const GameMiddleware: React.FunctionComponent<Props> = (props: Props) => {
-  let { games, loading } = props.gameState;
+  let { game, loading } = props.gameState;
   //const classes = useStyles();
 
-  return loading ? (
-    <Loading />
-  ) : (
-    
-  );
+  return loading ? <Loading /> : <Loading />;
 };
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
@@ -44,7 +40,7 @@ const mapDispatchToProps = (
 ): DispatchProps => {
   return {
     gameGetAll: async () => {
-      dispatch(GameActions.gameGetAll());
+      //dispatch(GameActions.gameGetAll());
     }
   };
 };

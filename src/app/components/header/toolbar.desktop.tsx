@@ -1,6 +1,6 @@
 import React from 'react';
 import Toolbar from '@material-ui/core/Toolbar';
-import { makeStyles, IconButton, Typography, Button } from '@material-ui/core';
+import { IconButton, Typography, Button } from '@material-ui/core';
 import HouseIcon from '@material-ui/icons/Home';
 import { Link } from 'react-router-dom';
 
@@ -16,7 +16,7 @@ interface OwnProps {
 type Props = OwnProps;
 
 const ToolbarDesktop: React.FunctionComponent<Props> = (props: Props) => {
-  const { user, classes, logout } = props;
+  const { user, classes } = props;
 
   const admin = () =>
     user.role.permissionLevel >= 100 ? (

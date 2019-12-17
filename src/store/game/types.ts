@@ -9,16 +9,15 @@ import { Game } from '../../api/classes/game.class';
 export enum GameActionTypes {
   ACTION_STARTED = '@@game/ACTION_STARTED',
   ACTION_FAILURE = '@@game/ACTION_FAILURE',
-  CREATE = '@@game/CREATE',
+  GET = '@@game/GET',
   UPDATE = '@@game/UPDATE',
-  REMOVE = '@@game/REMOVE',
-  GETALL = '@@game/GETALL'
+  REMOVE = '@@game/REMOVE'
 }
 
 // Declare state types with `readonly` modifier to get compile time immutability.
 // https://github.com/piotrwitek/react-redux-typescript-guide#state-with-type-level-immutability
 export interface GameState {
-  readonly games?: Game[];
+  readonly game?: Game;
   readonly loading: boolean;
 }
 

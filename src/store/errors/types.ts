@@ -12,17 +12,17 @@ export interface MyError {
 // Define however naming conventions you'd like for your action types, but
 // personally, I use the `@@context/ACTION_TYPE` convention, to follow the convention
 // of Redux's `@@INIT` action.
-export enum ErrorActionTypes {
+export enum ErrorsActionTypes {
   ADD_ERROR = '@@global/ADD_ERROR',
   HANDLE_ERROR = '@@global/HANDLE_ERROR'
 }
 
 // Declare state types with `readonly` modifier to get compile time immutability.
 // https://github.com/piotrwitek/react-redux-typescript-guide#state-with-type-level-immutability
-export interface ErrorState {
+export interface ErrorsState {
   readonly errors: MyError[];
 }
 
-export const defaultErrorState: ErrorState = {
+export const defaultErrorsState: ErrorsState = {
   errors: []
 };

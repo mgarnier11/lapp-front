@@ -22,9 +22,9 @@ import { RootState } from '../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { relog } from '../store/user/actions';
 import { CssBaseline, Fab, Modal } from '@material-ui/core';
-import { RoleActions, roleActionsInstance } from '../store/role/actions';
-import { questionActionsInstance } from '../store/question/actions';
-import { questionTypeActionsInstance } from '../store/questionType/actions';
+import { RolesActions, roleActionsInstance } from '../store/roles/actions';
+import { questionActionsInstance } from '../store/questions/actions';
+import { questionTypeActionsInstance } from '../store/questionTypes/actions';
 import { UserState } from '../store/user/types';
 import apiHandler from '../api/apiHandler';
 import { Question } from '../api/classes/question.class';
@@ -237,7 +237,7 @@ const mapDispatchToProps = (
       await dispatch(relog(false));
     },
     roleGetAll: async () => {
-      await dispatch(RoleActions.roleGetAll());
+      await dispatch(RolesActions.roleGetAll());
     }
   };
 };

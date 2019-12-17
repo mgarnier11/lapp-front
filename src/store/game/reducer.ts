@@ -3,7 +3,7 @@ import { Action } from './actions';
 import { GameState, defaultGameState, GameActionTypes } from './types';
 // States' definition
 
-const game = (
+export const game = (
   gameState: GameState = defaultGameState,
   action: Action
 ): GameState => {
@@ -21,11 +21,11 @@ const game = (
       };
     }
 
-    case GameActionTypes.CREATE: {
-      if (gameState.games) {
+    case GameActionTypes.GET: {
+      if (gameState.game) {
         return {
           ...gameState,
-          games: gameState.games.concat(action.game),
+          game: gameState.game,
           loading: false
         };
       } else {
@@ -37,12 +37,10 @@ const game = (
     }
 
     case GameActionTypes.UPDATE: {
-      if (gameState.games) {
+      if (gameState.game) {
         return {
           ...gameState,
-          games: gameState.games.map(game =>
-            game.id === action.game.id ? action.game : game
-          ),
+          game: gameState.game,
           loading: false
         };
       } else {
@@ -54,24 +52,9 @@ const game = (
     }
 
     case GameActionTypes.REMOVE: {
-      if (gameState.games) {
-        return {
-          ...gameState,
-          games: gameState.games.filter(game => game.id !== action.game.id),
-          loading: false
-        };
-      } else {
-        return {
-          ...gameState,
-          loading: false
-        };
-      }
-    }
-
-    case GameActionTypes.GETALL: {
       return {
         ...gameState,
-        games: action.games,
+        game: undefined,
         loading: false
       };
     }

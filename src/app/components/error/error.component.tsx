@@ -4,8 +4,8 @@ import { ThunkDispatch } from 'redux-thunk';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { RootState } from '../../../store';
-import { ErrorState, MyError } from '../../../store/error/types';
-import { handleError } from '../../../store/error/actions';
+import { ErrorsState, MyError } from '../../../store/errors/types';
+import { handleError } from '../../../store/errors/actions';
 import { IconButton } from '@material-ui/core';
 import { WithSnackbarProps, withSnackbar } from 'notistack';
 
@@ -16,7 +16,7 @@ interface DispatchProps {
 }
 
 interface StateProps {
-  errorState: ErrorState;
+  errorsState: ErrorsState;
 }
 
 type Props = StateProps & OwnProps & DispatchProps & WithSnackbarProps;
@@ -62,8 +62,8 @@ class Error extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
-    let prevErrors = prevProps.errorState.errors;
-    let errors = this.props.errorState.errors;
+    let prevErrors = prevProps.errorsState.errors;
+    let errors = this.props.errorsState.errors;
 
     if (prevErrors.length !== errors.length) {
       let newError = errors
@@ -81,7 +81,7 @@ class Error extends React.Component<Props, State> {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    errorState: states.errorState
+    errorsState: states.errorsState
   };
 };
 

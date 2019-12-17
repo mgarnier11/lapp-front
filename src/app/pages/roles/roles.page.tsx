@@ -13,10 +13,10 @@ import {
   Theme
 } from '@material-ui/core/styles';
 
-import { RoleState } from '../../../store/role/types';
+import { RolesState } from '../../../store/roles/types';
 import { RootState } from '../../../store';
-import { RoleActions } from '../../../store/role/actions';
-import { addError } from '../../../store/error/actions';
+import { RolesActions } from '../../../store/roles/actions';
+import { addError } from '../../../store/errors/actions';
 import { Role } from '../../../api/classes/role.class';
 import { Loading } from '../../components/loading/loading.component';
 
@@ -39,7 +39,7 @@ interface DispatchProps {
 }
 
 interface StateProps {
-  roleState: RoleState;
+  rolesState: RolesState;
 }
 
 type Props = StateProps &
@@ -76,7 +76,7 @@ class Roles extends React.Component<Props, ComponentState> {
   }
 
   reloadDatas() {
-    if (!this.props.roleState.roles && !this.props.roleState.loading) {
+    if (!this.props.rolesState.roles && !this.props.rolesState.loading) {
       this.props.roleGetAll();
     }
   }
@@ -90,7 +90,7 @@ class Roles extends React.Component<Props, ComponentState> {
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: ComponentState) {
-    let nextRoles = nextProps.roleState.roles;
+    let nextRoles = nextProps.rolesState.roles;
     if (nextRoles) {
       let prevRoles = prevState.roles;
 
@@ -109,7 +109,7 @@ class Roles extends React.Component<Props, ComponentState> {
 
     return (
       <Container component="main" className={classes.root}>
-        {this.props.roleState.roles
+        {this.props.rolesState.roles
           ? this.renderTable(this.state.roles)
           : this.renderLoading()}
       </Container>
@@ -160,7 +160,7 @@ class Roles extends React.Component<Props, ComponentState> {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    roleState: states.roleState
+    rolesState: states.rolesState
   };
 };
 
@@ -170,16 +170,16 @@ const mapDispatchToProps = (
 ): DispatchProps => {
   return {
     roleCreate: async (role: Partial<Role>) => {
-      return await dispatch(RoleActions.roleCreate(role));
+      return await dispatch(RolesActions.roleCreate(role));
     },
     roleUpdate: async (role: Role) => {
-      return await dispatch(RoleActions.roleUpdate(role));
+      return await dispatch(RolesActions.roleUpdate(role));
     },
     roleRemove: async (roleId: string) => {
-      return await dispatch(RoleActions.roleRemove(roleId));
+      return await dispatch(RolesActions.roleRemove(roleId));
     },
     roleGetAll: async () => {
-      await dispatch(RoleActions.roleGetAll());
+      await dispatch(RolesActions.roleGetAll());
     },
     addError: async (error: any) => {
       await dispatch(addError(error));

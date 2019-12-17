@@ -3,33 +3,33 @@
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import { store } from '../index';
-import { GameTypeActionTypes } from './types';
+import { GameTypesActionTypes } from './types';
 import apiHandler from '../../api/apiHandler';
-import { addError } from '../error/actions';
+import { addError } from '../errors/actions';
 import { GameType, GameTypeBackModel } from '../../api/classes/gameType.class';
 import { ServiceEvents } from '../../api/services/baseService';
 
 // Action Definition
 export interface ActionStarted {
-  type: GameTypeActionTypes.ACTION_STARTED;
+  type: GameTypesActionTypes.ACTION_STARTED;
 }
 export interface ActionFailure {
-  type: GameTypeActionTypes.ACTION_FAILURE;
+  type: GameTypesActionTypes.ACTION_FAILURE;
 }
 export interface Create {
-  type: GameTypeActionTypes.CREATE;
+  type: GameTypesActionTypes.CREATE;
   gameType: GameType;
 }
 export interface Update {
-  type: GameTypeActionTypes.UPDATE;
+  type: GameTypesActionTypes.UPDATE;
   gameType: GameType;
 }
 export interface Remove {
-  type: GameTypeActionTypes.REMOVE;
+  type: GameTypesActionTypes.REMOVE;
   gameType: GameType;
 }
 export interface GetAll {
-  type: GameTypeActionTypes.GETALL;
+  type: GameTypesActionTypes.GETALL;
   gameTypes: GameType[];
 }
 // Union Action Types
@@ -41,12 +41,8 @@ export type Action =
   | Remove
   | GetAll;
 
-export class GameTypeActions {
+export class GameTypesActions {
   private binded: boolean = false;
-  /**
-   *
-   */
-  constructor() {}
 
   public bindBaseEvents() {
     if (!this.binded) {
@@ -88,34 +84,34 @@ export class GameTypeActions {
 
   private gameTypeCreated(gameTypeModel: GameTypeBackModel) {
     store.dispatch({
-      type: GameTypeActionTypes.CREATE,
+      type: GameTypesActionTypes.CREATE,
       gameType: GameType.fromBack(gameTypeModel)
     });
   }
 
   private gameTypeUpdated(gameTypeModel: GameTypeBackModel) {
     store.dispatch({
-      type: GameTypeActionTypes.UPDATE,
+      type: GameTypesActionTypes.UPDATE,
       gameType: GameType.fromBack(gameTypeModel)
     });
   }
 
   private gameTypeRemoved(gameTypeModel: GameTypeBackModel) {
     store.dispatch({
-      type: GameTypeActionTypes.REMOVE,
+      type: GameTypesActionTypes.REMOVE,
       gameType: GameType.fromBack(gameTypeModel)
     });
   }
 
-  private static gameTypeActionStartedCreator = (): ActionStarted => {
+  private static gameTypesActionStartedCreator = (): ActionStarted => {
     return {
-      type: GameTypeActionTypes.ACTION_STARTED
+      type: GameTypesActionTypes.ACTION_STARTED
     };
   };
 
-  private static gameTypeActionFailureCreator = (): ActionFailure => {
+  private static gameTypesActionFailureCreator = (): ActionFailure => {
     return {
-      type: GameTypeActionTypes.ACTION_FAILURE
+      type: GameTypesActionTypes.ACTION_FAILURE
     };
   };
 
@@ -126,7 +122,7 @@ export class GameTypeActions {
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
       return new Promise<boolean>(resolve => {
-        dispatch(GameTypeActions.gameTypeActionStartedCreator());
+        dispatch(GameTypesActions.gameTypesActionStartedCreator());
         apiHandler.gameTypeService.featherService
           .create(gameType)
           .then(gameType => {
@@ -143,7 +139,7 @@ export class GameTypeActions {
             resolve(true);
           })
           .catch(error => {
-            dispatch(GameTypeActions.gameTypeActionFailureCreator());
+            dispatch(GameTypesActions.gameTypesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
           });
@@ -158,7 +154,7 @@ export class GameTypeActions {
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
       return new Promise<boolean>(resolve => {
-        dispatch(GameTypeActions.gameTypeActionStartedCreator());
+        dispatch(GameTypesActions.gameTypesActionStartedCreator());
         apiHandler.gameTypeService.featherService
           .patch(gameType.id, gameType)
           .then(gameType => {
@@ -176,7 +172,7 @@ export class GameTypeActions {
             resolve(true);
           })
           .catch(error => {
-            dispatch(GameTypeActions.gameTypeActionFailureCreator());
+            dispatch(GameTypesActions.gameTypesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
           });
@@ -191,7 +187,7 @@ export class GameTypeActions {
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
       return new Promise<boolean>(resolve => {
-        dispatch(GameTypeActions.gameTypeActionStartedCreator());
+        dispatch(GameTypesActions.gameTypesActionStartedCreator());
         apiHandler.gameTypeService.featherService
           .remove(gameTypeId)
           .then(gameType => {
@@ -209,7 +205,7 @@ export class GameTypeActions {
             resolve(true);
           })
           .catch(error => {
-            dispatch(GameTypeActions.gameTypeActionFailureCreator());
+            dispatch(GameTypesActions.gameTypesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
           });
@@ -227,18 +223,18 @@ export class GameTypeActions {
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
       return new Promise<boolean>(resolve => {
-        dispatch(GameTypeActions.gameTypeActionStartedCreator());
+        dispatch(GameTypesActions.gameTypesActionStartedCreator());
         apiHandler.gameTypeService.featherService
           .find()
           .then(gameTypes => {
             dispatch({
-              type: GameTypeActionTypes.GETALL,
+              type: GameTypesActionTypes.GETALL,
               gameTypes: gameTypes
             });
             resolve(true);
           })
           .catch(error => {
-            dispatch(GameTypeActions.gameTypeActionFailureCreator());
+            dispatch(GameTypesActions.gameTypesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
           });
@@ -247,4 +243,4 @@ export class GameTypeActions {
   };
 }
 
-export const gameTypeActionsInstance = new GameTypeActions();
+export const gameTypeActionsInstance = new GameTypesActions();

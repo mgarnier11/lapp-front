@@ -3,33 +3,33 @@
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import { store } from '../index';
-import { RoleActionTypes } from './types';
+import { RolesActionTypes } from './types';
 import apiHandler from '../../api/apiHandler';
-import { addError } from '../error/actions';
+import { addError } from '../errors/actions';
 import { Role, RoleBackModel } from '../../api/classes/role.class';
 import { ServiceEvents } from '../../api/services/baseService';
 
 // Action Definition
 export interface ActionStarted {
-  type: RoleActionTypes.ACTION_STARTED;
+  type: RolesActionTypes.ACTION_STARTED;
 }
 export interface ActionFailure {
-  type: RoleActionTypes.ACTION_FAILURE;
+  type: RolesActionTypes.ACTION_FAILURE;
 }
 export interface Create {
-  type: RoleActionTypes.CREATE;
+  type: RolesActionTypes.CREATE;
   role: Role;
 }
 export interface Update {
-  type: RoleActionTypes.UPDATE;
+  type: RolesActionTypes.UPDATE;
   role: Role;
 }
 export interface Remove {
-  type: RoleActionTypes.REMOVE;
+  type: RolesActionTypes.REMOVE;
   role: Role;
 }
 export interface GetAll {
-  type: RoleActionTypes.GETALL;
+  type: RolesActionTypes.GETALL;
   roles: Role[];
 }
 // Union Action Types
@@ -41,12 +41,8 @@ export type Action =
   | Remove
   | GetAll;
 
-export class RoleActions {
+export class RolesActions {
   private binded: boolean = false;
-  /**
-   *
-   */
-  constructor() {}
 
   public bindBaseEvents() {
     if (!this.binded) {
@@ -88,34 +84,34 @@ export class RoleActions {
 
   private roleCreated(roleModel: RoleBackModel) {
     store.dispatch({
-      type: RoleActionTypes.CREATE,
+      type: RolesActionTypes.CREATE,
       role: Role.fromBack(roleModel)
     });
   }
 
   private roleUpdated(roleModel: RoleBackModel) {
     store.dispatch({
-      type: RoleActionTypes.UPDATE,
+      type: RolesActionTypes.UPDATE,
       role: Role.fromBack(roleModel)
     });
   }
 
   private roleRemoved(roleModel: RoleBackModel) {
     store.dispatch({
-      type: RoleActionTypes.REMOVE,
+      type: RolesActionTypes.REMOVE,
       role: Role.fromBack(roleModel)
     });
   }
 
-  private static roleActionStartedCreator = (): ActionStarted => {
+  private static rolesActionStartedCreator = (): ActionStarted => {
     return {
-      type: RoleActionTypes.ACTION_STARTED
+      type: RolesActionTypes.ACTION_STARTED
     };
   };
 
-  private static roleActionFailureCreator = (): ActionFailure => {
+  private static rolesActionFailureCreator = (): ActionFailure => {
     return {
-      type: RoleActionTypes.ACTION_FAILURE
+      type: RolesActionTypes.ACTION_FAILURE
     };
   };
 
@@ -126,7 +122,7 @@ export class RoleActions {
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
       return new Promise<boolean>(resolve => {
-        dispatch(RoleActions.roleActionStartedCreator());
+        dispatch(RolesActions.rolesActionStartedCreator());
         apiHandler.roleService.featherService
           .create(role)
           .then(role => {
@@ -140,7 +136,7 @@ export class RoleActions {
             resolve(true);
           })
           .catch(error => {
-            dispatch(RoleActions.roleActionFailureCreator());
+            dispatch(RolesActions.rolesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
           });
@@ -155,7 +151,7 @@ export class RoleActions {
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
       return new Promise<boolean>(resolve => {
-        dispatch(RoleActions.roleActionStartedCreator());
+        dispatch(RolesActions.rolesActionStartedCreator());
         apiHandler.roleService.featherService
           .patch(role.id, role)
           .then(role => {
@@ -170,7 +166,7 @@ export class RoleActions {
             resolve(true);
           })
           .catch(error => {
-            dispatch(RoleActions.roleActionFailureCreator());
+            dispatch(RolesActions.rolesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
           });
@@ -185,7 +181,7 @@ export class RoleActions {
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
       return new Promise<boolean>(resolve => {
-        dispatch(RoleActions.roleActionStartedCreator());
+        dispatch(RolesActions.rolesActionStartedCreator());
         apiHandler.roleService.featherService
           .remove(roleId)
           .then(role => {
@@ -200,7 +196,7 @@ export class RoleActions {
             resolve(true);
           })
           .catch(error => {
-            dispatch(RoleActions.roleActionFailureCreator());
+            dispatch(RolesActions.rolesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
           });
@@ -218,18 +214,18 @@ export class RoleActions {
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
       return new Promise<boolean>(resolve => {
-        dispatch(RoleActions.roleActionStartedCreator());
+        dispatch(RolesActions.rolesActionStartedCreator());
         apiHandler.roleService.featherService
           .find()
           .then(roles => {
             dispatch({
-              type: RoleActionTypes.GETALL,
+              type: RolesActionTypes.GETALL,
               roles: roles
             });
             resolve(true);
           })
           .catch(error => {
-            dispatch(RoleActions.roleActionFailureCreator());
+            dispatch(RolesActions.rolesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
           });
@@ -238,4 +234,4 @@ export class RoleActions {
   };
 }
 
-export const roleActionsInstance = new RoleActions();
+export const roleActionsInstance = new RolesActions();

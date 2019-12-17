@@ -3,9 +3,9 @@
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import { store } from '../index';
-import { QuestionTypeActionTypes } from './types';
+import { QuestionTypesActionTypes } from './types';
 import apiHandler from '../../api/apiHandler';
-import { addError } from '../error/actions';
+import { addError } from '../errors/actions';
 import {
   QuestionType,
   QuestionTypeBackModel
@@ -14,25 +14,25 @@ import { ServiceEvents } from '../../api/services/baseService';
 
 // Action Definition
 export interface ActionStarted {
-  type: QuestionTypeActionTypes.ACTION_STARTED;
+  type: QuestionTypesActionTypes.ACTION_STARTED;
 }
 export interface ActionFailure {
-  type: QuestionTypeActionTypes.ACTION_FAILURE;
+  type: QuestionTypesActionTypes.ACTION_FAILURE;
 }
 export interface Create {
-  type: QuestionTypeActionTypes.CREATE;
+  type: QuestionTypesActionTypes.CREATE;
   questionType: QuestionType;
 }
 export interface Update {
-  type: QuestionTypeActionTypes.UPDATE;
+  type: QuestionTypesActionTypes.UPDATE;
   questionType: QuestionType;
 }
 export interface Remove {
-  type: QuestionTypeActionTypes.REMOVE;
+  type: QuestionTypesActionTypes.REMOVE;
   questionType: QuestionType;
 }
 export interface GetAll {
-  type: QuestionTypeActionTypes.GETALL;
+  type: QuestionTypesActionTypes.GETALL;
   questionTypes: QuestionType[];
 }
 // Union Action Types
@@ -44,12 +44,8 @@ export type Action =
   | Remove
   | GetAll;
 
-export class QuestionTypeActions {
+export class QuestionTypesActions {
   private binded: boolean = false;
-  /**
-   *
-   */
-  constructor() {}
 
   public bindBaseEvents() {
     if (!this.binded) {
@@ -91,34 +87,34 @@ export class QuestionTypeActions {
 
   private questionTypeCreated(questionTypeModel: QuestionTypeBackModel) {
     store.dispatch({
-      type: QuestionTypeActionTypes.CREATE,
+      type: QuestionTypesActionTypes.CREATE,
       questionType: QuestionType.fromBack(questionTypeModel)
     });
   }
 
   private questionTypeUpdated(questionTypeModel: QuestionTypeBackModel) {
     store.dispatch({
-      type: QuestionTypeActionTypes.UPDATE,
+      type: QuestionTypesActionTypes.UPDATE,
       questionType: QuestionType.fromBack(questionTypeModel)
     });
   }
 
   private questionTypeRemoved(questionTypeModel: QuestionTypeBackModel) {
     store.dispatch({
-      type: QuestionTypeActionTypes.REMOVE,
+      type: QuestionTypesActionTypes.REMOVE,
       questionType: QuestionType.fromBack(questionTypeModel)
     });
   }
 
-  private static questionTypeActionStartedCreator = (): ActionStarted => {
+  private static questionTypesActionStartedCreator = (): ActionStarted => {
     return {
-      type: QuestionTypeActionTypes.ACTION_STARTED
+      type: QuestionTypesActionTypes.ACTION_STARTED
     };
   };
 
-  private static questionTypeActionFailureCreator = (): ActionFailure => {
+  private static questionTypesActionFailureCreator = (): ActionFailure => {
     return {
-      type: QuestionTypeActionTypes.ACTION_FAILURE
+      type: QuestionTypesActionTypes.ACTION_FAILURE
     };
   };
 
@@ -129,7 +125,7 @@ export class QuestionTypeActions {
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
       return new Promise<boolean>(resolve => {
-        dispatch(QuestionTypeActions.questionTypeActionStartedCreator());
+        dispatch(QuestionTypesActions.questionTypesActionStartedCreator());
         apiHandler.questionTypeService.featherService
           .create(questionType)
           .then(questionType => {
@@ -146,7 +142,7 @@ export class QuestionTypeActions {
             resolve(true);
           })
           .catch(error => {
-            dispatch(QuestionTypeActions.questionTypeActionFailureCreator());
+            dispatch(QuestionTypesActions.questionTypesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
           });
@@ -161,7 +157,7 @@ export class QuestionTypeActions {
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
       return new Promise<boolean>(resolve => {
-        dispatch(QuestionTypeActions.questionTypeActionStartedCreator());
+        dispatch(QuestionTypesActions.questionTypesActionStartedCreator());
         apiHandler.questionTypeService.featherService
           .patch(questionType.id, questionType)
           .then(questionType => {
@@ -179,7 +175,7 @@ export class QuestionTypeActions {
             resolve(true);
           })
           .catch(error => {
-            dispatch(QuestionTypeActions.questionTypeActionFailureCreator());
+            dispatch(QuestionTypesActions.questionTypesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
           });
@@ -194,7 +190,7 @@ export class QuestionTypeActions {
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
       return new Promise<boolean>(resolve => {
-        dispatch(QuestionTypeActions.questionTypeActionStartedCreator());
+        dispatch(QuestionTypesActions.questionTypesActionStartedCreator());
         apiHandler.questionTypeService.featherService
           .remove(questionTypeId)
           .then(questionType => {
@@ -212,7 +208,7 @@ export class QuestionTypeActions {
             resolve(true);
           })
           .catch(error => {
-            dispatch(QuestionTypeActions.questionTypeActionFailureCreator());
+            dispatch(QuestionTypesActions.questionTypesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
           });
@@ -230,18 +226,18 @@ export class QuestionTypeActions {
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
       return new Promise<boolean>(resolve => {
-        dispatch(QuestionTypeActions.questionTypeActionStartedCreator());
+        dispatch(QuestionTypesActions.questionTypesActionStartedCreator());
         apiHandler.questionTypeService.featherService
           .find()
           .then(questionTypes => {
             dispatch({
-              type: QuestionTypeActionTypes.GETALL,
+              type: QuestionTypesActionTypes.GETALL,
               questionTypes: questionTypes
             });
             resolve(true);
           })
           .catch(error => {
-            dispatch(QuestionTypeActions.questionTypeActionFailureCreator());
+            dispatch(QuestionTypesActions.questionTypesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
           });
@@ -250,4 +246,4 @@ export class QuestionTypeActions {
   };
 }
 
-export const questionTypeActionsInstance = new QuestionTypeActions();
+export const questionTypeActionsInstance = new QuestionTypesActions();

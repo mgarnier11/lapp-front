@@ -1,30 +1,30 @@
 import { Action } from './actions';
 import {
-  QuestionState,
-  defaultQuestionState,
-  QuestionActionTypes
+  QuestionsState,
+  defaultQuestionsState,
+  QuestionsActionTypes
 } from './types';
 // States' definition
 
-const question = (
-  questionState: QuestionState = defaultQuestionState,
+export const questions = (
+  questionState: QuestionsState = defaultQuestionsState,
   action: Action
-): QuestionState => {
+): QuestionsState => {
   switch (action.type) {
-    case QuestionActionTypes.ACTION_STARTED: {
+    case QuestionsActionTypes.ACTION_STARTED: {
       return {
         ...questionState,
         loading: true
       };
     }
-    case QuestionActionTypes.ACTION_FAILURE: {
+    case QuestionsActionTypes.ACTION_FAILURE: {
       return {
         ...questionState,
         loading: false
       };
     }
 
-    case QuestionActionTypes.CREATE: {
+    case QuestionsActionTypes.CREATE: {
       if (questionState.questions) {
         return {
           ...questionState,
@@ -39,7 +39,7 @@ const question = (
       }
     }
 
-    case QuestionActionTypes.UPDATE: {
+    case QuestionsActionTypes.UPDATE: {
       if (questionState.questions) {
         return {
           ...questionState,
@@ -56,7 +56,7 @@ const question = (
       }
     }
 
-    case QuestionActionTypes.REMOVE: {
+    case QuestionsActionTypes.REMOVE: {
       if (questionState.questions) {
         return {
           ...questionState,
@@ -73,7 +73,7 @@ const question = (
       }
     }
 
-    case QuestionActionTypes.GETALL: {
+    case QuestionsActionTypes.GETALL: {
       return {
         ...questionState,
         questions: action.questions,
@@ -85,4 +85,4 @@ const question = (
   }
 };
 
-export default question;
+export default questions;

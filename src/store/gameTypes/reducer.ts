@@ -1,30 +1,30 @@
 import { Action } from './actions';
 import {
-  GameTypeState,
-  defaultGameTypeState,
-  GameTypeActionTypes
+  GameTypesState,
+  defaultGameTypesState,
+  GameTypesActionTypes
 } from './types';
 // States' definition
 
-const gameType = (
-  gameTypeState: GameTypeState = defaultGameTypeState,
+export const gameTypes = (
+  gameTypeState: GameTypesState = defaultGameTypesState,
   action: Action
-): GameTypeState => {
+): GameTypesState => {
   switch (action.type) {
-    case GameTypeActionTypes.ACTION_STARTED: {
+    case GameTypesActionTypes.ACTION_STARTED: {
       return {
         ...gameTypeState,
         loading: true
       };
     }
-    case GameTypeActionTypes.ACTION_FAILURE: {
+    case GameTypesActionTypes.ACTION_FAILURE: {
       return {
         ...gameTypeState,
         loading: false
       };
     }
 
-    case GameTypeActionTypes.CREATE: {
+    case GameTypesActionTypes.CREATE: {
       if (gameTypeState.gameTypes) {
         return {
           ...gameTypeState,
@@ -39,7 +39,7 @@ const gameType = (
       }
     }
 
-    case GameTypeActionTypes.UPDATE: {
+    case GameTypesActionTypes.UPDATE: {
       if (gameTypeState.gameTypes) {
         return {
           ...gameTypeState,
@@ -56,7 +56,7 @@ const gameType = (
       }
     }
 
-    case GameTypeActionTypes.REMOVE: {
+    case GameTypesActionTypes.REMOVE: {
       if (gameTypeState.gameTypes) {
         return {
           ...gameTypeState,
@@ -73,7 +73,7 @@ const gameType = (
       }
     }
 
-    case GameTypeActionTypes.GETALL: {
+    case GameTypesActionTypes.GETALL: {
       return {
         ...gameTypeState,
         gameTypes: action.gameTypes,
@@ -85,4 +85,4 @@ const gameType = (
   }
 };
 
-export default gameType;
+export default gameTypes;

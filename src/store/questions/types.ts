@@ -1,4 +1,3 @@
-import { Role } from '../../api/classes/role.class';
 import { Question } from '../../api/classes/question.class';
 
 // Use `enum`s for better autocompletion of action type names. These will
@@ -7,7 +6,7 @@ import { Question } from '../../api/classes/question.class';
 // Define however naming conventions you'd like for your action types, but
 // personally, I use the `@@context/ACTION_TYPE` convention, to follow the convention
 // of Redux's `@@INIT` action.
-export enum QuestionActionTypes {
+export enum QuestionsActionTypes {
   ACTION_STARTED = '@@question/ACTION_STARTED',
   ACTION_FAILURE = '@@question/ACTION_FAILURE',
   CREATE = '@@question/CREATE',
@@ -18,9 +17,9 @@ export enum QuestionActionTypes {
 
 // Declare state types with `readonly` modifier to get compile time immutability.
 // https://github.com/piotrwitek/react-redux-typescript-guide#state-with-type-level-immutability
-export interface QuestionState {
+export interface QuestionsState {
   readonly questions?: Question[];
   readonly loading: boolean;
 }
 
-export const defaultQuestionState: QuestionState = { loading: false };
+export const defaultQuestionsState: QuestionsState = { loading: false };

@@ -1,20 +1,20 @@
 import { Action } from './actions';
-import { ErrorState, defaultErrorState, ErrorActionTypes } from './types';
+import { ErrorsState, defaultErrorsState, ErrorsActionTypes } from './types';
 // States' definition
 
-const error = (
-  errorState: ErrorState = defaultErrorState,
+export const errors = (
+  errorState: ErrorsState = defaultErrorsState,
   action: Action
-): ErrorState => {
+): ErrorsState => {
   switch (action.type) {
-    case ErrorActionTypes.ADD_ERROR: {
+    case ErrorsActionTypes.ADD_ERROR: {
       return {
         ...errorState,
         errors: errorState.errors.concat(action.error)
       };
     }
 
-    case ErrorActionTypes.HANDLE_ERROR: {
+    case ErrorsActionTypes.HANDLE_ERROR: {
       return {
         ...errorState,
         errors: errorState.errors.map(err =>
@@ -27,4 +27,4 @@ const error = (
   }
 };
 
-export default error;
+export default errors;

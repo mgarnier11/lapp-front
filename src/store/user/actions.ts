@@ -4,7 +4,7 @@ import { AnyAction } from 'redux';
 import { UserActionTypes } from './types';
 import { LoginCredentials, User } from '../../api/classes/user.class';
 import apiHandler from '../../api/apiHandler';
-import { addError } from '../error/actions';
+import { addError } from '../errors/actions';
 import { ServiceEvents } from '../../api/services/baseService';
 
 // Action Definition

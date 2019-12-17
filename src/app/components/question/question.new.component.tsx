@@ -1,15 +1,12 @@
-import * as lodash from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import {
   Container,
-  Box,
   Typography,
   Card,
   CardContent,
   CardHeader,
-  TextareaAutosize,
   Grid,
   Select,
   MenuItem,
@@ -30,13 +27,12 @@ import Rating from '@material-ui/lab/Rating';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import { RootState } from '../../../store';
-import { QuestionActions } from '../../../store/question/actions';
-import { addError } from '../../../store/error/actions';
+import { QuestionsActions } from '../../../store/questions/actions';
+import { addError } from '../../../store/errors/actions';
 import { Question } from '../../../api/classes/question.class';
-import { Loading } from '../loading/loading.component';
-import { QuestionTypeActions } from '../../../store/questionType/actions';
-import { QuestionTypeState } from '../../../store/questionType/types';
-import { QuestionState } from '../../../store/question/types';
+import { QuestionTypesActions } from '../../../store/questionTypes/actions';
+import { QuestionTypesState } from '../../../store/questionTypes/types';
+import { QuestionsState } from '../../../store/questions/types';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
@@ -80,8 +76,8 @@ interface DispatchProps {
 }
 
 interface StateProps {
-  questionTypeState: QuestionTypeState;
-  questionState: QuestionState;
+  questionTypesState: QuestionTypesState;
+  questionsState: QuestionsState;
 }
 
 type Props = StateProps &
@@ -110,8 +106,8 @@ class QuestionNewComponent extends React.Component<Props, ComponentState> {
 
   reloadDatas() {
     if (
-      !this.props.questionTypeState.questionTypes &&
-      !this.props.questionTypeState.loading
+      !this.props.questionTypesState.questionTypes &&
+      !this.props.questionTypesState.loading
     ) {
       this.props.questionTypeGetAll();
     }
@@ -140,7 +136,7 @@ class QuestionNewComponent extends React.Component<Props, ComponentState> {
   };
 
   handleTypeChange = (e: React.ChangeEvent<{ value: unknown }>) => {
-    const questionTypes = this.props.questionTypeState.questionTypes;
+    const questionTypes = this.props.questionTypesState.questionTypes;
 
     if (questionTypes) {
       this.setState({
@@ -169,8 +165,8 @@ class QuestionNewComponent extends React.Component<Props, ComponentState> {
 
   isDenied(): boolean {
     const { difficulty, hotLevel, text, type } = this.state.question;
-    const questionTypes = this.props.questionTypeState.questionTypes;
-    const questionLoading = this.props.questionState.loading;
+    const questionTypes = this.props.questionTypesState.questionTypes;
+    const questionLoading = this.props.questionsState.loading;
     return (
       questionLoading ||
       (questionTypes ? !questionTypes.includes(type) : true) ||
@@ -183,7 +179,7 @@ class QuestionNewComponent extends React.Component<Props, ComponentState> {
   render() {
     const classes = this.props.classes;
     const { difficulty, hotLevel, text, type } = this.state.question;
-    const questionTypes = this.props.questionTypeState.questionTypes;
+    const questionTypes = this.props.questionTypesState.questionTypes;
 
     return (
       <Container component="main" className={classes.root} tabIndex={-1}>
@@ -264,8 +260,8 @@ class QuestionNewComponent extends React.Component<Props, ComponentState> {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    questionTypeState: states.questionTypeState,
-    questionState: states.questionState
+    questionTypesState: states.questionTypesState,
+    questionsState: states.questionsState
   };
 };
 
@@ -275,10 +271,10 @@ const mapDispatchToProps = (
 ): DispatchProps => {
   return {
     questionCreate: async (question: Partial<Question>) => {
-      return await dispatch(QuestionActions.questionCreate(question));
+      return await dispatch(QuestionsActions.questionCreate(question));
     },
     questionTypeGetAll: async () => {
-      await dispatch(QuestionTypeActions.questionTypeGetAll());
+      await dispatch(QuestionTypesActions.questionTypeGetAll());
     },
     addError: async (error: any) => {
       await dispatch(addError(error));

@@ -21,9 +21,9 @@ import { User } from '../../../../api/classes/user.class';
 import { logout, register } from '../../../../store/user/actions';
 import { RouterProps } from 'react-router';
 import { Role } from '../../../../api/classes/role.class';
-import { RoleActions } from '../../../../store/role/actions';
-import { RoleState } from '../../../../store/role/types';
-import { addError } from '../../../../store/error/actions';
+import { RolesActions } from '../../../../store/roles/actions';
+import { RolesState } from '../../../../store/roles/types';
+import { addError } from '../../../../store/errors/actions';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 const styles = (theme: Theme): StyleRules =>
@@ -58,7 +58,7 @@ interface DispatchProps {
 
 interface StateProps {
   userState: UserState;
-  roleState: RoleState;
+  rolesState: RolesState;
 }
 
 type Props = StateProps &
@@ -147,8 +147,8 @@ class Register extends React.Component<Props, ComponentState> {
 
   componentDidUpdate() {
     if (this.state.roleId === '') {
-      if (this.props.roleState.roles) {
-        let role = this.props.roleState.roles.find(r => r.name === 'user');
+      if (this.props.rolesState.roles) {
+        let role = this.props.rolesState.roles.find(r => r.name === 'user');
 
         if (role) {
           this.setState({
@@ -156,7 +156,7 @@ class Register extends React.Component<Props, ComponentState> {
           });
         }
       } else {
-        if (!this.props.roleState.loading) this.props.roleGetAll();
+        if (!this.props.rolesState.loading) this.props.roleGetAll();
       }
     }
   }
@@ -255,7 +255,7 @@ class Register extends React.Component<Props, ComponentState> {
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
     userState: states.userState,
-    roleState: states.roleState
+    rolesState: states.rolesState
   };
 };
 
@@ -271,7 +271,7 @@ const mapDispatchToProps = (
       await dispatch(logout());
     },
     roleGetAll: async () => {
-      await dispatch(RoleActions.roleGetAll());
+      await dispatch(RolesActions.roleGetAll());
     },
     addError: async (error: any) => {
       await dispatch(addError(error));

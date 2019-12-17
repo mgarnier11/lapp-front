@@ -1,26 +1,26 @@
 import { Action } from './actions';
-import { RoleState, defaultRoleState, RoleActionTypes } from './types';
+import { RolesState, defaultRolesState, RolesActionTypes } from './types';
 // States' definition
 
-const role = (
-  roleState: RoleState = defaultRoleState,
+export const roles = (
+  roleState: RolesState = defaultRolesState,
   action: Action
-): RoleState => {
+): RolesState => {
   switch (action.type) {
-    case RoleActionTypes.ACTION_STARTED: {
+    case RolesActionTypes.ACTION_STARTED: {
       return {
         ...roleState,
         loading: true
       };
     }
-    case RoleActionTypes.ACTION_FAILURE: {
+    case RolesActionTypes.ACTION_FAILURE: {
       return {
         ...roleState,
         loading: false
       };
     }
 
-    case RoleActionTypes.CREATE: {
+    case RolesActionTypes.CREATE: {
       if (roleState.roles) {
         return {
           ...roleState,
@@ -35,7 +35,7 @@ const role = (
       }
     }
 
-    case RoleActionTypes.UPDATE: {
+    case RolesActionTypes.UPDATE: {
       if (roleState.roles) {
         return {
           ...roleState,
@@ -52,7 +52,7 @@ const role = (
       }
     }
 
-    case RoleActionTypes.REMOVE: {
+    case RolesActionTypes.REMOVE: {
       if (roleState.roles) {
         return {
           ...roleState,
@@ -67,7 +67,7 @@ const role = (
       }
     }
 
-    case RoleActionTypes.GETALL: {
+    case RolesActionTypes.GETALL: {
       return {
         ...roleState,
         roles: action.roles,
@@ -79,4 +79,4 @@ const role = (
   }
 };
 
-export default role;
+export default roles;
