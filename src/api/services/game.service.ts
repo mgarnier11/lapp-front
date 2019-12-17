@@ -17,4 +17,14 @@ export class GameService extends BaseService<Game> {
       }
     });
   }
+
+  public async findGameByDisplayId(displayId: string) {
+    let games = (await this.featherService.find({
+      query: {
+        displayId: displayId
+      }
+    })) as Game[];
+
+    return games[0];
+  }
 }
