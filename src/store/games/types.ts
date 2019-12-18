@@ -7,12 +7,12 @@ import { Game } from '../../api/classes/game.class';
 // personally, I use the `@@context/ACTION_TYPE` convention, to follow the convention
 // of Redux's `@@INIT` action.
 export enum GamesActionTypes {
-  ACTION_STARTED = '@@game/ACTION_STARTED',
-  ACTION_FAILURE = '@@game/ACTION_FAILURE',
-  CREATE = '@@game/CREATE',
-  UPDATE = '@@game/UPDATE',
-  REMOVE = '@@game/REMOVE',
-  GETALL = '@@game/GETALL'
+  ACTION_STARTED = '@@games/ACTION_STARTED',
+  ACTION_FAILURE = '@@games/ACTION_FAILURE',
+  CREATE = '@@games/CREATE',
+  UPDATE = '@@games/UPDATE',
+  REMOVE = '@@games/REMOVE',
+  GETALL = '@@games/GETALL'
 }
 
 // Declare state types with `readonly` modifier to get compile time immutability.

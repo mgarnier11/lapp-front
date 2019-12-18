@@ -20,7 +20,8 @@ const GameNotFound: React.FunctionComponent<Props> = (props: Props) => {
   return (
     <Container maxWidth="md" className={classes.root}>
       <Typography variant="h5" align="center" className={classes.text}>
-        Error: Game with displayId: <b>{props.displayId}</b> not found
+        Error: Game with displayId: <b>{props.displayId}</b> not found or you
+        are not allowed in it
       </Typography>
     </Container>
   );

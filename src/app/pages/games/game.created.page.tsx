@@ -2,23 +2,7 @@ import * as lodash from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import {
-  Container,
-  Typography,
-  Card,
-  CardContent,
-  CardHeader,
-  Select,
-  MenuItem,
-  Button,
-  TextField,
-  InputLabel,
-  FormControl,
-  Input,
-  Chip,
-  Checkbox,
-  ListItemText
-} from '@material-ui/core';
+import { Container, Grid } from '@material-ui/core';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import {
   withStyles,
@@ -43,17 +27,21 @@ import { QuestionTypesState } from '../../../store/questionTypes/types';
 import { QuestionType } from '../../../api/classes/questionType.class';
 import { GameActions } from '../../../store/game/actions';
 import { GameState } from '../../../store/game/types';
+import { Loading } from '../../components/loading/loading.component';
+import GameForm from '../../components/game/game.form.component';
 
-const styles = (theme: Theme): StyleRules => createStyles({});
+const styles = (theme: Theme): StyleRules =>
+  createStyles({
+    root: {
+      marginTop: theme.spacing(3)
+    }
+  });
 
 interface OwnProps {
   displayId?: string;
 }
 
 interface DispatchProps {
-  gameTypeGetAll: () => Promise<any>;
-  questionTypeGetall: () => Promise<any>;
-  gameGetByDisplayId: (displayId: string) => Promise<any>;
   gameUpdate: (game: Game) => Promise<any>;
   gameRemove: (gameId: string) => Promise<any>;
   addError: (error: any) => void;
@@ -71,9 +59,7 @@ type Props = StateProps &
   WithSnackbarProps &
   WithStyles<typeof styles>;
 
-interface ComponentState {
-  game: Game;
-}
+interface ComponentState {}
 
 class GameCreated extends React.Component<Props, ComponentState> {
   /**
@@ -82,66 +68,33 @@ class GameCreated extends React.Component<Props, ComponentState> {
   constructor(props: Props) {
     super(props);
 
-    this.state = {
-      game: new Game()
-    };
+    this.state = {};
   }
 
-  reloadDatas() {
-    if (
-      !this.props.gameTypesState.gameTypes &&
-      !this.props.gameTypesState.loading
-    ) {
-      this.props.gameTypeGetAll();
-    }
-
-    if (
-      !this.props.questionTypesState.questionTypes &&
-      !this.props.questionTypesState.loading
-    ) {
-      this.props.questionTypeGetall();
-    }
-
-    if (
-      this.props.displayId &&
-      !this.props.gameState.game &&
-      !this.props.gameState.loading
-    ) {
-      this.props.gameGetByDisplayId(this.props.displayId);
-    }
-  }
-
-  componentDidMount() {
-    this.reloadDatas();
-  }
-
-  componentDidUpdate() {
-    this.reloadDatas();
-  }
-
-  static getDerivedStateFromProps(nextProps: Props, prevState: ComponentState) {
-    let nextGame = nextProps.gameState.game;
-    if (nextGame) {
-      let prevGame = prevState.game;
-
-      if (!Game.CompareObjects(nextGame, prevGame)) {
-        return {
-          game: lodash.cloneDeep(nextGame)
-        };
-      }
-    }
-
-    return null;
-  }
+  handleSubmit = (game: Game) => {
+    this.props.gameUpdate(game);
+  };
 
   render() {
     const classes = this.props.classes;
-    const allGameTypes = this.props.gameTypesState.gameTypes;
-    const allQuestionTypes = this.props.questionTypesState.questionTypes;
 
     const game = this.props.gameState.game;
 
-    return <Container component="main"></Container>;
+    if (!game) return <Loading />;
+    return (
+      <Container maxWidth="md" className={classes.root}>
+        <Grid container spacing={1}>
+          <Grid item xs={12} sm={6}>
+            <GameForm
+              game={game}
+              onSubmit={this.handleSubmit}
+              buttonText="Update Game"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}></Grid>
+        </Grid>
+      </Container>
+    );
   }
 }
 
@@ -158,15 +111,6 @@ const mapDispatchToProps = (
   ownProps: OwnProps
 ): DispatchProps => {
   return {
-    gameTypeGetAll: async () => {
-      return await dispatch(GameTypesActions.gameTypeGetAll());
-    },
-    questionTypeGetall: async () => {
-      return await dispatch(QuestionTypesActions.questionTypeGetAll());
-    },
-    gameGetByDisplayId: async (displayId: string) => {
-      return await dispatch(GameActions.gameGetByDisplayId(displayId));
-    },
     gameUpdate: async (game: Game) => {
       return await dispatch(GameActions.gameUpdate(game));
     },

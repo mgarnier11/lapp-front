@@ -1,20 +1,16 @@
-import React, { ReactChild, ReactPortal, ReactFragment } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import {
-  Route,
-  Redirect,
-  useParams,
-  withRouter,
-  RouteComponentProps
-} from 'react-router-dom';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { RootState } from '../../../store';
 import { Loading } from '../../components/loading/loading.component';
 import { GameState } from '../../../store/game/types';
 import { GameActions } from '../../../store/game/actions';
 import { GameStatus } from '../../../api/classes/game.class';
+import GameCreated from '../../pages/games/game.created.page';
 
 import GameNotFound from '../../pages/games/game.notFound.page';
+import { UserState } from '../../../store/user/types';
 
 interface RouteParams {
   displayId: string;
@@ -28,6 +24,7 @@ interface DispatchProps {
 
 interface StateProps {
   gameState: GameState;
+  userState: UserState;
 }
 
 type Props = StateProps & OwnProps & DispatchProps & RouteComponentProps;
@@ -55,30 +52,35 @@ class GameMiddleware extends React.Component<Props, ComponentState> {
 
   render() {
     const { displayId } = this.props.match.params as any;
-    const { game, loading } = this.props.gameState;
+    const { game, loading: gameLoading } = this.props.gameState;
+    const { user, loading: userLoading } = this.props.userState;
 
-    if (loading) return <Loading />;
-    else if (game) {
-      switch (game.status) {
-        case GameStatus.created:
-          return <>created</>;
-        case GameStatus.started:
-          return <>started</>;
-        case GameStatus.finished:
-          return <>finished</>;
+    if (game && user) {
+      if (
+        game.creator.id === user.id ||
+        game.users.map(u => u.id).includes(user.id)
+      ) {
+        switch (game.status) {
+          case GameStatus.created:
+            return <GameCreated displayId={displayId} />;
+          case GameStatus.started:
+            return <>started</>;
+          case GameStatus.finished:
+            return <>finished</>;
+        }
+      } else {
+        return <GameNotFound displayId={displayId} />;
       }
-    } else {
-      return <GameNotFound displayId={displayId} />;
-    }
-    console.log(game);
-
+    } else if (gameLoading || userLoading) return <Loading />;
+    else if (!game) return <GameNotFound displayId={displayId} />;
     return <>An error occured</>;
   }
 }
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    gameState: states.gameState
+    gameState: states.gameState,
+    userState: states.userState
   };
 };
 

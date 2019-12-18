@@ -25,18 +25,29 @@ import { relog } from '../store/user/actions';
 import { CssBaseline, Fab, Modal } from '@material-ui/core';
 import { RolesActions, roleActionsInstance } from '../store/roles/actions';
 import { questionActionsInstance } from '../store/questions/actions';
-import { questionTypeActionsInstance } from '../store/questionTypes/actions';
+import {
+  questionTypeActionsInstance,
+  QuestionTypesActions
+} from '../store/questionTypes/actions';
 import { UserState } from '../store/user/types';
 import apiHandler from '../api/apiHandler';
 import { Question } from '../api/classes/question.class';
 import { Game } from '../api/classes/game.class';
 import { ServiceEvents } from '../api/services/baseService';
+import {
+  gameTypeActionsInstance,
+  GameTypesActions
+} from '../store/gameTypes/actions';
+import { gameActionsInstance } from '../store/game/actions';
+import { gamesActionsInstance } from '../store/games/actions';
 
 interface OwnProps {}
 
 interface DispatchProps {
   relog: () => void;
   roleGetAll: () => void;
+  questionTypeGetAll: () => void;
+  gameTypeGetAll: () => void;
 }
 
 interface StateProps {
@@ -83,6 +94,14 @@ class App extends React.Component<Props, State> {
     roleActionsInstance.bindBaseEvents();
     questionActionsInstance.bindBaseEvents();
     questionTypeActionsInstance.bindBaseEvents();
+    gameTypeActionsInstance.bindBaseEvents();
+    gamesActionsInstance.bindBaseEvents();
+    this.loadTypes();
+  }
+
+  loadTypes() {
+    this.props.questionTypeGetAll();
+    this.props.gameTypeGetAll();
   }
 
   componentWillUnmount() {
@@ -90,10 +109,16 @@ class App extends React.Component<Props, State> {
       ServiceEvents.created,
       this.questionSuccessfullyCreated
     );
+    apiHandler.gameService.ownEvents.off(
+      ServiceEvents.created,
+      this.gameSuccessfullyCreated
+    );
 
     roleActionsInstance.unbindEvents();
     questionActionsInstance.unbindEvents();
     questionTypeActionsInstance.unbindEvents();
+    gameTypeActionsInstance.unbindEvents();
+    gamesActionsInstance.unbindEvents();
   }
 
   questionSuccessfullyCreated(q: Question) {
@@ -234,6 +259,12 @@ const mapDispatchToProps = (
   ownProps: OwnProps
 ): DispatchProps => {
   return {
+    gameTypeGetAll: () => {
+      dispatch(GameTypesActions.gameTypeGetAll());
+    },
+    questionTypeGetAll: () => {
+      dispatch(QuestionTypesActions.questionTypeGetAll());
+    },
     relog: async () => {
       await dispatch(relog(false));
     },
