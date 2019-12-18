@@ -1,15 +1,26 @@
 import React, { ReactChild, ReactPortal, ReactFragment } from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { Route, Redirect } from 'react-router-dom';
+import {
+  Route,
+  Redirect,
+  useParams,
+  withRouter,
+  RouteComponentProps
+} from 'react-router-dom';
 import { RootState } from '../../../store';
 import { Loading } from '../../components/loading/loading.component';
 import { GameState } from '../../../store/game/types';
 import { GameActions } from '../../../store/game/actions';
+import { GameStatus } from '../../../api/classes/game.class';
 
-interface OwnProps {
-  displayId?: string;
+import GameNotFound from '../../pages/games/game.notFound.page';
+
+interface RouteParams {
+  displayId: string;
 }
+
+interface OwnProps {}
 
 interface DispatchProps {
   gameGetByDisplayId: (displayId: string) => Promise<any>;
@@ -19,16 +30,51 @@ interface StateProps {
   gameState: GameState;
 }
 
-type Props = StateProps & OwnProps & DispatchProps;
+type Props = StateProps & OwnProps & DispatchProps & RouteComponentProps;
 
-const GameMiddleware: React.FunctionComponent<Props> = (props: Props) => {
-  console.log(props.displayId);
+interface ComponentState {}
 
-  let { game, loading } = props.gameState;
-  //const classes = useStyles();
+class GameMiddleware extends React.Component<Props, ComponentState> {
+  /**
+   *
+   */
+  constructor(props: Props) {
+    super(props);
 
-  return loading ? <Loading /> : <Loading />;
-};
+    this.state = {};
+  }
+
+  componentWillMount() {
+    const { displayId } = this.props.match.params as any;
+    const { game, loading } = this.props.gameState;
+
+    if (!game && !loading && displayId) {
+      this.props.gameGetByDisplayId(displayId);
+    }
+  }
+
+  render() {
+    const { displayId } = this.props.match.params as any;
+    const { game, loading } = this.props.gameState;
+
+    if (loading) return <Loading />;
+    else if (game) {
+      switch (game.status) {
+        case GameStatus.created:
+          return <>created</>;
+        case GameStatus.started:
+          return <>started</>;
+        case GameStatus.finished:
+          return <>finished</>;
+      }
+    } else {
+      return <GameNotFound displayId={displayId} />;
+    }
+    console.log(game);
+
+    return <>An error occured</>;
+  }
+}
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
@@ -47,7 +93,9 @@ const mapDispatchToProps = (
   };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, RootState>(
-  mapStateToProps,
-  mapDispatchToProps
-)(GameMiddleware);
+export default withRouter(
+  connect<StateProps, DispatchProps, OwnProps, RootState>(
+    mapStateToProps,
+    mapDispatchToProps
+  )(GameMiddleware)
+);

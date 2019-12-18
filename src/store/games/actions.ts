@@ -8,6 +8,7 @@ import apiHandler from '../../api/apiHandler';
 import { addError } from '../errors/actions';
 import { Game, GameBackModel } from '../../api/classes/game.class';
 import { ServiceEvents } from '../../api/services/baseService';
+import { GameActionTypes } from '../game/types';
 
 // Action Definition
 export interface ActionStarted {
@@ -90,17 +91,37 @@ export class GamesActions {
   }
 
   private gameUpdated(gameModel: GameBackModel) {
-    store.dispatch({
-      type: GamesActionTypes.UPDATE,
-      game: Game.fromBack(gameModel)
-    });
+    const game = Game.fromBack(gameModel);
+    const playingGame = store.getState().gameState.game;
+
+    if (playingGame && playingGame.id === game.id) {
+      store.dispatch({
+        type: GameActionTypes.UPDATE,
+        game
+      });
+    } else {
+      store.dispatch({
+        type: GamesActionTypes.UPDATE,
+        game
+      });
+    }
   }
 
   private gameRemoved(gameModel: GameBackModel) {
-    store.dispatch({
-      type: GamesActionTypes.REMOVE,
-      game: Game.fromBack(gameModel)
-    });
+    const game = Game.fromBack(gameModel);
+    const playingGame = store.getState().gameState.game;
+
+    if (playingGame && playingGame.id === game.id) {
+      store.dispatch({
+        type: GameActionTypes.REMOVE,
+        game
+      });
+    } else {
+      store.dispatch({
+        type: GamesActionTypes.REMOVE,
+        game
+      });
+    }
   }
 
   private static gameActionStartedCreator = (): ActionStarted => {

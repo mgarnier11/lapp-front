@@ -21,33 +21,19 @@ export const game = (
     }
 
     case GameActionTypes.GET: {
-      if (gameState.game) {
-        return {
-          ...gameState,
-          game: gameState.game,
-          loading: false
-        };
-      } else {
-        return {
-          ...gameState,
-          loading: false
-        };
-      }
+      return {
+        ...gameState,
+        game: action.game,
+        loading: false
+      };
     }
 
     case GameActionTypes.UPDATE: {
-      if (gameState.game) {
-        return {
-          ...gameState,
-          game: gameState.game,
-          loading: false
-        };
-      } else {
-        return {
-          ...gameState,
-          loading: false
-        };
-      }
+      return {
+        ...gameState,
+        game: action.game,
+        loading: false
+      };
     }
 
     case GameActionTypes.REMOVE: {

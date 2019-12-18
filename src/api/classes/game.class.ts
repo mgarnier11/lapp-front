@@ -73,4 +73,21 @@ export class Game {
 
     return newObj;
   }
+
+  public static CompareObjects(obj1: Game, obj2: Game): boolean {
+    return (
+      obj1.id === obj2.id &&
+      obj1.displayId === obj2.displayId &&
+      obj1.name === obj2.name &&
+      User.CompareArrays(obj1.users, obj2.users) &&
+      obj1.nbTurns === obj2.nbTurns &&
+      obj1.actualTurn === obj2.actualTurn &&
+      QuestionType.CompareArrays(obj1.questionTypes, obj2.questionTypes) &&
+      obj1.maxDifficulty === obj2.maxDifficulty &&
+      obj1.maxHotLevel === obj2.maxHotLevel &&
+      User.CompareObjects(obj1.creator, obj2.creator) &&
+      GameType.CompareObjects(obj1.type, obj2.type) &&
+      obj1.status === obj2.status
+    );
+  }
 }

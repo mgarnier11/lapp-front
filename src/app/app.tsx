@@ -189,15 +189,9 @@ class App extends React.Component<Props, State> {
           <Guard minimalPermission={0} path="/questions" redirect="/">
             <Questions />
           </Guard>
-          <Guard
-            minimalPermission={0}
-            path="/games/:displayId"
-            redirect="/"
-            children={(displayId: string): React.FunctionComponent<any> => {
-              console.log(displayId);
-              return <GameMiddlewareComponent />;
-            }}
-          />
+          <Guard minimalPermission={0} path="/games/:displayId" redirect="/">
+            <GameMiddlewareComponent />
+          </Guard>
           <Guard minimalPermission={100} path="/roles" redirect="/home">
             <Roles />
           </Guard>
