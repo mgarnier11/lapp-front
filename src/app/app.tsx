@@ -16,13 +16,14 @@ import Roles from './pages/roles/roles.page';
 import QuestionTypes from './pages/questionTypes/question-types.page';
 import Questions from './pages/questions/questions.page';
 import QuestionNewComponent from './components/question/question.new.component';
+import GameNotFound from './pages/games/game.notFound.page';
 import GameNewComponent from './components/game/game.new.component';
 import GameMiddlewareComponent from './components/game/game.middleware.component';
 
 import { RootState } from '../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { relog } from '../store/user/actions';
-import { CssBaseline, Fab, Modal } from '@material-ui/core';
+import { CssBaseline, Fab, Modal, Container } from '@material-ui/core';
 import { RolesActions, roleActionsInstance } from '../store/roles/actions';
 import { questionActionsInstance } from '../store/questions/actions';
 import {
@@ -32,14 +33,14 @@ import {
 import { UserState } from '../store/user/types';
 import apiHandler from '../api/apiHandler';
 import { Question } from '../api/classes/question.class';
-import { Game } from '../api/classes/game.class';
+import { Game, GameStatus } from '../api/classes/game.class';
 import { ServiceEvents } from '../api/services/baseService';
 import {
   gameTypeActionsInstance,
   GameTypesActions
 } from '../store/gameTypes/actions';
-import { gameActionsInstance } from '../store/game/actions';
 import { gamesActionsInstance } from '../store/games/actions';
+import { GameState } from '../store/game/types';
 
 interface OwnProps {}
 
@@ -52,6 +53,7 @@ interface DispatchProps {
 
 interface StateProps {
   userState: UserState;
+  gameState: GameState;
 }
 
 type Props = StateProps & OwnProps & DispatchProps & RouteComponentProps;
@@ -145,7 +147,41 @@ class App extends React.Component<Props, State> {
     this.setState({ gameModalOpen: false });
   };
 
+  playingGameNext = () => {
+    console.log('ok');
+  };
+
   renderQuestionFAB() {
+    return (
+      <Fab
+        variant="extended"
+        className="floating-action-button"
+        color="primary"
+        onClick={this.playingGameNext}
+      >
+        New Question
+      </Fab>
+    );
+  }
+
+  renderPlayingFAB() {
+    const { game } = this.props.gameState;
+    let text = 'Next';
+
+    if (game) {
+      switch (game!.status) {
+        case GameStatus.created:
+          text = 'Start Game';
+          break;
+        case GameStatus.started:
+          text = 'Next Question';
+          break;
+        case GameStatus.finished:
+          text = '';
+          break;
+      }
+    }
+
     return (
       <Fab
         variant="extended"
@@ -153,7 +189,7 @@ class App extends React.Component<Props, State> {
         color="primary"
         onClick={this.openQuestionModal}
       >
-        New Question
+        {text}
       </Fab>
     );
   }
@@ -191,10 +227,16 @@ class App extends React.Component<Props, State> {
   }
 
   renderFAB() {
-    switch (this.props.location.pathname) {
-      case '/questions':
-        return this.renderQuestionFAB();
+    const questions = /questions/;
+    const game = /games\/[A-Z0-9]{5,}/;
+    const { pathname } = this.props.location;
 
+    switch (true) {
+      case questions.test(pathname):
+        return this.renderQuestionFAB();
+      case game.test(pathname):
+        if (this.props.gameState.game) return this.renderPlayingFAB();
+        else return this.renderGameFAB();
       default:
         return this.renderGameFAB();
     }
@@ -250,7 +292,8 @@ class App extends React.Component<Props, State> {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    userState: states.userState
+    userState: states.userState,
+    gameState: states.gameState
   };
 };
 

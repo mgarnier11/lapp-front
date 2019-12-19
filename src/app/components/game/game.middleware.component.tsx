@@ -39,9 +39,7 @@ class GameMiddleware extends React.Component<Props, ComponentState> {
     super(props);
 
     this.state = {};
-  }
 
-  componentWillMount() {
     const { displayId } = this.props.match.params as any;
     const { game, loading } = this.props.gameState;
 

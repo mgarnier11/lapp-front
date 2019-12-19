@@ -108,13 +108,6 @@ class Register extends React.Component<Props, ComponentState> {
         })
         .then(registered => {
           if (registered) {
-            this.props.enqueueSnackbar(
-              'Successfully registered, you can now log in',
-              {
-                variant: 'success'
-              }
-            );
-
             this.props.history.push('/login');
           }
         });

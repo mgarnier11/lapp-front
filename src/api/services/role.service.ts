@@ -1,7 +1,6 @@
 import { Service } from '@feathersjs/feathers';
 import { afterAllHook } from '../hooks/role.hooks';
 import { Role } from '../classes/role.class';
-import { EventEmitter } from 'events';
 import { BaseService } from './baseService';
 
 export class RoleService extends BaseService<Role> {

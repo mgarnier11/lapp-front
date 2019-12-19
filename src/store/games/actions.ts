@@ -95,18 +95,15 @@ export class GamesActions {
     const playingGame = store.getState().gameState.game;
 
     if (playingGame && playingGame.id === game.id) {
-      console.log('t2');
-
       store.dispatch({
         type: GameActionTypes.UPDATE,
         game
       });
-    } else {
-      store.dispatch({
-        type: GamesActionTypes.UPDATE,
-        game
-      });
     }
+    store.dispatch({
+      type: GamesActionTypes.UPDATE,
+      game
+    });
   }
 
   private gameRemoved(gameModel: GameBackModel) {
@@ -118,12 +115,11 @@ export class GamesActions {
         type: GameActionTypes.REMOVE,
         game
       });
-    } else {
-      store.dispatch({
-        type: GamesActionTypes.REMOVE,
-        game
-      });
     }
+    store.dispatch({
+      type: GamesActionTypes.REMOVE,
+      game
+    });
   }
 
   private static gameActionStartedCreator = (): ActionStarted => {
@@ -149,12 +145,6 @@ export class GamesActions {
         apiHandler.gameService.featherService
           .create(game)
           .then(game => {
-            /*
-            dispatch({
-              type: GameActionTypes.CREATE,
-              game: game
-            });
-            */
             apiHandler.gameService.ownEvents.emit(ServiceEvents.created, game);
             resolve(true);
           })
@@ -178,12 +168,6 @@ export class GamesActions {
         apiHandler.gameService.featherService
           .patch(game.id, game)
           .then(game => {
-            /*
-          dispatch({
-            type: GameActionTypes.UPDATE,
-            game: game
-          });
-          */
             apiHandler.gameService.ownEvents.emit(ServiceEvents.updated, game);
 
             resolve(true);
@@ -208,12 +192,6 @@ export class GamesActions {
         apiHandler.gameService.featherService
           .remove(gameId)
           .then(game => {
-            /*
-            dispatch({
-              type: GameActionTypes.REMOVE,
-              game: game
-            });
-            */
             apiHandler.gameService.ownEvents.emit(ServiceEvents.removed, game);
 
             resolve(true);

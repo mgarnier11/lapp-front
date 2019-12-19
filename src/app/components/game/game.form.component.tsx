@@ -3,7 +3,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import {
-  Container,
   Typography,
   Select,
   MenuItem,
@@ -258,8 +257,6 @@ class GameForm extends React.Component<Props, ComponentState> {
 
     const allGameTypes = this.props.gameTypesState.gameTypes;
     const allQuestionTypes = this.props.questionTypesState.questionTypes;
-    console.log(allQuestionTypes);
-    console.log(questionTypes);
 
     return (
       <form className={classes.form} onSubmit={this.handleFormSubmit}>

@@ -95,60 +95,6 @@ export class GameActions {
       });
     };
   };
-
-  public static gameUpdate = (
-    game: Game
-  ): ThunkAction<Promise<boolean>, {}, {}, AnyAction> => {
-    return async (
-      dispatch: ThunkDispatch<{}, {}, AnyAction>
-    ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
-        dispatch(GameActions.gameActionStartedCreator());
-        apiHandler.gameService.featherService
-          .patch(game.id, game)
-          .then(game => {
-            dispatch({
-              type: GameActionTypes.UPDATE,
-              game: game
-            });
-
-            resolve(true);
-          })
-          .catch(error => {
-            dispatch(GameActions.gameActionFailureCreator());
-            dispatch(addError(error));
-            resolve(false);
-          });
-      });
-    };
-  };
-
-  public static gameRemove = (
-    gameId: string
-  ): ThunkAction<Promise<boolean>, {}, {}, AnyAction> => {
-    return async (
-      dispatch: ThunkDispatch<{}, {}, AnyAction>
-    ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
-        dispatch(GameActions.gameActionStartedCreator());
-        apiHandler.gameService.featherService
-          .remove(gameId)
-          .then(game => {
-            dispatch({
-              type: GameActionTypes.REMOVE,
-              game: game
-            });
-
-            resolve(true);
-          })
-          .catch(error => {
-            dispatch(GameActions.gameActionFailureCreator());
-            dispatch(addError(error));
-            resolve(false);
-          });
-      });
-    };
-  };
 }
 
 export const gameActionsInstance = new GameActions();

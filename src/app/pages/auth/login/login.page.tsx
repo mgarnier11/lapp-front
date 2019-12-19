@@ -91,8 +91,6 @@ class Login extends React.Component<Props, ComponentState> {
         password: this.state.password
       })
       .then(logged => {
-        console.log(logged);
-
         if (logged) this.props.history.push('/home');
       });
   };

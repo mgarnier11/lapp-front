@@ -29,6 +29,10 @@ export const user = (
       };
     }
 
+    case UserActionTypes.REGISTER: {
+      return { ...userState, user: undefined, loading: false };
+    }
+
     case UserActionTypes.LOGOUT: {
       apiHandler.userservice.ownEvents.emit('logged out');
 

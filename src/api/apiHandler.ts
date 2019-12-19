@@ -10,9 +10,7 @@ import { GameService } from './services/game.service';
 import { QuestionTypeService } from './services/questionType.service';
 import { RoleService } from './services/role.service';
 import { User, LoginCredentials } from './classes/user.class';
-import { EventEmitter } from 'events';
-import { BaseService, ServiceNames } from './services/baseService';
-import { GameType } from './classes/gameType.class';
+import { ServiceNames } from './services/baseService';
 import { GameTypeService } from './services/gameType.service';
 
 class ApiHandler {
@@ -89,7 +87,6 @@ class ApiHandler {
   }
 
   async login(credentials?: LoginCredentials) {
-    //console.log(credentials);
     let options = {
       ...{ strategy: 'local' },
       ...credentials

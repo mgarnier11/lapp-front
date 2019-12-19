@@ -18,7 +18,8 @@ import ToolbarMobile from './toolbar.mobile';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    display: 'flex'
+    display: 'flex',
+    height: '64px'
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1000
@@ -66,7 +67,7 @@ const Header: React.FunctionComponent<Props> = (props: Props) => {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="static" className={classes.appBar}>
+      <AppBar position="fixed" className={classes.appBar}>
         {user ? (
           <>
             <Hidden mdUp>
