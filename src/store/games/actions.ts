@@ -95,6 +95,8 @@ export class GamesActions {
     const playingGame = store.getState().gameState.game;
 
     if (playingGame && playingGame.id === game.id) {
+      console.log('t2');
+
       store.dispatch({
         type: GameActionTypes.UPDATE,
         game

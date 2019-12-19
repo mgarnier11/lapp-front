@@ -72,6 +72,8 @@ class GameCreated extends React.Component<Props, ComponentState> {
   }
 
   handleSubmit = (game: Game) => {
+    console.log('t');
+
     this.props.gameUpdate(game);
   };
 

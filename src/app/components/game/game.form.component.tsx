@@ -115,6 +115,19 @@ class GameForm extends React.Component<Props, ComponentState> {
     this.isDenied = this.isDenied.bind(this);
   }
 
+  private static prevPropsGame: Game;
+  static getDerivedStateFromProps(nextProps: Props, prevState: ComponentState) {
+    let nextPropsGame = nextProps.game;
+    if (!Game.CompareObjects(nextPropsGame, GameForm.prevPropsGame)) {
+      GameForm.prevPropsGame = lodash.cloneDeep(nextPropsGame);
+      return {
+        game: lodash.cloneDeep(nextPropsGame)
+      };
+    }
+
+    return null;
+  }
+
   handleNameChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     this.setState({
       game: { ...this.state.game, name: e.target.value }
@@ -122,12 +135,7 @@ class GameForm extends React.Component<Props, ComponentState> {
   };
 
   handleMaxDifficultyChange = (e: any, value: number) => {
-    console.log('im herer');
-    console.log(value);
-
-    this.setState({ game: { ...this.state.game, maxDifficulty: value } }, () =>
-      console.log(this.state)
-    );
+    this.setState({ game: { ...this.state.game, maxDifficulty: value } });
   };
 
   handleMaxHotLevelChange = (e: any, value: number) => {
@@ -247,10 +255,11 @@ class GameForm extends React.Component<Props, ComponentState> {
       type,
       questionTypes
     } = this.state.game;
-    console.log(maxDifficulty);
 
     const allGameTypes = this.props.gameTypesState.gameTypes;
     const allQuestionTypes = this.props.questionTypesState.questionTypes;
+    console.log(allQuestionTypes);
+    console.log(questionTypes);
 
     return (
       <form className={classes.form} onSubmit={this.handleFormSubmit}>
@@ -341,6 +350,11 @@ class GameForm extends React.Component<Props, ComponentState> {
               transformOrigin: {
                 vertical: 'bottom',
                 horizontal: 'left'
+              },
+              PaperProps: {
+                style: {
+                  maxHeight: 300
+                }
               }
             }}
           >
@@ -349,7 +363,11 @@ class GameForm extends React.Component<Props, ComponentState> {
                 <MenuItem key={questionType.id} value={questionType.id}>
                   <Checkbox
                     color="primary"
-                    checked={questionTypes.indexOf(questionType) > -1}
+                    checked={
+                      questionTypes.find(t =>
+                        QuestionType.CompareObjects(questionType, t)
+                      ) !== undefined
+                    }
                   />
                   <ListItemText primary={questionType.name} />
                 </MenuItem>

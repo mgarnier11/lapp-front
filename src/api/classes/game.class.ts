@@ -76,6 +76,8 @@ export class Game {
 
   public static CompareObjects(obj1: Game, obj2: Game): boolean {
     return (
+      obj1 !== undefined &&
+      obj2 !== undefined &&
       obj1.id === obj2.id &&
       obj1.displayId === obj2.displayId &&
       obj1.name === obj2.name &&
