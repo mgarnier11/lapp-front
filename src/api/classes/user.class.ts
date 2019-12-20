@@ -1,4 +1,5 @@
 import { Role, RoleBackModel } from './role.class';
+import { Game } from './game.class';
 
 export interface LoginCredentials {
   email: string;
@@ -26,6 +27,10 @@ export class User {
   public role: Role = new Role();
 
   public gender: number = 0;
+
+  public createdGames: Game[] = [];
+
+  public games: Game[] = [];
 
   public static New(datas: Partial<User>): User {
     return Object.assign(new User(), datas);

@@ -99,6 +99,7 @@ class App extends React.Component<Props, State> {
     gameTypeActionsInstance.bindBaseEvents();
     gamesActionsInstance.bindBaseEvents();
     this.loadTypes();
+    apiHandler.gameService.findGamesPerUser('5de6bcf9a23a5d40602409fb');
   }
 
   loadTypes() {

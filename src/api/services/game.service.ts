@@ -26,4 +26,24 @@ export class GameService extends BaseService<Game> {
 
     return games[0];
   }
+
+  public async findCreatedGamesPerUser(userId: string) {
+    let createdGames = await this.featherService.find({
+      query: {
+        creatorId: { $in: [userId] }
+      }
+    });
+
+    return createdGames;
+  }
+
+  public async findGamesPerUser(userId: string) {
+    let games = await this.featherService.find({
+      query: {
+        userIds: { $elemMatch: { $in: [userId] } }
+      }
+    });
+
+    return games;
+  }
 }
