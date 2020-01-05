@@ -23,6 +23,10 @@ export class Question {
 
   public creator: User = new User();
 
+  public temp(): string {
+    return 'ok';
+  }
+
   public static New(datas: Partial<Question>): Question {
     return Object.assign(new Question(), datas);
   }
@@ -43,15 +47,20 @@ export class Question {
   public static CompareArrays(arr1: Question[], arr2: Question[]): boolean {
     return (
       arr1.length === arr2.length &&
-      arr1.every(
-        (e, i) =>
-          e.id === arr2[i].id &&
-          e.difficulty === arr2[i].difficulty &&
-          e.hotLevel === arr2[i].hotLevel &&
-          e.text === arr2[i].text &&
-          QuestionType.CompareObjects(e.type, arr2[i].type) &&
-          User.CompareObjects(e.creator, arr2[i].creator)
-      )
+      arr1.every((e, i) => Question.CompareObjects(e, arr2[i]))
+    );
+  }
+
+  public static CompareObjects(obj1: Question, obj2: Question): boolean {
+    return (
+      obj1 !== undefined &&
+      obj2 !== undefined &&
+      obj1.id === obj2.id &&
+      obj1.difficulty === obj2.difficulty &&
+      obj1.hotLevel === obj2.hotLevel &&
+      obj1.text === obj2.text &&
+      QuestionType.CompareObjects(obj1.type, obj2.type) &&
+      User.CompareObjects(obj1.creator, obj2.creator)
     );
   }
 }

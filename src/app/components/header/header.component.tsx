@@ -125,6 +125,8 @@ export default connect<StateProps, DispatchProps, OwnProps, RootState>(
 export const renderUser = (props: any) => {
   return (
     <>
+      <Typography>{props.user.name}</Typography>
+
       <Link to="/me" style={{ zIndex: 1200 }}>
         <IconButton color="inherit" className={props.classes.button} edge="end">
           <PermIdentityIcon />

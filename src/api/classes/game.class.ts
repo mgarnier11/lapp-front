@@ -1,6 +1,7 @@
 import { QuestionType, QuestionTypeBackModel } from './questionType.class';
 import { User, UserBackModel } from './user.class';
 import { GameType, GameTypeBackModel } from './gameType.class';
+import { DummyUser } from './dummyUser.class';
 
 export interface GameBackModel {
   _id: string;
@@ -31,6 +32,8 @@ export class Game {
 
   public users: User[] = [];
 
+  public dummyUsers: DummyUser[] = [];
+
   public nbTurns: number = 0;
 
   public actualTurn: number = 0;
@@ -47,6 +50,12 @@ export class Game {
 
   public status: GameStatus = GameStatus.created;
 
+  public tests: string = 'rerer';
+
+  public get allUsers() {
+    return [...this.users, ...this.dummyUsers];
+  }
+
   public static New(datas: Partial<Game>): Game {
     return Object.assign(new Game(), datas);
   }
@@ -54,12 +63,18 @@ export class Game {
   public static fromBack(datas: any) {
     let newObj = new Game();
 
+    console.log(datas);
+
     newObj.id = datas._id;
     newObj.displayId = datas._displayId;
     newObj.name = datas._name;
     for (const userModel of datas._users) {
       newObj.users.push(User.fromBack(userModel));
     }
+    for (const dummyUserModel of datas._dummyUsers) {
+      newObj.dummyUsers.push(DummyUser.fromBack(dummyUserModel));
+    }
+
     newObj.nbTurns = datas._nbTurns;
     newObj.actualTurn = datas._actualTurn;
     for (const questionTypeModel of datas._questionTypes) {

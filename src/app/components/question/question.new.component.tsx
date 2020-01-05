@@ -33,6 +33,7 @@ import { Question } from '../../../api/classes/question.class';
 import { QuestionTypesActions } from '../../../store/questionTypes/actions';
 import { QuestionTypesState } from '../../../store/questionTypes/types';
 import { QuestionsState } from '../../../store/questions/types';
+import { Helper } from '../../../helper';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
@@ -122,16 +123,20 @@ class QuestionNewComponent extends React.Component<Props, ComponentState> {
   }
 
   handleDifficultyChange = (e: any, value: number) => {
-    this.setState({ question: { ...this.state.question, difficulty: value } });
+    this.setState({
+      question: Helper.clone(this.state.question, { difficulty: value })
+    });
   };
 
   handleHotLevelChange = (e: any, value: number) => {
-    this.setState({ question: { ...this.state.question, hotLevel: value } });
+    this.setState({
+      question: Helper.clone(this.state.question, { hotLevel: value })
+    });
   };
 
   handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     this.setState({
-      question: { ...this.state.question, text: e.target.value }
+      question: Helper.clone(this.state.question, { text: e.target.value })
     });
   };
 
@@ -140,10 +145,9 @@ class QuestionNewComponent extends React.Component<Props, ComponentState> {
 
     if (questionTypes) {
       this.setState({
-        question: {
-          ...this.state.question,
+        question: Helper.clone(this.state.question, {
           type: questionTypes.find(t => t.id === (e.target.value as string))!
-        }
+        })
       });
     } else {
       console.error(

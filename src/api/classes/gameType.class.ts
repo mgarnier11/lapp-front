@@ -12,6 +12,10 @@ export class GameType {
 
   public name: string = '';
 
+  public temp(): string {
+    return 'ok';
+  }
+
   public static New(datas: Partial<GameType>): GameType {
     return Object.assign(new GameType(), datas);
   }
@@ -33,6 +37,11 @@ export class GameType {
   }
 
   public static CompareObjects(obj1: GameType, obj2: GameType): boolean {
-    return obj1.id === obj2.id && obj1.name === obj2.name;
+    return (
+      obj1 !== undefined &&
+      obj2 !== undefined &&
+      obj1.id === obj2.id &&
+      obj1.name === obj2.name
+    );
   }
 }

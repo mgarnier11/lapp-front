@@ -12,10 +12,9 @@ import {
 } from '@material-ui/core/styles';
 
 import { RootState } from '../../../store';
-import { GamesActions } from '../../../store/games/actions';
 import { addError } from '../../../store/errors/actions';
-import { Game } from '../../../api/classes/game.class';
-import GameForm from './game.form.component';
+import { DummyUser } from '../../../api/classes/dummyUser.class';
+import DummyUserForm from './dummy.form.component';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
@@ -40,10 +39,11 @@ const styles = (theme: Theme): StyleRules =>
     }
   });
 
-interface OwnProps {}
+interface OwnProps {
+  dummyUserCreate: (dummyUser: DummyUser) => void;
+}
 
 interface DispatchProps {
-  gameCreate: (game: Partial<Game>) => Promise<any>;
   addError: (error: any) => void;
 }
 
@@ -57,7 +57,7 @@ type Props = StateProps &
 
 interface ComponentState {}
 
-class GameNewComponent extends React.Component<Props, ComponentState> {
+class DummyUserNewComponent extends React.Component<Props, ComponentState> {
   /**
    *
    */
@@ -67,8 +67,8 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
     this.state = {};
   }
 
-  handleSubmit = (game: Game) => {
-    this.props.gameCreate(game);
+  handleSubmit = (dummyUser: DummyUser) => {
+    this.props.dummyUserCreate(dummyUser);
   };
 
   render() {
@@ -77,12 +77,12 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
     return (
       <Container component="main" className={classes.root} tabIndex={-1}>
         <Card className={classes.card} raised={true}>
-          <CardHeader title="Create a new game" />
+          <CardHeader title="Create a new temporary user" />
           <CardContent className={classes.cardContent}>
-            <GameForm
-              game={Game.New({ nbTurns: 10 })}
+            <DummyUserForm
+              dummyUser={DummyUser.New({})}
               onSubmit={this.handleSubmit}
-              buttonText="Create Game"
+              buttonText="Create user"
             />
           </CardContent>
         </Card>
@@ -100,9 +100,6 @@ const mapDispatchToProps = (
   ownProps: OwnProps
 ): DispatchProps => {
   return {
-    gameCreate: async (newGame: Partial<Game>) => {
-      return await dispatch(GamesActions.gameCreate(newGame));
-    },
     addError: async (error: any) => {
       await dispatch(addError(error));
     }
@@ -114,4 +111,4 @@ export default connect<StateProps, DispatchProps, OwnProps, RootState>(
   mapDispatchToProps,
   null,
   { forwardRef: true }
-)(withStyles(styles)(withSnackbar(GameNewComponent)));
+)(withStyles(styles)(withSnackbar(DummyUserNewComponent)));

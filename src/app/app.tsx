@@ -158,7 +158,7 @@ class App extends React.Component<Props, State> {
         variant="extended"
         className="floating-action-button"
         color="primary"
-        onClick={this.playingGameNext}
+        onClick={this.openQuestionModal}
       >
         New Question
       </Fab>
@@ -167,6 +167,7 @@ class App extends React.Component<Props, State> {
 
   renderPlayingFAB() {
     const { game } = this.props.gameState;
+    const isDisabled = this.props.userState.user!.id !== game!.creator.id;
     let text = 'Next';
 
     if (game) {
@@ -188,7 +189,8 @@ class App extends React.Component<Props, State> {
         variant="extended"
         className="floating-action-button"
         color="primary"
-        onClick={this.openQuestionModal}
+        onClick={this.playingGameNext}
+        disabled={isDisabled}
       >
         {text}
       </Fab>

@@ -11,7 +11,11 @@ import {
   TableCell,
   TableRow,
   TableBody,
-  IconButton
+  TableContainer,
+  IconButton,
+  Button,
+  Checkbox,
+  Modal
 } from '@material-ui/core';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import {
@@ -33,13 +37,21 @@ import { GamesActions } from '../../../store/games/actions';
 import { GameState } from '../../../store/game/types';
 import { Loading } from '../../components/loading/loading.component';
 import GameForm from '../../components/game/game.form.component';
-import { User } from '../../../api/classes/user.class';
+import DummyNewComponent from '../../components/user/dummy.new.component';
+import { User, GenderTable } from '../../../api/classes/user.class';
 import apiHandler from '../../../api/apiHandler';
+import { DummyUser } from '../../../api/classes/dummyUser.class';
+import { Helper } from '../../../helper';
+import { UserState } from '../../../store/user/types';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
     root: {
       marginTop: theme.spacing(3)
+    },
+    addDummyUserButton: {
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1)
     }
   });
 
@@ -56,6 +68,7 @@ interface DispatchProps {
 interface StateProps {
   gameTypesState: GameTypesState;
   gameState: GameState;
+  userState: UserState;
   questionTypesState: QuestionTypesState;
 }
 
@@ -67,6 +80,7 @@ type Props = StateProps &
 
 interface ComponentState {
   selectedUser: User | null;
+  dummyModalOpen: boolean;
   foundUsers: User[];
 }
 
@@ -79,9 +93,18 @@ class GameCreated extends React.Component<Props, ComponentState> {
 
     this.state = {
       selectedUser: null,
+      dummyModalOpen: false,
       foundUsers: []
     };
   }
+
+  openDummyModal = () => {
+    this.setState({ dummyModalOpen: true });
+  };
+
+  closeDummyModal = () => {
+    this.setState({ dummyModalOpen: false });
+  };
 
   handleSubmit = (game: Game) => {
     this.props.gameUpdate(game);
@@ -91,18 +114,43 @@ class GameCreated extends React.Component<Props, ComponentState> {
     const { game } = this.props.gameState;
 
     if (game) {
-      await this.props.gameUpdate({ ...game, users: [...game.users, user] });
+      await this.props.gameUpdate(
+        Helper.clone(game, { users: [...game.users, user] })
+      );
     }
   };
 
-  removeUser = async (user: User) => {
+  removeUser = async (user: any) => {
     const { game } = this.props.gameState;
 
     if (game) {
-      await this.props.gameUpdate({
-        ...game,
-        users: game.users.filter(u => u.id !== user.id)
-      });
+      await this.props.gameUpdate(
+        Helper.clone(game, {
+          users: game.users.filter(u => u.id !== user.id)
+        })
+      );
+    }
+  };
+
+  addDummyUser = async (dummy: DummyUser) => {
+    const { game } = this.props.gameState;
+
+    if (game) {
+      await this.props.gameUpdate(
+        Helper.clone(game, { dummyUsers: [...game.dummyUsers, dummy] })
+      );
+    }
+  };
+
+  removeDummyUser = async (dummy: any) => {
+    const { game } = this.props.gameState;
+
+    if (game) {
+      await this.props.gameUpdate(
+        Helper.clone(game, {
+          dummyUsers: game.dummyUsers.filter(d => d.id !== dummy.id)
+        })
+      );
     }
   };
 
@@ -131,78 +179,124 @@ class GameCreated extends React.Component<Props, ComponentState> {
       });
   };
 
+  handleDummyUserCreate = (dummy: DummyUser) => {
+    this.addDummyUser(dummy);
+
+    this.closeDummyModal();
+  };
+
   render() {
     const classes = this.props.classes;
+    const isDisabled =
+      this.props.userState.user!.id !== this.props.gameState.game!.creator.id;
 
     const game = this.props.gameState.game;
 
     if (!game) return <Loading />;
     return (
-      <Container maxWidth="md" className={classes.root}>
-        <Grid container spacing={1}>
-          <Grid item xs={12} md={6}>
-            <GameForm
-              game={game}
-              onSubmit={this.handleSubmit}
-              buttonText="Update Game"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Autocomplete
-              getOptionLabel={(option: User) => option.name}
-              options={this.state.foundUsers}
-              onChange={this.handleSelectUser}
-              value={this.state.selectedUser}
-              renderInput={params => (
-                <TextField
-                  {...params}
-                  onChange={this.handleSearchChange}
-                  label="Search an user"
-                  variant="outlined"
-                  fullWidth
-                />
-              )}
-            />
+      <>
+        <Container maxWidth="md" className={classes.root}>
+          <Grid container spacing={1}>
+            <Grid item xs={12} md={6}>
+              <GameForm
+                game={game}
+                onSubmit={this.handleSubmit}
+                buttonText="Update Game"
+                disabled={isDisabled}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Autocomplete
+                getOptionLabel={(option: User) => option.name}
+                options={this.state.foundUsers}
+                onChange={this.handleSelectUser}
+                value={this.state.selectedUser}
+                disabled={isDisabled}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    onChange={this.handleSearchChange}
+                    label="Search an existing user"
+                    variant="outlined"
+                    fullWidth
+                  />
+                )}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                className={classes.addDummyUserButton}
+                onClick={this.openDummyModal}
+                disabled={isDisabled}
+              >
+                Add a temporary user
+              </Button>
 
-            <Box>
-              <Table size="small">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>User name</TableCell>
-                    <TableCell align="right">Gender</TableCell>
-                    <TableCell align="right">Actions</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {game.users.map(user => (
-                    <TableRow key={user.id}>
-                      <TableCell>{user.name}</TableCell>
-                      <TableCell align="right">{user.gender}</TableCell>
-                      <TableCell align="right">
-                        <IconButton
-                          color="primary"
-                          onClick={() => this.removeUser(user)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </TableCell>
+              <TableContainer component="div">
+                <Table size="small" stickyHeader>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Temporary</TableCell>
+                      <TableCell>User name</TableCell>
+                      <TableCell align="right">Gender</TableCell>
+                      <TableCell align="right">Actions</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Box>
+                  </TableHead>
+                  <TableBody>
+                    {game.allUsers.map(user => {
+                      const isDummy = user.constructor.name !== User.name;
+                      return (
+                        <TableRow key={user.id}>
+                          <TableCell>
+                            <Checkbox
+                              checked={isDummy}
+                              color="primary"
+                              disabled
+                            />
+                          </TableCell>
+                          <TableCell>{user.name}</TableCell>
+                          <TableCell align="right">
+                            {GenderTable[user.gender]}
+                          </TableCell>
+                          <TableCell align="right">
+                            <IconButton
+                              color="primary"
+                              onClick={() =>
+                                isDummy
+                                  ? this.removeDummyUser(user)
+                                  : this.removeUser(user)
+                              }
+                              disabled={isDisabled}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Grid>
           </Grid>
-        </Grid>
-      </Container>
+        </Container>
+        <Modal open={this.state.dummyModalOpen} onClose={this.closeDummyModal}>
+          <DummyNewComponent dummyUserCreate={this.handleDummyUserCreate} />
+        </Modal>
+      </>
     );
   }
+
+  renderGender() {}
 }
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
     gameTypesState: states.gameTypesState,
     gameState: states.gameState,
-    questionTypesState: states.questionTypesState
+    questionTypesState: states.questionTypesState,
+    userState: states.userState
   };
 };
 

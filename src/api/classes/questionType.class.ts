@@ -8,6 +8,10 @@ export class QuestionType {
 
   public name: string = '';
 
+  public temp(): string {
+    return 'ok';
+  }
+
   public static New(datas: Partial<QuestionType>): QuestionType {
     return Object.assign(new QuestionType(), datas);
   }
@@ -35,6 +39,11 @@ export class QuestionType {
     obj1: QuestionType,
     obj2: QuestionType
   ): boolean {
-    return obj1.id === obj2.id && obj1.name === obj2.name;
+    return (
+      obj1 !== undefined &&
+      obj2 !== undefined &&
+      obj1.id === obj2.id &&
+      obj1.name === obj2.name
+    );
   }
 }

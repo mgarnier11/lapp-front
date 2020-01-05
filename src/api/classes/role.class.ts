@@ -7,9 +7,16 @@ export interface RoleBackModel {
 
 export class Role {
   public id: string = '';
+
   public name: string = '';
+
   public icon: string = '';
+
   public permissionLevel: number = 0;
+
+  public temp(): string {
+    return 'ok';
+  }
 
   public static New(datas: Partial<Role>): Role {
     return Object.assign(new Role(), datas);
@@ -35,6 +42,8 @@ export class Role {
 
   public static CompareObjects(obj1: Role, obj2: Role): boolean {
     return (
+      obj1 !== undefined &&
+      obj2 !== undefined &&
       obj1.id === obj2.id &&
       obj1.icon === obj2.icon &&
       obj1.name === obj2.name &&

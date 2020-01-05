@@ -33,6 +33,7 @@ import { GamesState } from '../../../store/games/types';
 import { QuestionTypesState } from '../../../store/questionTypes/types';
 import { QuestionType } from '../../../api/classes/questionType.class';
 import { GameType } from '../../../api/classes/gameType.class';
+import { Helper } from '../../../helper';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
@@ -71,6 +72,7 @@ interface OwnProps {
   game: Game;
   onSubmit: (game: Game) => void;
   buttonText?: string;
+  disabled?: boolean;
 }
 
 interface DispatchProps {
@@ -92,7 +94,8 @@ interface ComponentState {
 
 class GameForm extends React.Component<Props, ComponentState> {
   public static defaultProps = {
-    buttonText: 'Accept'
+    buttonText: 'Accept',
+    disabled: false
   };
 
   /**
@@ -129,21 +132,25 @@ class GameForm extends React.Component<Props, ComponentState> {
 
   handleNameChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     this.setState({
-      game: { ...this.state.game, name: e.target.value }
+      game: Helper.clone(this.state.game, { name: e.target.value })
     });
   };
 
   handleMaxDifficultyChange = (e: any, value: number) => {
-    this.setState({ game: { ...this.state.game, maxDifficulty: value } });
+    this.setState({
+      game: Helper.clone(this.state.game, { maxDifficulty: value })
+    });
   };
 
   handleMaxHotLevelChange = (e: any, value: number) => {
-    this.setState({ game: { ...this.state.game, maxHotLevel: value } });
+    this.setState({
+      game: Helper.clone(this.state.game, { maxHotLevel: value })
+    });
   };
 
   handleNbTurnsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
-      game: { ...this.state.game, nbTurns: parseInt(e.target.value) }
+      game: Helper.clone(this.state.game, { nbTurns: parseInt(e.target.value) })
     });
   };
 
@@ -151,12 +158,11 @@ class GameForm extends React.Component<Props, ComponentState> {
     const gameTypes = this.props.gameTypesState.gameTypes;
     if (gameTypes) {
       this.setState({
-        game: {
-          ...this.state.game,
+        game: Helper.clone(this.state.game, {
           type: gameTypes.find(
             t => t.id === parseInt(e.target.value as string)
           )!
-        }
+        })
       });
     } else {
       console.error('Game types not loaded yet !', 'How did you get here ?');
@@ -180,10 +186,7 @@ class GameForm extends React.Component<Props, ComponentState> {
       else selectedTypes.splice(indexToRemove, 1);
 
       this.setState({
-        game: {
-          ...this.state.game,
-          questionTypes: selectedTypes
-        }
+        game: Helper.clone(this.state.game, { questionTypes: selectedTypes })
       });
     } else {
       console.error(
@@ -195,13 +198,12 @@ class GameForm extends React.Component<Props, ComponentState> {
 
   removeQuestionType = (typeId: string) => {
     this.setState({
-      game: {
-        ...this.state.game,
+      game: Helper.clone(this.state.game, {
         questionTypes: lodash.reject(
           this.state.game.questionTypes,
           t => t.id === typeId
         )
-      }
+      })
     });
   };
 
@@ -268,6 +270,7 @@ class GameForm extends React.Component<Props, ComponentState> {
             id="type-select"
             value={type.id}
             fullWidth
+            disabled={this.props.disabled}
             onChange={this.handleGameTypeChange}
           >
             {allGameTypes ? (
@@ -288,20 +291,30 @@ class GameForm extends React.Component<Props, ComponentState> {
             margin="normal"
             variant="outlined"
             value={name}
+            disabled={this.props.disabled}
             onChange={this.handleNameChange}
           />
         </FormControl>
         <FormControl className={classes.ratingFormControl}>
-          <Typography component="legend">Maximum&nbsp;Difficulty</Typography>
+          <Typography
+            component="legend"
+            color={this.props.disabled ? 'textSecondary' : 'initial'}
+          >
+            Maximum&nbsp;Difficulty
+          </Typography>
           <Rating
             className={classes.ratingComponent}
             name="difficulty"
             value={maxDifficulty}
             onChange={this.handleMaxDifficultyChange}
+            disabled={this.props.disabled}
           />
         </FormControl>
         <FormControl className={classes.ratingFormControl}>
-          <Typography component="legend">
+          <Typography
+            component="legend"
+            color={this.props.disabled ? 'textSecondary' : 'initial'}
+          >
             Maximum&nbsp;Hot&nbsp;Level
           </Typography>
           <Rating
@@ -310,6 +323,7 @@ class GameForm extends React.Component<Props, ComponentState> {
             onChange={this.handleMaxHotLevelChange}
             className={`${classes.ratingComponent} ${classes.hotLevelRating}`}
             icon={<FavoriteIcon fontSize="inherit" />}
+            disabled={this.props.disabled}
           />
         </FormControl>
         <FormControl className={classes.formControl}>
@@ -319,6 +333,7 @@ class GameForm extends React.Component<Props, ComponentState> {
             margin="normal"
             variant="outlined"
             type="number"
+            disabled={this.props.disabled}
             value={isNaN(nbTurns) ? '' : nbTurns}
             onChange={this.handleNbTurnsChange}
           />
@@ -330,6 +345,7 @@ class GameForm extends React.Component<Props, ComponentState> {
             multiple
             input={<Input />}
             value={questionTypes}
+            disabled={this.props.disabled}
             onChange={this.handleQuestionTypeChange}
             renderValue={selected => (
               <div className={classes.chips}>
@@ -339,6 +355,7 @@ class GameForm extends React.Component<Props, ComponentState> {
                     label={value.name}
                     className={classes.chip}
                     onDelete={() => this.removeQuestionType(value.id)}
+                    disabled={this.props.disabled}
                   />
                 ))}
               </div>
@@ -378,7 +395,7 @@ class GameForm extends React.Component<Props, ComponentState> {
           type="submit"
           variant="contained"
           color="primary"
-          disabled={this.isDenied()}
+          disabled={this.isDenied() || this.props.disabled}
         >
           {allGameTypes && allQuestionTypes ? this.props.buttonText : 'Loading'}
         </Button>

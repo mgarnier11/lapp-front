@@ -15,6 +15,8 @@ export interface UserBackModel {
   _gender: number;
 }
 
+export const GenderTable = ['Man', 'Woman'];
+
 export class User {
   public id: string = '';
 
@@ -31,6 +33,10 @@ export class User {
   public createdGames: Game[] = [];
 
   public games: Game[] = [];
+
+  public temp(): string {
+    return 'ok';
+  }
 
   public static New(datas: Partial<User>): User {
     return Object.assign(new User(), datas);
@@ -56,6 +62,8 @@ export class User {
   }
   public static CompareObjects(obj1: User, obj2: User): boolean {
     return (
+      obj1 !== undefined &&
+      obj2 !== undefined &&
       obj1.name === obj2.name &&
       obj1.email === obj2.email &&
       obj1.gender === obj2.gender &&
