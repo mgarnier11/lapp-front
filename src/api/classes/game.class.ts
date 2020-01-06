@@ -89,6 +89,13 @@ export class Game {
     return newObj;
   }
 
+  public static CompareArrays(arr1: Game[], arr2: Game[]): boolean {
+    return (
+      arr1.length === arr2.length &&
+      arr1.every((e, i) => Game.CompareObjects(e, arr2[i]))
+    );
+  }
+
   public static CompareObjects(obj1: Game, obj2: Game): boolean {
     return (
       obj1 !== undefined &&

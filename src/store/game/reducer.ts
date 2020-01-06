@@ -10,6 +10,7 @@ export const game = (
     case GameActionTypes.ACTION_STARTED: {
       return {
         ...gameState,
+        game: undefined,
         loading: true
       };
     }

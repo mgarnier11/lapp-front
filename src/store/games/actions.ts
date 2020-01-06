@@ -204,7 +204,7 @@ export class GamesActions {
       });
     };
   };
-  /*
+
   public static gameGetAll = (): ThunkAction<
     Promise<boolean>,
     {},
@@ -233,7 +233,7 @@ export class GamesActions {
       });
     };
   };
-*/
+
   public static gameGetAllLinked = (
     userId: string
   ): ThunkAction<Promise<boolean>, {}, {}, AnyAction> => {
@@ -247,9 +247,13 @@ export class GamesActions {
           apiHandler.gameService.findGamesPerUser(userId)
         ])
           .then(gamesArrays => {
+            let games: Game[] = gamesArrays.flat();
             dispatch({
               type: GamesActionTypes.GETALL,
-              games: gamesArrays.flat()
+              games: games.filter(
+                (elem, index) =>
+                  index === games.findIndex(g => g.id === elem.id)
+              )
             });
             resolve(true);
           })

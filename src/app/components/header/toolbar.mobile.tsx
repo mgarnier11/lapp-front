@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import CloseIcon from '@material-ui/icons/Close';
+import HouseIcon from '@material-ui/icons/House';
 import { Link } from 'react-router-dom';
 
 import { User } from '../../../api/classes/user.class';
@@ -62,6 +63,18 @@ const ToolbarMobile: React.FunctionComponent<Props> = (props: Props) => {
       >
         {state.drawerOpen ? <CloseIcon /> : <MenuIcon />}
       </IconButton>
+
+      <IconButton
+        edge="start"
+        className={classes.button}
+        color="inherit"
+        style={{ zIndex: 1200 }}
+      >
+        <Link to="/home" className={classes.button}>
+          <HouseIcon />
+        </Link>
+      </IconButton>
+
       <Typography style={{ flexGrow: 1 }} />
 
       {renderUser(props)}
