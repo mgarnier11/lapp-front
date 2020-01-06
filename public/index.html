@@ -28,6 +28,7 @@
       window.favicon = '%PUBLIC_URL%/favicon.ico';
 
       let apiUrl = '';
+      console.log(env);
       if (env == 'development') apiUrl = 'http://localhost:3030';
       else if (env == 'staging')
         apiUrl = 'https://lapp-back-dev.herokuapp.com/';

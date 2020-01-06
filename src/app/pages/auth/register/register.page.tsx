@@ -4,7 +4,14 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { ThunkDispatch } from 'redux-thunk';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { Container, Avatar, TextField, Grid, Switch } from '@material-ui/core';
+import {
+  Container,
+  Avatar,
+  TextField,
+  Grid,
+  Switch,
+  MenuItem
+} from '@material-ui/core';
 import {
   withStyles,
   WithStyles,
@@ -134,8 +141,10 @@ class Register extends React.Component<Props, ComponentState> {
     this.setState({ password: e.target.value });
   };
 
-  handleGenderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ gender: e.target.checked ? 1 : 0 });
+  handleGenderChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+    this.setState({
+      gender: e.target.value as number
+    });
   };
 
   componentDidUpdate() {
@@ -213,15 +222,17 @@ class Register extends React.Component<Props, ComponentState> {
                 />
               </Grid>
               <Grid item xs={12}>
-                <Typography align="center">
-                  Men
-                  <Switch
-                    color="primary"
-                    value={gender !== 0}
-                    onChange={this.handleGenderChange}
-                  />
-                  Women
-                </Typography>
+                <TextField
+                  select
+                  label="Gender"
+                  id="gender-select"
+                  value={gender}
+                  fullWidth
+                  onChange={this.handleGenderChange}
+                >
+                  <MenuItem value={0}>Man</MenuItem>
+                  <MenuItem value={1}>Woman</MenuItem>
+                </TextField>
               </Grid>
             </Grid>
             <Button

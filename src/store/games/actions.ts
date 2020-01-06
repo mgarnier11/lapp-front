@@ -204,7 +204,7 @@ export class GamesActions {
       });
     };
   };
-
+  /*
   public static gameGetAll = (): ThunkAction<
     Promise<boolean>,
     {},
@@ -222,6 +222,34 @@ export class GamesActions {
             dispatch({
               type: GamesActionTypes.GETALL,
               games: games
+            });
+            resolve(true);
+          })
+          .catch(error => {
+            dispatch(GamesActions.gameActionFailureCreator());
+            dispatch(addError(error));
+            resolve(false);
+          });
+      });
+    };
+  };
+*/
+  public static gameGetAllLinked = (
+    userId: string
+  ): ThunkAction<Promise<boolean>, {}, {}, AnyAction> => {
+    return async (
+      dispatch: ThunkDispatch<{}, {}, AnyAction>
+    ): Promise<boolean> => {
+      return new Promise<boolean>(resolve => {
+        dispatch(GamesActions.gameActionStartedCreator());
+        Promise.all([
+          apiHandler.gameService.findCreatedGamesPerUser(userId),
+          apiHandler.gameService.findGamesPerUser(userId)
+        ])
+          .then(gamesArrays => {
+            dispatch({
+              type: GamesActionTypes.GETALL,
+              games: gamesArrays.flat()
             });
             resolve(true);
           })
