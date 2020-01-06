@@ -24,17 +24,16 @@
 
     <script>
       const env = '%NODE_ENV%';
-      const reactEnv = '%REACT_ENV%';
-      const reaactAppEnv = '%REACT_APP_ENVIRONMENT%';
+      const reactEnv = '%REACT_APP_ENVIRONMENT%';
       window.favicon = '%PUBLIC_URL%/favicon.ico';
 
       let apiUrl = '';
-      console.log(env);
-      if (env == 'development') apiUrl = 'http://localhost:3030';
-      else if (env == 'staging')
+      if (reactEnv == 'development') apiUrl = 'http://localhost:3030';
+      else if (reactEnv == 'staging')
         apiUrl = 'https://lapp-back-dev.herokuapp.com/';
-      else if (env == 'production')
+      else if (reactEnv == 'production')
         apiUrl = 'https://lapp-back-prod.herokuapp.com/';
+      else apiUrl = 'http://localhost:3030';
       console.log(env);
       console.log(reactEnv);
 
