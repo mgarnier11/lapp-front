@@ -15,7 +15,8 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  IconButton
+  IconButton,
+  Chip
 } from '@material-ui/core';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import MaterialTable, { Column, EditComponentProps } from 'material-table';
@@ -40,7 +41,7 @@ import { QuestionTypesActions } from '../../../store/questionTypes/actions';
 import { QuestionTypesState } from '../../../store/questionTypes/types';
 import Rating from '@material-ui/lab/Rating';
 import { GamesState, GamesActionTypes } from '../../../store/games/types';
-import { Game } from '../../../api/classes/game.class';
+import { Game, GameStatusColors } from '../../../api/classes/game.class';
 import { UserState } from '../../../store/user/types';
 import { GamesActions } from '../../../store/games/actions';
 import { Link, withRouter } from 'react-router-dom';
@@ -134,8 +135,8 @@ class Home extends React.Component<Props, ComponentState> {
       .then(() => {
         this.props.gameRemove(gameId);
       })
-      .catch(() => {
-        console.log('notok');
+      .catch(error => {
+        this.props.addError(error);
       });
   };
 
@@ -206,7 +207,9 @@ class Home extends React.Component<Props, ComponentState> {
                   <TableRow key={game.id}>
                     <TableCell>{game.displayId}</TableCell>
                     <TableCell>{game.name}</TableCell>
-                    <TableCell>{game.status}</TableCell>
+                    <TableCell>
+                      <Chip label={game.status} />
+                    </TableCell>
                     {displayActions && (
                       <TableCell align="center">
                         {displayGoTo && (

@@ -23,6 +23,12 @@ export enum GameStatus {
   finished = 'Finished'
 }
 
+export enum GameStatusColors {
+  Created = 'default',
+  Started = 'primary',
+  Finished = 'secondary'
+}
+
 export class Game {
   public id: string = '';
 
@@ -62,8 +68,6 @@ export class Game {
 
   public static fromBack(datas: any) {
     let newObj = new Game();
-
-    console.log(datas);
 
     newObj.id = datas._id;
     newObj.displayId = datas._displayId;

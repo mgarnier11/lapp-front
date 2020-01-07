@@ -39,8 +39,9 @@ import {
   gameTypeActionsInstance,
   GameTypesActions
 } from '../store/gameTypes/actions';
-import { gamesActionsInstance } from '../store/games/actions';
+import { gamesActionsInstance, GamesActions } from '../store/games/actions';
 import { GameState } from '../store/game/types';
+import { Helper } from '../helper';
 
 interface OwnProps {}
 
@@ -49,6 +50,7 @@ interface DispatchProps {
   roleGetAll: () => void;
   questionTypeGetAll: () => void;
   gameTypeGetAll: () => void;
+  gameUpdate: (game: Game) => Promise<any>;
 }
 
 interface StateProps {
@@ -149,7 +151,11 @@ class App extends React.Component<Props, State> {
   };
 
   playingGameNext = () => {
-    console.log('ok');
+    const { game } = this.props.gameState;
+
+    if (game) {
+      this.props.gameUpdate(Helper.clone(game, { status: GameStatus.started }));
+    }
   };
 
   renderQuestionFAB() {
@@ -316,6 +322,9 @@ const mapDispatchToProps = (
     },
     roleGetAll: async () => {
       await dispatch(RolesActions.roleGetAll());
+    },
+    gameUpdate: async (game: Game) => {
+      return await dispatch(GamesActions.gameUpdate(game));
     }
   };
 };

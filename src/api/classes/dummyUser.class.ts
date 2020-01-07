@@ -24,8 +24,6 @@ export class DummyUser {
   public static fromBack(datas: DummyUserBackModel) {
     let newObj = new DummyUser();
 
-    console.log(datas);
-
     newObj.id = datas._id;
     newObj.name = datas._name;
     newObj.gender = datas._gender;

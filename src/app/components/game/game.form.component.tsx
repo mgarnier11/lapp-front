@@ -64,7 +64,8 @@ const styles = (theme: Theme): StyleRules =>
     },
     chip: {
       margin: '2px',
-      minWidth: `calc(50% - 4px)`
+      minWidth: `calc(50% - 4px)`,
+      zIndex: 1200
     }
   });
 
