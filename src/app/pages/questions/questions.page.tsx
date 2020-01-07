@@ -58,7 +58,7 @@ interface ComponentState {
   questions: Question[];
 }
 
-class Questions extends React.Component<Props, ComponentState> {
+class QuestionsPage extends React.Component<Props, ComponentState> {
   /**
    *
    */
@@ -274,7 +274,12 @@ const mapDispatchToProps = (
   };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, RootState>(
+export const Questions = connect<
+  StateProps,
+  DispatchProps,
+  OwnProps,
+  RootState
+>(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(withSnackbar(Questions)));
+)(withStyles(styles)(withSnackbar(QuestionsPage)));

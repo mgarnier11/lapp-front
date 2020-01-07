@@ -14,7 +14,7 @@ import {
 import { RootState } from '../../../store';
 import { addError } from '../../../store/errors/actions';
 import { DummyUser } from '../../../api/classes/dummyUser.class';
-import DummyUserForm from './dummy.form.component';
+import { DummyUserForm } from './dummy.form.component';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
@@ -106,9 +106,11 @@ const mapDispatchToProps = (
   };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, RootState>(
-  mapStateToProps,
-  mapDispatchToProps,
-  null,
-  { forwardRef: true }
-)(withStyles(styles)(withSnackbar(DummyUserNewComponent)));
+export const DummyUserNew = connect<
+  StateProps,
+  DispatchProps,
+  OwnProps,
+  RootState
+>(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(
+  withStyles(styles)(withSnackbar(DummyUserNewComponent))
+);

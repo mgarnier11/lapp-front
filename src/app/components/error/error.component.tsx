@@ -23,7 +23,7 @@ type Props = StateProps & OwnProps & DispatchProps & WithSnackbarProps;
 
 interface State {}
 
-class Error extends React.Component<Props, State> {
+class ErrorComponent extends React.Component<Props, State> {
   /**
    *
    */
@@ -96,9 +96,9 @@ const mapDispatchToProps = (
   };
 };
 
-export default withSnackbar(
+export const Error = withSnackbar(
   connect<StateProps, DispatchProps, OwnProps, RootState>(
     mapStateToProps,
     mapDispatchToProps
-  )(Error)
+  )(ErrorComponent)
 );

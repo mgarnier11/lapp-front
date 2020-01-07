@@ -15,7 +15,7 @@ interface OwnProps {
 
 type Props = OwnProps & RouteComponentProps;
 
-const GameNotFound: React.FunctionComponent<Props> = (props: Props) => {
+const GameNotFoundPage: React.FunctionComponent<Props> = (props: Props) => {
   const classes = useStyles();
 
   const displayId = props.displayId || props.location.state.displayId;
@@ -30,4 +30,4 @@ const GameNotFound: React.FunctionComponent<Props> = (props: Props) => {
   );
 };
 
-export default withRouter(GameNotFound);
+export const GameNotFound = withRouter(GameNotFoundPage);

@@ -13,8 +13,8 @@ import { makeStyles, Hidden, CssBaseline } from '@material-ui/core';
 import { UserState } from '../../../store/user/types';
 import { RootState } from '../../../store';
 import { logout } from '../../../store/user/actions';
-import ToolbarDesktop from './toolbar.desktop';
-import ToolbarMobile from './toolbar.mobile';
+import { ToolbarMobile } from './toolbar.mobile';
+import { ToolbarDesktop } from './toolbar.desktop';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -59,7 +59,7 @@ interface StateProps {
 
 type Props = StateProps & OwnProps & DispatchProps;
 
-const Header: React.FunctionComponent<Props> = (props: Props) => {
+const HeaderComponent: React.FunctionComponent<Props> = (props: Props) => {
   const classes = useStyles();
 
   const user = props.userState.user;
@@ -117,10 +117,10 @@ const mapDispatchToProps = (
   };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, RootState>(
+export const Header = connect<StateProps, DispatchProps, OwnProps, RootState>(
   mapStateToProps,
   mapDispatchToProps
-)(Header);
+)(HeaderComponent);
 
 export const renderUser = (props: any) => {
   return (

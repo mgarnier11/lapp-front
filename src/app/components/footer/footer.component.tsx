@@ -3,9 +3,9 @@ import React from 'react';
 
 //const useStyles = makeStyles(theme => ({}));
 
-const Footer: React.FunctionComponent = () => {
+const FooterComponent: React.FunctionComponent = () => {
   //const classes = useStyles();
   return <footer></footer>;
 };
 
-export default Footer;
+export const Footer = FooterComponent;

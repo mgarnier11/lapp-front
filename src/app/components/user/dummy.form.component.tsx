@@ -47,7 +47,7 @@ interface ComponentState {
   error: string;
 }
 
-class DummyUserForm extends React.Component<Props, ComponentState> {
+class DummyUserFormComponent extends React.Component<Props, ComponentState> {
   public static defaultProps = {
     buttonText: 'Accept'
   };
@@ -72,10 +72,12 @@ class DummyUserForm extends React.Component<Props, ComponentState> {
     if (
       !DummyUser.CompareObjects(
         nextPropsDummyUser,
-        DummyUserForm.prevPropsDummyUser
+        DummyUserFormComponent.prevPropsDummyUser
       )
     ) {
-      DummyUserForm.prevPropsDummyUser = lodash.cloneDeep(nextPropsDummyUser);
+      DummyUserFormComponent.prevPropsDummyUser = lodash.cloneDeep(
+        nextPropsDummyUser
+      );
       return {
         dummyUser: lodash.cloneDeep(nextPropsDummyUser)
       };
@@ -176,9 +178,11 @@ const mapDispatchToProps = (
   };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, RootState>(
-  mapStateToProps,
-  mapDispatchToProps,
-  null,
-  { forwardRef: true }
-)(withStyles(styles)(DummyUserForm));
+export const DummyUserForm = connect<
+  StateProps,
+  DispatchProps,
+  OwnProps,
+  RootState
+>(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(
+  withStyles(styles)(DummyUserFormComponent)
+);

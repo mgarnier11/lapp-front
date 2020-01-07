@@ -22,7 +22,7 @@ interface State {
   eventsLinked: ServiceEvent[];
 }
 
-class Success extends React.Component<Props, State> {
+class SuccessComponent extends React.Component<Props, State> {
   /**
    *
    */
@@ -132,4 +132,4 @@ class Success extends React.Component<Props, State> {
   }
 }
 
-export default withSnackbar(Success);
+export const Success = withSnackbar(SuccessComponent);

@@ -34,8 +34,6 @@ export const user = (
     }
 
     case UserActionTypes.LOGOUT: {
-      apiHandler.userservice.ownEvents.emit('logged out');
-
       return {
         ...userState,
         user: undefined,

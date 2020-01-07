@@ -7,10 +7,10 @@ import { Loading } from '../../components/loading/loading.component';
 import { GameState } from '../../../store/game/types';
 import { GameActions } from '../../../store/game/actions';
 import { GameStatus } from '../../../api/classes/game.class';
-import GameCreated from '../../pages/games/game.created.page';
 
-import GameNotFound from '../../pages/games/game.notFound.page';
 import { UserState } from '../../../store/user/types';
+import { GameNotFound } from '../../pages/games/game.notFound.page';
+import { GameCreated } from '../../pages/games/game.created.page';
 
 interface RouteParams {
   displayId: string;
@@ -31,7 +31,7 @@ type Props = StateProps & OwnProps & DispatchProps & RouteComponentProps;
 
 interface ComponentState {}
 
-class GameMiddleware extends React.Component<Props, ComponentState> {
+class GameMiddlewareComponent extends React.Component<Props, ComponentState> {
   /**
    *
    */
@@ -93,9 +93,9 @@ const mapDispatchToProps = (
   };
 };
 
-export default withRouter(
+export const GameMiddleware = withRouter(
   connect<StateProps, DispatchProps, OwnProps, RootState>(
     mapStateToProps,
     mapDispatchToProps
-  )(GameMiddleware)
+  )(GameMiddlewareComponent)
 );

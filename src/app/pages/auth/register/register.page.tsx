@@ -79,7 +79,7 @@ interface ComponentState {
   gender: number;
 }
 
-class Register extends React.Component<Props, ComponentState> {
+class RegisterPage extends React.Component<Props, ComponentState> {
   /**
    *
    */
@@ -257,9 +257,9 @@ const mapDispatchToProps = (
   };
 };
 
-export default withRouter(
+export const Register = withRouter(
   connect<StateProps, DispatchProps, OwnProps, RootState>(
     mapStateToProps,
     mapDispatchToProps
-  )(withStyles(styles)(withSnackbar(Register)))
+  )(withStyles(styles)(withSnackbar(RegisterPage)))
 );

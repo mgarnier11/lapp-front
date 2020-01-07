@@ -37,14 +37,14 @@ import { QuestionTypesState } from '../../../store/questionTypes/types';
 import { GamesActions } from '../../../store/games/actions';
 import { GameState } from '../../../store/game/types';
 import { Loading } from '../../components/loading/loading.component';
-import GameForm from '../../components/game/game.form.component';
-import DummyNewComponent from '../../components/user/dummy.new.component';
 import { User, GenderTable } from '../../../api/classes/user.class';
 import apiHandler from '../../../api/apiHandler';
 import { DummyUser } from '../../../api/classes/dummyUser.class';
 import { Helper } from '../../../helper';
 import { UserState } from '../../../store/user/types';
 import { GamesState } from '../../../store/games/types';
+import { GameForm } from '../../components/game/game.form.component';
+import { DummyUserNew } from '../../components/user/dummy.new.component';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
@@ -87,7 +87,7 @@ interface ComponentState {
   foundUsers: User[];
 }
 
-class GameCreated extends React.Component<Props, ComponentState> {
+class GameCreatedPage extends React.Component<Props, ComponentState> {
   /**
    *
    */
@@ -291,7 +291,7 @@ class GameCreated extends React.Component<Props, ComponentState> {
           </Grid>
         </Container>
         <Modal open={this.state.dummyModalOpen} onClose={this.closeDummyModal}>
-          <DummyNewComponent dummyUserCreate={this.handleDummyUserCreate} />
+          <DummyUserNew dummyUserCreate={this.handleDummyUserCreate} />
         </Modal>
       </>
     );
@@ -325,9 +325,11 @@ const mapDispatchToProps = (
   };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, RootState>(
-  mapStateToProps,
-  mapDispatchToProps,
-  null,
-  { forwardRef: true }
-)(withStyles(styles)(withSnackbar(GameCreated)));
+export const GameCreated = connect<
+  StateProps,
+  DispatchProps,
+  OwnProps,
+  RootState
+>(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(
+  withStyles(styles)(withSnackbar(GameCreatedPage))
+);

@@ -24,7 +24,9 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-const ToolbarMobile: React.FunctionComponent<Props> = (props: Props) => {
+const ToolbarMobileComponent: React.FunctionComponent<Props> = (
+  props: Props
+) => {
   const { user, classes } = props;
   const [state, setState] = React.useState({
     drawerOpen: false
@@ -112,4 +114,4 @@ const ToolbarMobile: React.FunctionComponent<Props> = (props: Props) => {
   );
 };
 
-export default ToolbarMobile;
+export const ToolbarMobile = ToolbarMobileComponent;

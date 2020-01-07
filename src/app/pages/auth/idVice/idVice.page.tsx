@@ -22,8 +22,8 @@ import {
 
 import { UserState } from '../../../../store/user/types';
 import { RootState } from '../../../../store';
-import { LoginCredentials } from '../../../../api/classes/user.class';
-import { login, logout } from '../../../../store/user/actions';
+import { LoginCredentials, User } from '../../../../api/classes/user.class';
+import { login, logout, register } from '../../../../store/user/actions';
 
 const styles = (theme: Theme): StyleRules => ({
   paper: {
@@ -52,6 +52,7 @@ interface OwnProps {}
 
 interface DispatchProps {
   login: (credentials: LoginCredentials) => Promise<any>;
+  register: (userDatas: Partial<User>) => Promise<any>;
   logout: () => void;
 }
 
@@ -70,7 +71,7 @@ interface ComponentState {
   password: string;
 }
 
-class LoginPage extends React.Component<Props, ComponentState> {
+class IdVicePage extends React.Component<Props, ComponentState> {
   /**
    *
    */
@@ -168,7 +169,7 @@ class LoginPage extends React.Component<Props, ComponentState> {
               </Grid>
               <Grid item>
                 <Link to="/idVice">
-                  You don't want to Sign Up ? Use ID-Vice
+                  You don't want to Sing Up ? Use ID-Vice
                 </Link>
               </Grid>
             </Grid>
@@ -193,15 +194,18 @@ const mapDispatchToProps = (
     login: async (credentials: LoginCredentials) => {
       return await dispatch(login(credentials));
     },
+    register: async (userDatas: Partial<User>) => {
+      return await dispatch(register(userDatas));
+    },
     logout: async () => {
       await dispatch(logout());
     }
   };
 };
 
-export const Login = withRouter(
+export const IdVice = withRouter(
   connect<StateProps, DispatchProps, OwnProps, RootState>(
     mapStateToProps,
     mapDispatchToProps
-  )(withStyles(styles)(LoginPage))
+  )(withStyles(styles)(IdVicePage))
 );

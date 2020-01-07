@@ -15,7 +15,9 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-const ToolbarDesktop: React.FunctionComponent<Props> = (props: Props) => {
+const ToolbarDesktopComponent: React.FunctionComponent<Props> = (
+  props: Props
+) => {
   const { user, classes } = props;
 
   const admin = () =>
@@ -59,4 +61,4 @@ const ToolbarDesktop: React.FunctionComponent<Props> = (props: Props) => {
   );
 };
 
-export default ToolbarDesktop;
+export const ToolbarDesktop = ToolbarDesktopComponent;

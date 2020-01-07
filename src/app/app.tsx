@@ -3,22 +3,6 @@ import { connect } from 'react-redux';
 import { Switch, Route, Redirect, withRouter } from 'react-router';
 import { RouteComponentProps } from 'react-router';
 
-import Header from './components/header/header.component';
-//import Loading from './components/loading/loading.component';
-import Login from './pages/auth/login/login.page';
-import Register from './pages/auth/register/register.page';
-import Home from './pages/home/home.page';
-import Guard from './components/guard/guard.component';
-import Footer from './components/footer/footer.component';
-import Error from './components/error/error.component';
-import Success from './components/success/success.component';
-import Roles from './pages/roles/roles.page';
-import QuestionTypes from './pages/questionTypes/question-types.page';
-import Questions from './pages/questions/questions.page';
-import QuestionNewComponent from './components/question/question.new.component';
-import GameNewComponent from './components/game/game.new.component';
-import GameMiddlewareComponent from './components/game/game.middleware.component';
-
 import { RootState } from '../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { relog } from '../store/user/actions';
@@ -41,6 +25,21 @@ import {
 import { gamesActionsInstance, GamesActions } from '../store/games/actions';
 import { GameState } from '../store/game/types';
 import { Helper } from '../helper';
+import { IdVice } from './pages/auth/idVice/idVice.page';
+import { Home } from './pages/home/home.page';
+import { Questions } from './pages/questions/questions.page';
+import { Roles } from './pages/roles/roles.page';
+import { QuestionTypes } from './pages/questionTypes/question-types.page';
+import { Login } from './pages/auth/login/login.page';
+import { Register } from './pages/auth/register/register.page';
+import { QuestionNew } from './components/question/question.new.component';
+import { GameNew } from './components/game/game.new.component';
+import { Header } from './components/header/header.component';
+import { Guard } from './components/guard/guard.component';
+import { GameMiddleware } from './components/game/game.middleware.component';
+import { Footer } from './components/footer/footer.component';
+import { Success } from './components/success/success.component';
+import { Error } from './components/error/error.component';
 
 interface OwnProps {}
 
@@ -82,9 +81,14 @@ class App extends React.Component<Props, State> {
       this
     );
     this.gameSuccessfullyCreated = this.gameSuccessfullyCreated.bind(this);
+
+    Helper.setDeviceId();
+    /*
     console.log(Helper.getPlayer(8, 150, 5, 'test'));
 
     Helper.verify(150, 5, 'test').then(r => console.log(r));
+    console.log(MediaDeviceInfo.toString());
+    */
   }
 
   componentDidMount() {
@@ -225,7 +229,7 @@ class App extends React.Component<Props, State> {
         open={this.state.questionModalOpen}
         onClose={this.closeQuestionModal}
       >
-        <QuestionNewComponent />
+        <QuestionNew />
       </Modal>
     );
   }
@@ -233,7 +237,7 @@ class App extends React.Component<Props, State> {
   renderGameModal() {
     return (
       <Modal open={this.state.gameModalOpen} onClose={this.closeGameModal}>
-        <GameNewComponent />
+        <GameNew />
       </Modal>
     );
   }
@@ -269,7 +273,7 @@ class App extends React.Component<Props, State> {
             <Questions />
           </Guard>
           <Guard minimalPermission={0} path="/games/:displayId" redirect="/">
-            <GameMiddlewareComponent />
+            <GameMiddleware />
           </Guard>
           <Guard minimalPermission={100} path="/roles" redirect="/home">
             <Roles />
@@ -277,6 +281,9 @@ class App extends React.Component<Props, State> {
           <Guard minimalPermission={100} path="/questionTypes" redirect="/home">
             <QuestionTypes />
           </Guard>
+          <Route exact path="/idVice">
+            <IdVice />
+          </Route>
           <Route exact path="/login">
             <Login />
           </Route>

@@ -28,7 +28,7 @@ interface OptionnalState {
 
 type ComponentState = RequiredState & OptionnalState;
 
-class YesNo extends React.Component<Props, ComponentState> {
+class YesNoComponent extends React.Component<Props, ComponentState> {
   private events: EventEmitter = new EventEmitter();
 
   private static defaultState: OptionnalState = {
@@ -43,7 +43,7 @@ class YesNo extends React.Component<Props, ComponentState> {
    */
   constructor(props: Props) {
     super(props);
-    this.state = { ...YesNo.defaultState, isOpen: false };
+    this.state = { ...YesNoComponent.defaultState, isOpen: false };
   }
 
   private handleAccept = () => {
@@ -59,7 +59,7 @@ class YesNo extends React.Component<Props, ComponentState> {
   };
 
   present = (newState: Partial<OptionnalState>) => {
-    if (newState) newState = { ...YesNo.defaultState, ...newState };
+    if (newState) newState = { ...YesNoComponent.defaultState, ...newState };
 
     this.setState({
       isOpen: true,
@@ -114,8 +114,11 @@ class YesNo extends React.Component<Props, ComponentState> {
     );
   }
 }
-const ref = React.createRef<YesNo>();
+const ref = React.createRef<YesNoComponent>();
 
-ReactDOM.render(<YesNo ref={ref} />, document.getElementById('yesno'));
+ReactDOM.render(
+  <YesNoComponent ref={ref} />,
+  document.getElementById('yesnoRoot')
+);
 
 export const yesNoController = ref.current;

@@ -4,4 +4,4 @@ const Page404: React.FunctionComponent = () => {
   return <>Error page not found</>;
 };
 
-export default Page404;
+export const PageNotFound = Page404;

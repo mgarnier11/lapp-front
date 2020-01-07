@@ -1,8 +1,31 @@
 import seedRandom from 'seedrandom';
+import uuid from 'uuid';
+
+const idVice = 'id-vice';
 
 export class Helper {
   public static clone<T>(instance: T, newProps?: Partial<T>): T {
     return Object.assign(Object.create(instance as any), instance, newProps);
+  }
+
+  public static getDeviceId() {
+    return localStorage.getItem(idVice);
+  }
+
+  public static setDeviceId() {
+    let deviceId = localStorage.getItem(idVice);
+
+    if (!deviceId) deviceId = Helper.setNewDeviceId();
+
+    return deviceId;
+  }
+
+  public static setNewDeviceId() {
+    let deviceId = uuid.v1();
+
+    localStorage.setItem(idVice, deviceId);
+
+    return localStorage.getItem(idVice);
   }
 
   public static getPlayer(

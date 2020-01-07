@@ -93,7 +93,7 @@ interface ComponentState {
   error: string;
 }
 
-class GameForm extends React.Component<Props, ComponentState> {
+class GameFormComponent extends React.Component<Props, ComponentState> {
   public static defaultProps = {
     buttonText: 'Accept',
     disabled: false
@@ -121,8 +121,8 @@ class GameForm extends React.Component<Props, ComponentState> {
   private static prevPropsGame: Game;
   static getDerivedStateFromProps(nextProps: Props, prevState: ComponentState) {
     let nextPropsGame = nextProps.game;
-    if (!Game.CompareObjects(nextPropsGame, GameForm.prevPropsGame)) {
-      GameForm.prevPropsGame = lodash.cloneDeep(nextPropsGame);
+    if (!Game.CompareObjects(nextPropsGame, GameFormComponent.prevPropsGame)) {
+      GameFormComponent.prevPropsGame = lodash.cloneDeep(nextPropsGame);
       return {
         game: lodash.cloneDeep(nextPropsGame)
       };
@@ -424,9 +424,9 @@ const mapDispatchToProps = (
   };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, RootState>(
+export const GameForm = connect<StateProps, DispatchProps, OwnProps, RootState>(
   mapStateToProps,
   mapDispatchToProps,
   null,
   { forwardRef: true }
-)(withStyles(styles)(GameForm));
+)(withStyles(styles)(GameFormComponent));

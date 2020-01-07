@@ -43,7 +43,7 @@ interface StateProps {
 
 type Props = StateProps & OwnProps & DispatchProps;
 
-const Guard: React.FunctionComponent<Props> = (props: Props) => {
+const GuardComponent: React.FunctionComponent<Props> = (props: Props) => {
   let { user, loading } = props.userState;
   //const classes = useStyles();
 
@@ -85,7 +85,7 @@ const mapDispatchToProps = (
   };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, RootState>(
+export const Guard = connect<StateProps, DispatchProps, OwnProps, RootState>(
   mapStateToProps,
   mapDispatchToProps
-)(Guard);
+)(GuardComponent);

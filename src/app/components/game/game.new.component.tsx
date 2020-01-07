@@ -15,7 +15,7 @@ import { RootState } from '../../../store';
 import { GamesActions } from '../../../store/games/actions';
 import { addError } from '../../../store/errors/actions';
 import { Game } from '../../../api/classes/game.class';
-import GameForm from './game.form.component';
+import { GameForm } from './game.form.component';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
@@ -109,7 +109,7 @@ const mapDispatchToProps = (
   };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, RootState>(
+export const GameNew = connect<StateProps, DispatchProps, OwnProps, RootState>(
   mapStateToProps,
   mapDispatchToProps,
   null,

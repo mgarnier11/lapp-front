@@ -53,7 +53,7 @@ interface ComponentState {
   roles: Role[];
 }
 
-class Roles extends React.Component<Props, ComponentState> {
+class RolesPage extends React.Component<Props, ComponentState> {
   /**
    *
    */
@@ -187,7 +187,7 @@ const mapDispatchToProps = (
   };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, RootState>(
+export const Roles = connect<StateProps, DispatchProps, OwnProps, RootState>(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(withSnackbar(Roles)));
+)(withStyles(styles)(withSnackbar(RolesPage)));

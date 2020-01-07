@@ -72,7 +72,7 @@ interface ComponentState {
   games: Game[];
 }
 
-class Home extends React.Component<Props, ComponentState> {
+class HomePage extends React.Component<Props, ComponentState> {
   /**
    *
    */
@@ -125,7 +125,7 @@ class Home extends React.Component<Props, ComponentState> {
         this.props.gameRemove(gameId);
       })
       .catch(error => {
-        this.props.addError(error);
+        //this.props.addError(error);
       });
   };
 
@@ -264,9 +264,9 @@ const mapDispatchToProps = (
   };
 };
 
-export default withRouter(
+export const Home = withRouter(
   connect<StateProps, DispatchProps, OwnProps, RootState>(
     mapStateToProps,
     mapDispatchToProps
-  )(withStyles(styles)(withSnackbar(Home)))
+  )(withStyles(styles)(withSnackbar(HomePage)))
 );

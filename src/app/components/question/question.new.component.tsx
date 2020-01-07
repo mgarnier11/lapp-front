@@ -286,9 +286,11 @@ const mapDispatchToProps = (
   };
 };
 
-export default connect<StateProps, DispatchProps, OwnProps, RootState>(
-  mapStateToProps,
-  mapDispatchToProps,
-  null,
-  { forwardRef: true }
-)(withStyles(styles)(withSnackbar(QuestionNewComponent)));
+export const QuestionNew = connect<
+  StateProps,
+  DispatchProps,
+  OwnProps,
+  RootState
+>(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(
+  withStyles(styles)(withSnackbar(QuestionNewComponent))
+);
