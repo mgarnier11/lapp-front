@@ -56,10 +56,13 @@ export class Game {
 
   public status: GameStatus = GameStatus.created;
 
-  public tests: string = 'rerer';
-
   public get allUsers() {
     return [...this.users, ...this.dummyUsers];
+  }
+
+  public canStart(): boolean {
+    if (this.allUsers.length <= 1) return false;
+    return true;
   }
 
   public static New(datas: Partial<Game>): Game {

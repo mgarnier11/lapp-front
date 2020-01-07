@@ -9,7 +9,6 @@ import {
   Avatar,
   TextField,
   Grid,
-  Switch,
   MenuItem
 } from '@material-ui/core';
 import {

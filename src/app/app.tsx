@@ -16,14 +16,13 @@ import Roles from './pages/roles/roles.page';
 import QuestionTypes from './pages/questionTypes/question-types.page';
 import Questions from './pages/questions/questions.page';
 import QuestionNewComponent from './components/question/question.new.component';
-import GameNotFound from './pages/games/game.notFound.page';
 import GameNewComponent from './components/game/game.new.component';
 import GameMiddlewareComponent from './components/game/game.middleware.component';
 
 import { RootState } from '../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { relog } from '../store/user/actions';
-import { CssBaseline, Fab, Modal, Container } from '@material-ui/core';
+import { CssBaseline, Fab, Modal } from '@material-ui/core';
 import { RolesActions, roleActionsInstance } from '../store/roles/actions';
 import { questionActionsInstance } from '../store/questions/actions';
 import {
@@ -83,6 +82,9 @@ class App extends React.Component<Props, State> {
       this
     );
     this.gameSuccessfullyCreated = this.gameSuccessfullyCreated.bind(this);
+    console.log(Helper.getPlayer(8, 150, 5, 'test'));
+
+    Helper.verify(150, 5, 'test').then(r => console.log(r));
   }
 
   componentDidMount() {
@@ -173,7 +175,8 @@ class App extends React.Component<Props, State> {
 
   renderPlayingFAB() {
     const { game } = this.props.gameState;
-    const isDisabled = this.props.userState.user!.id !== game!.creator.id;
+    const isDisabled =
+      this.props.userState.user!.id !== game!.creator.id || !game!.canStart();
     let text = 'Next';
 
     if (game) {

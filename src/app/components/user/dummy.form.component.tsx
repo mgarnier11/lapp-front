@@ -2,19 +2,7 @@ import * as lodash from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import {
-  Typography,
-  Select,
-  MenuItem,
-  Button,
-  TextField,
-  InputLabel,
-  FormControl,
-  Input,
-  Chip,
-  Checkbox,
-  ListItemText
-} from '@material-ui/core';
+import { MenuItem, Button, TextField, FormControl } from '@material-ui/core';
 import {
   withStyles,
   WithStyles,
@@ -22,14 +10,10 @@ import {
   StyleRules,
   Theme
 } from '@material-ui/core/styles';
-import Rating from '@material-ui/lab/Rating';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import { RootState } from '../../../store';
 import { addError } from '../../../store/errors/actions';
 import { DummyUser } from '../../../api/classes/dummyUser.class';
-import { QuestionTypesState } from '../../../store/questionTypes/types';
-import { QuestionType } from '../../../api/classes/questionType.class';
 import { Helper } from '../../../helper';
 
 const styles = (theme: Theme): StyleRules =>

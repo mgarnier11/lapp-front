@@ -4,9 +4,6 @@ import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import {
   Container,
-  Select,
-  MenuItem,
-  TextField,
   Grid,
   Typography,
   TableContainer,
@@ -19,7 +16,6 @@ import {
   Chip
 } from '@material-ui/core';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
-import MaterialTable, { Column, EditComponentProps } from 'material-table';
 import {
   withStyles,
   WithStyles,
@@ -27,24 +23,17 @@ import {
   createStyles,
   Theme
 } from '@material-ui/core/styles';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 
-import { QuestionsState } from '../../../store/questions/types';
 import { RootState } from '../../../store';
-import { QuestionsActions } from '../../../store/questions/actions';
 import { addError } from '../../../store/errors/actions';
-import { Question } from '../../../api/classes/question.class';
 import { Loading } from '../../components/loading/loading.component';
-import { QuestionTypesActions } from '../../../store/questionTypes/actions';
-import { QuestionTypesState } from '../../../store/questionTypes/types';
-import Rating from '@material-ui/lab/Rating';
-import { GamesState, GamesActionTypes } from '../../../store/games/types';
-import { Game, GameStatusColors } from '../../../api/classes/game.class';
+import { GamesState } from '../../../store/games/types';
+import { Game } from '../../../api/classes/game.class';
 import { UserState } from '../../../store/user/types';
 import { GamesActions } from '../../../store/games/actions';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { GameActions } from '../../../store/game/actions';
 import { RouterProps } from 'react-router';
 import { yesNoController } from '../../components/dialogs/yesno.component';

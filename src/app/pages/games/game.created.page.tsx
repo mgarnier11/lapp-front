@@ -5,7 +5,6 @@ import {
   Container,
   Grid,
   TextField,
-  Box,
   Table,
   TableHead,
   TableCell,
@@ -14,8 +13,8 @@ import {
   TableContainer,
   IconButton,
   Button,
-  Checkbox,
-  Modal
+  Modal,
+  Tooltip
 } from '@material-ui/core';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import {
@@ -27,6 +26,8 @@ import {
 } from '@material-ui/core/styles';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import DeleteIcon from '@material-ui/icons/Delete';
+import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
+import PersonIcon from '@material-ui/icons/Person';
 
 import { RootState } from '../../../store';
 import { addError } from '../../../store/errors/actions';
@@ -43,6 +44,7 @@ import apiHandler from '../../../api/apiHandler';
 import { DummyUser } from '../../../api/classes/dummyUser.class';
 import { Helper } from '../../../helper';
 import { UserState } from '../../../store/user/types';
+import { GamesState } from '../../../store/games/types';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
@@ -67,6 +69,7 @@ interface DispatchProps {
 
 interface StateProps {
   gameTypesState: GameTypesState;
+  gamesState: GamesState;
   gameState: GameState;
   userState: UserState;
   questionTypesState: QuestionTypesState;
@@ -188,7 +191,8 @@ class GameCreated extends React.Component<Props, ComponentState> {
   render() {
     const classes = this.props.classes;
     const isDisabled =
-      this.props.userState.user!.id !== this.props.gameState.game!.creator.id;
+      this.props.userState.user!.id !== this.props.gameState.game!.creator.id ||
+      this.props.gamesState.loading;
 
     const game = this.props.gameState.game;
 
@@ -237,7 +241,7 @@ class GameCreated extends React.Component<Props, ComponentState> {
                 <Table size="small" stickyHeader>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Temporary</TableCell>
+                      <TableCell>Type</TableCell>
                       <TableCell>User name</TableCell>
                       <TableCell align="right">Gender</TableCell>
                       <TableCell align="right">Actions</TableCell>
@@ -249,11 +253,15 @@ class GameCreated extends React.Component<Props, ComponentState> {
                       return (
                         <TableRow key={user.id}>
                           <TableCell>
-                            <Checkbox
-                              checked={isDummy}
-                              color="primary"
-                              disabled
-                            />
+                            {isDummy ? (
+                              <Tooltip title="Temporary user">
+                                <HourglassEmptyIcon />
+                              </Tooltip>
+                            ) : (
+                              <Tooltip title="Registered user">
+                                <PersonIcon />
+                              </Tooltip>
+                            )}
                           </TableCell>
                           <TableCell>{user.name}</TableCell>
                           <TableCell align="right">
@@ -278,6 +286,7 @@ class GameCreated extends React.Component<Props, ComponentState> {
                   </TableBody>
                 </Table>
               </TableContainer>
+              {this.props.gamesState.loading && <Loading />}
             </Grid>
           </Grid>
         </Container>
@@ -287,13 +296,12 @@ class GameCreated extends React.Component<Props, ComponentState> {
       </>
     );
   }
-
-  renderGender() {}
 }
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
     gameTypesState: states.gameTypesState,
+    gamesState: states.gamesState,
     gameState: states.gameState,
     questionTypesState: states.questionTypesState,
     userState: states.userState
