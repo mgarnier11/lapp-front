@@ -245,10 +245,7 @@ class GameCreated extends React.Component<Props, ComponentState> {
                   </TableHead>
                   <TableBody>
                     {game.allUsers.map(user => {
-                      const isDummy = user.constructor.name !== User.name;
-                      console.log(user.constructor.name);
-                      console.log(User.name);
-
+                      const isDummy = user instanceof DummyUser; //isUUID.v1(user.id);
                       return (
                         <TableRow key={user.id}>
                           <TableCell>

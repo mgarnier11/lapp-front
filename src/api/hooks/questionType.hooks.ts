@@ -20,6 +20,6 @@ export function afterAllHook(options = {}): Hook {
 }
 
 function convertToClass(data: any): QuestionType {
-  if (data.constructor.name === QuestionType.name) return data;
+  if (data instanceof QuestionType) return data;
   else return QuestionType.fromBack(data);
 }

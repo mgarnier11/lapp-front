@@ -20,6 +20,6 @@ export function afterAllHook(options = {}): Hook {
 }
 
 function convertToClass(data: any): Game {
-  if (data.constructor.name === Game.name) return data;
+  if (data instanceof Game) return data;
   else return Game.fromBack(data);
 }
