@@ -58,13 +58,11 @@ interface OwnProps {}
 interface DispatchProps {
   register: (userDatas: Partial<User>) => Promise<any>;
   logout: () => void;
-  roleGetAll: () => void;
   addError: (error: any) => void;
 }
 
 interface StateProps {
   userState: UserState;
-  rolesState: RolesState;
 }
 
 type Props = StateProps &
@@ -78,7 +76,6 @@ interface ComponentState {
   email: string;
   password: string;
   name: string;
-  roleId: string;
   gender: number;
 }
 
@@ -93,7 +90,6 @@ class Register extends React.Component<Props, ComponentState> {
       email: '',
       password: '',
       name: '',
-      roleId: '',
       gender: 0
     };
 
@@ -109,7 +105,6 @@ class Register extends React.Component<Props, ComponentState> {
           email: this.state.email,
           name: this.state.name,
           password: this.state.password,
-          role: Role.New({ id: this.state.roleId }),
           gender: this.state.gender
         })
         .then(registered => {
@@ -145,22 +140,6 @@ class Register extends React.Component<Props, ComponentState> {
       gender: e.target.value as number
     });
   };
-
-  componentDidUpdate() {
-    if (this.state.roleId === '') {
-      if (this.props.rolesState.roles) {
-        let role = this.props.rolesState.roles.find(r => r.name === 'user');
-
-        if (role) {
-          this.setState({
-            roleId: role.id
-          });
-        }
-      } else {
-        if (!this.props.rolesState.loading) this.props.roleGetAll();
-      }
-    }
-  }
 
   render() {
     const classes = this.props.classes;
@@ -257,8 +236,7 @@ class Register extends React.Component<Props, ComponentState> {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    userState: states.userState,
-    rolesState: states.rolesState
+    userState: states.userState
   };
 };
 
@@ -272,9 +250,6 @@ const mapDispatchToProps = (
     },
     logout: async () => {
       await dispatch(logout());
-    },
-    roleGetAll: async () => {
-      await dispatch(RolesActions.roleGetAll());
     },
     addError: async (error: any) => {
       await dispatch(addError(error));

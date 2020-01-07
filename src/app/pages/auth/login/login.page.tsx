@@ -22,8 +22,8 @@ import {
 
 import { UserState } from '../../../../store/user/types';
 import { RootState } from '../../../../store';
-import { LoginCredentials } from '../../../../api/classes/user.class';
-import { login, logout } from '../../../../store/user/actions';
+import { LoginCredentials, User } from '../../../../api/classes/user.class';
+import { login, logout, register } from '../../../../store/user/actions';
 
 const styles = (theme: Theme): StyleRules => ({
   paper: {
@@ -42,6 +42,9 @@ const styles = (theme: Theme): StyleRules => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2)
+  },
+  noLogin: {
+    cursor: 'pointer'
   }
 });
 
@@ -49,6 +52,7 @@ interface OwnProps {}
 
 interface DispatchProps {
   login: (credentials: LoginCredentials) => Promise<any>;
+  register: (userDatas: Partial<User>) => Promise<any>;
   logout: () => void;
 }
 
@@ -161,7 +165,7 @@ class Login extends React.Component<Props, ComponentState> {
             </Button>
             <Grid container>
               <Grid item>
-                <Link to="/register">Don't have an account? Sign Up</Link>
+                <Link to="/register">Don't have an account ? Sign Up</Link>
               </Grid>
             </Grid>
           </form>
@@ -184,6 +188,9 @@ const mapDispatchToProps = (
   return {
     login: async (credentials: LoginCredentials) => {
       return await dispatch(login(credentials));
+    },
+    register: async (userDatas: Partial<User>) => {
+      return await dispatch(register(userDatas));
     },
     logout: async () => {
       await dispatch(logout());
