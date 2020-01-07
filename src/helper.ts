@@ -1,5 +1,6 @@
 import seedRandom from 'seedrandom';
 import uuid from 'uuid';
+import systeminformation from 'systeminformation';
 
 const idVice = 'id-vice';
 
@@ -9,10 +10,11 @@ export class Helper {
   }
 
   public static getDeviceId() {
-    return localStorage.getItem(idVice);
+    return Helper.setDeviceId();
   }
 
   public static setDeviceId() {
+    //get a the actual device id, set a new if undefined
     let deviceId = localStorage.getItem(idVice);
 
     if (!deviceId) deviceId = Helper.setNewDeviceId();
@@ -25,7 +27,7 @@ export class Helper {
 
     localStorage.setItem(idVice, deviceId);
 
-    return localStorage.getItem(idVice);
+    return deviceId;
   }
 
   public static getPlayer(

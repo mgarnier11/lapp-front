@@ -61,7 +61,8 @@ const userActionFailureCreator = (): ActionFailure => {
 
 // Async Actions
 export const login = (
-  credentials: LoginCredentials
+  credentials: LoginCredentials,
+  hideSuccess?: boolean
 ): ThunkAction<Promise<boolean>, {}, {}, AnyAction> => {
   return async (
     dispatch: ThunkDispatch<{}, {}, AnyAction>
@@ -75,7 +76,7 @@ export const login = (
             type: UserActionTypes.LOGIN,
             user: response.user
           });
-          apiHandler.userservice.ownEvents.emit('logged in');
+          if (!hideSuccess) apiHandler.userservice.ownEvents.emit('logged in');
           resolve(true);
         })
         .catch(error => {

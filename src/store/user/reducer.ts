@@ -11,13 +11,15 @@ export const user = (
     case UserActionTypes.ACTION_STARTED: {
       return {
         ...userState,
-        loading: true
+        loading: true,
+        isNotLogged: false
       };
     }
     case UserActionTypes.ACTION_FAILURE: {
       return {
         ...userState,
-        loading: false
+        loading: false,
+        isNotLogged: false
       };
     }
 
@@ -25,19 +27,26 @@ export const user = (
       return {
         ...userState,
         user: action.user,
-        loading: false
+        loading: false,
+        isNotLogged: action.user.name === 'notLoggedUser'
       };
     }
 
     case UserActionTypes.REGISTER: {
-      return { ...userState, user: undefined, loading: false };
+      return {
+        ...userState,
+        user: undefined,
+        loading: false,
+        isNotLogged: false
+      };
     }
 
     case UserActionTypes.LOGOUT: {
       return {
         ...userState,
         user: undefined,
-        loading: false
+        loading: false,
+        isNotLogged: false
       };
     }
 
@@ -45,7 +54,8 @@ export const user = (
       return {
         ...userState,
         user: action.user,
-        loading: false
+        loading: false,
+        isNotLogged: action.user.name === 'notLoggedUser'
       };
     }
 

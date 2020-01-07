@@ -25,7 +25,6 @@ import {
 import { gamesActionsInstance, GamesActions } from '../store/games/actions';
 import { GameState } from '../store/game/types';
 import { Helper } from '../helper';
-import { IdVice } from './pages/auth/idVice/idVice.page';
 import { Home } from './pages/home/home.page';
 import { Questions } from './pages/questions/questions.page';
 import { Roles } from './pages/roles/roles.page';
@@ -81,8 +80,6 @@ class App extends React.Component<Props, State> {
       this
     );
     this.gameSuccessfullyCreated = this.gameSuccessfullyCreated.bind(this);
-
-    Helper.setDeviceId();
     /*
     console.log(Helper.getPlayer(8, 150, 5, 'test'));
 
@@ -107,7 +104,7 @@ class App extends React.Component<Props, State> {
     gameTypeActionsInstance.bindBaseEvents();
     gamesActionsInstance.bindBaseEvents();
     this.loadTypes();
-    apiHandler.gameService.findGamesPerUser('5de6bcf9a23a5d40602409fb');
+    //apiHandler.gameService.findGamesPerUser('5de6bcf9a23a5d40602409fb');
   }
 
   loadTypes() {
@@ -281,9 +278,6 @@ class App extends React.Component<Props, State> {
           <Guard minimalPermission={100} path="/questionTypes" redirect="/home">
             <QuestionTypes />
           </Guard>
-          <Route exact path="/idVice">
-            <IdVice />
-          </Route>
           <Route exact path="/login">
             <Login />
           </Route>

@@ -24,6 +24,7 @@ interface OwnProps {
   path: string;
   redirect: string;
   minimalPermission: number;
+  notLoggedAllowed?: boolean;
   children:
     | ReactChild
     | ReactFragment

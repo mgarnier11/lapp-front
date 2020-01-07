@@ -12,6 +12,7 @@ import { RoleService } from './services/role.service';
 import { User, LoginCredentials } from './classes/user.class';
 import { ServiceNames } from './services/baseService';
 import { GameTypeService } from './services/gameType.service';
+import { Helper } from '../helper';
 
 class ApiHandler {
   //api initialization
@@ -82,11 +83,11 @@ class ApiHandler {
     return response;
   }
 
-  async logout() {
+  public async logout() {
     await this._feathers.logout();
   }
 
-  async login(credentials?: LoginCredentials) {
+  public async login(credentials?: LoginCredentials) {
     let options = {
       ...{ strategy: 'local' },
       ...credentials
@@ -98,8 +99,21 @@ class ApiHandler {
     return response;
   }
 
-  async register(userDatas: Partial<User>): Promise<User> {
+  public async register(userDatas: Partial<User>): Promise<User> {
     return await this.userservice.featherService.create(userDatas);
+  }
+
+  public getNewNotLoggedPassword(username: string) {
+    return new Promise((res, rej) => {
+      this.userservice.featherService.emit(
+        'newNotLoggedPassword',
+        Helper.getDeviceId(),
+        username,
+        (newPwd: string) => {
+          res(newPwd);
+        }
+      );
+    });
   }
 }
 

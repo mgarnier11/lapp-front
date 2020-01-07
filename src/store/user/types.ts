@@ -22,6 +22,10 @@ export enum UserActionTypes {
 export interface UserState {
   readonly user?: User;
   readonly loading: boolean;
+  readonly isNotLogged: boolean;
 }
 
-export const defaultUserState: UserState = { loading: false };
+export const defaultUserState: UserState = {
+  loading: false,
+  isNotLogged: false
+};

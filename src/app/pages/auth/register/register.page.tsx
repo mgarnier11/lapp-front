@@ -151,9 +151,7 @@ class RegisterPage extends React.Component<Props, ComponentState> {
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
+          <Typography variant="h4">Register</Typography>
           <form
             className={classes.form}
             noValidate
@@ -224,7 +222,7 @@ class RegisterPage extends React.Component<Props, ComponentState> {
             </Button>
             <Grid container justify="flex-start">
               <Grid item>
-                <Link to="/login">Already have an account? Sign in</Link>
+                <Link to="/login">Already have an account ? Sign in</Link>
               </Grid>
             </Grid>
           </form>

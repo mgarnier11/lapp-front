@@ -24,6 +24,7 @@ import { UserState } from '../../../../store/user/types';
 import { RootState } from '../../../../store';
 import { LoginCredentials } from '../../../../api/classes/user.class';
 import { login, logout } from '../../../../store/user/actions';
+import apiHandler from '../../../../api/apiHandler';
 
 const styles = (theme: Theme): StyleRules => ({
   paper: {
@@ -51,7 +52,7 @@ const styles = (theme: Theme): StyleRules => ({
 interface OwnProps {}
 
 interface DispatchProps {
-  login: (credentials: LoginCredentials) => Promise<any>;
+  login: (credentials: LoginCredentials, hideSuccess?: boolean) => Promise<any>;
   logout: () => void;
 }
 
@@ -106,6 +107,19 @@ class LoginPage extends React.Component<Props, ComponentState> {
     this.setState({ password: e.target.value });
   };
 
+  handleWithoutLoginClick = async () => {
+    console.log('t');
+
+    console.log(await apiHandler.getNewNotLoggedPassword('test'));
+    /*
+    try {
+      this.props.login({ email: 'notLogged@lapp.com', password: 'LaP@t@t3' });
+    } catch (error) {
+
+    }
+    */
+  };
+
   render() {
     const classes = this.props.classes;
     const loading = this.props.userState.loading;
@@ -117,9 +131,7 @@ class LoginPage extends React.Component<Props, ComponentState> {
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
+          <Typography variant="h4">Sign in</Typography>
           <form
             className={classes.form}
             noValidate
@@ -162,16 +174,21 @@ class LoginPage extends React.Component<Props, ComponentState> {
               {loading && <CircularProgress size={24} />}
               {!loading && 'Sign In'}
             </Button>
-            <Grid container>
-              <Grid item>
-                <Link to="/register">Don't have an account ? Sign Up</Link>
-              </Grid>
-              <Grid item>
-                <Link to="/idVice">
-                  You don't want to Sign Up ? Use ID-Vice
-                </Link>
-              </Grid>
-            </Grid>
+            <Typography align="center" color="primary">
+              <u>
+                <Link to="/register">Don't have an account ? Register</Link>
+              </u>
+            </Typography>
+
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={this.handleWithoutLoginClick}
+            >
+              Play without login
+            </Button>
           </form>
         </div>
       </Container>
@@ -190,8 +207,8 @@ const mapDispatchToProps = (
   ownProps: OwnProps
 ): DispatchProps => {
   return {
-    login: async (credentials: LoginCredentials) => {
-      return await dispatch(login(credentials));
+    login: async (credentials: LoginCredentials, hideSuccess?: boolean) => {
+      return await dispatch(login(credentials, hideSuccess));
     },
     logout: async () => {
       await dispatch(logout());
