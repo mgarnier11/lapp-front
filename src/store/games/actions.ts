@@ -135,7 +135,8 @@ export class GamesActions {
   };
 
   public static gameCreate = (
-    game: Partial<Game>
+    game: Partial<Game>,
+    hideSuccess?: boolean
   ): ThunkAction<Promise<boolean>, {}, {}, AnyAction> => {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
@@ -145,7 +146,11 @@ export class GamesActions {
         apiHandler.gameService.featherService
           .create(game)
           .then(game => {
-            apiHandler.gameService.ownEvents.emit(ServiceEvents.created, game);
+            if (!hideSuccess)
+              apiHandler.gameService.ownEvents.emit(
+                ServiceEvents.created,
+                game
+              );
             resolve(true);
           })
           .catch(error => {

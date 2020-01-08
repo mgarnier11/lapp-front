@@ -102,19 +102,6 @@ class ApiHandler {
   public async register(userDatas: Partial<User>): Promise<User> {
     return await this.userservice.featherService.create(userDatas);
   }
-
-  public getNewNotLoggedPassword(username: string) {
-    return new Promise((res, rej) => {
-      this.userservice.featherService.emit(
-        'newNotLoggedPassword',
-        Helper.getDeviceId(),
-        username,
-        (newPwd: string) => {
-          res(newPwd);
-        }
-      );
-    });
-  }
 }
 
 export default new ApiHandler();

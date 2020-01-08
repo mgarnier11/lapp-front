@@ -45,11 +45,14 @@ export class User {
   public static fromBack(datas: UserBackModel) {
     let newObj = new User();
 
+    console.log(datas);
+
     newObj.id = datas._id;
     newObj.name = datas._name;
     newObj.email = datas._email;
     newObj.role = Role.fromBack(datas._role);
     newObj.gender = datas._gender;
+    newObj.password = datas._password;
 
     return newObj;
   }

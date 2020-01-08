@@ -1,8 +1,10 @@
 import seedRandom from 'seedrandom';
 import uuid from 'uuid';
 import systeminformation from 'systeminformation';
+import { User, LoginCredentials } from './api/classes/user.class';
 
 const idVice = 'id-vice';
+const idVicePwd = 'id-vice-pwd';
 
 export class Helper {
   public static clone<T>(instance: T, newProps?: Partial<T>): T {
@@ -22,12 +24,26 @@ export class Helper {
     return deviceId;
   }
 
-  public static setNewDeviceId() {
-    let deviceId = uuid.v1();
+  public static setNewDeviceId(deviceId?: string) {
+    if (!deviceId) deviceId = uuid.v1();
 
     localStorage.setItem(idVice, deviceId);
 
     return deviceId;
+  }
+
+  public static saveIDVice(idVice: User) {
+    localStorage.setItem(idVicePwd, idVice.password);
+    Helper.setNewDeviceId(idVice.email);
+  }
+
+  public static getIDViceCredentials(): LoginCredentials {
+    let pwd = localStorage.getItem(idVicePwd);
+    let mail = Helper.getDeviceId();
+
+    if (!pwd) throw new Error('Password not initlaized');
+
+    return { email: mail, password: pwd };
   }
 
   public static getPlayer(

@@ -218,13 +218,13 @@ class RegisterPage extends React.Component<Props, ComponentState> {
               color="primary"
               className={classes.submit}
             >
-              Sign Up
+              Register
             </Button>
-            <Grid container justify="flex-start">
-              <Grid item>
+            <Typography align="center" color="primary">
+              <u>
                 <Link to="/login">Already have an account ? Sign in</Link>
-              </Grid>
-            </Grid>
+              </u>
+            </Typography>
           </form>
         </div>
       </Container>
