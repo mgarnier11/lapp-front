@@ -126,12 +126,17 @@ export const renderUser = (props: any) => {
   return (
     <>
       <Typography>{props.user.name}</Typography>
-
-      <Link to="/me" style={{ zIndex: 1200 }}>
-        <IconButton color="inherit" className={props.classes.button} edge="end">
-          <PermIdentityIcon />
-        </IconButton>
-      </Link>
+      {!props.user.isIDVice() && (
+        <Link to="/me" style={{ zIndex: 1200 }}>
+          <IconButton
+            color="inherit"
+            className={props.classes.button}
+            edge="end"
+          >
+            <PermIdentityIcon />
+          </IconButton>
+        </Link>
+      )}
 
       <IconButton
         edge="end"

@@ -117,7 +117,9 @@ export const register = (
   };
 };
 
-export const logout = (): ThunkAction<Promise<boolean>, {}, {}, AnyAction> => {
+export const logout = (
+  hideSuccess?: boolean
+): ThunkAction<Promise<boolean>, {}, {}, AnyAction> => {
   return async (
     dispatch: ThunkDispatch<{}, {}, AnyAction>
   ): Promise<boolean> => {
@@ -127,7 +129,7 @@ export const logout = (): ThunkAction<Promise<boolean>, {}, {}, AnyAction> => {
         .logout()
         .then(() => {
           dispatch({ type: UserActionTypes.LOGOUT });
-          apiHandler.userservice.ownEvents.emit('logged out');
+          if (!hideSuccess) apiHandler.userservice.ownEvents.emit('logged out');
           resolve(true);
         })
         .catch(error => {

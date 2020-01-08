@@ -266,7 +266,12 @@ class App extends React.Component<Props, State> {
           <Guard minimalPermission={NaN} path="/home" redirect="/">
             <Home />
           </Guard>
-          <Guard minimalPermission={0} path="/questions" redirect="/">
+          <Guard
+            minimalPermission={0}
+            path="/questions"
+            redirect="/"
+            idViceAllowed={false}
+          >
             <Questions />
           </Guard>
           <Guard minimalPermission={0} path="/games/:displayId" redirect="/">

@@ -34,6 +34,13 @@ const ToolbarDesktopComponent: React.FunctionComponent<Props> = (
       <></>
     );
 
+  const notIDVice = () =>
+    !user.isIDVice() && (
+      <Link to="/questions" className={classes.button}>
+        <Button className={classes.button}>Questions</Button>
+      </Link>
+    );
+
   return (
     <Toolbar>
       <IconButton
@@ -51,9 +58,7 @@ const ToolbarDesktopComponent: React.FunctionComponent<Props> = (
           Name not defined
         </Link>
 
-        <Link to="/questions" className={classes.button}>
-          <Button className={classes.button}>Questions</Button>
-        </Link>
+        {notIDVice()}
         {admin()}
       </Typography>
       {renderUser(props)}

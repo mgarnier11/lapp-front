@@ -1,5 +1,6 @@
 import { Role, RoleBackModel } from './role.class';
 import { Game } from './game.class';
+import isUUID from 'is-uuid';
 
 export interface LoginCredentials {
   email: string;
@@ -34,8 +35,8 @@ export class User {
 
   public games: Game[] = [];
 
-  public temp(): string {
-    return 'ok';
+  public isIDVice(): boolean {
+    return isUUID.v1(this.email);
   }
 
   public static New(datas: Partial<User>): User {
@@ -44,8 +45,6 @@ export class User {
 
   public static fromBack(datas: UserBackModel) {
     let newObj = new User();
-
-    console.log(datas);
 
     newObj.id = datas._id;
     newObj.name = datas._name;

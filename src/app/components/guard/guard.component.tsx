@@ -7,6 +7,7 @@ import { UserState } from '../../../store/user/types';
 import { relog } from '../../../store/user/actions';
 //import { makeStyles } from '@material-ui/core';
 import { Loading } from '../loading/loading.component';
+import { render } from 'react-dom';
 
 /*
 const useStyles = makeStyles(theme => ({
@@ -24,7 +25,7 @@ interface OwnProps {
   path: string;
   redirect: string;
   minimalPermission: number;
-  notLoggedAllowed?: boolean;
+  idViceAllowed?: boolean;
   children:
     | ReactChild
     | ReactFragment
@@ -45,28 +46,35 @@ interface StateProps {
 type Props = StateProps & OwnProps & DispatchProps;
 
 const GuardComponent: React.FunctionComponent<Props> = (props: Props) => {
-  let { user, loading } = props.userState;
+  const idViceAllowed =
+    props.idViceAllowed === undefined ? true : props.idViceAllowed;
+  const { minimalPermission, children, redirect } = props;
+  const { user, loading } = props.userState;
   //const classes = useStyles();
 
-  return loading ? (
-    <Loading />
-  ) : (
-    <Route
-      path={props.path}
-      render={() =>
-        user ? (
-          isNaN(props.minimalPermission) ||
-          user.role.permissionLevel >= props.minimalPermission ? (
-            <>{props.children}</>
-          ) : (
-            <Redirect to={props.redirect} />
-          )
-        ) : (
-          <Redirect to="/login" />
-        )
+  const renderRoute = () => {
+    if (user) {
+      if (
+        isNaN(minimalPermission) ||
+        user.role.permissionLevel >= minimalPermission
+      ) {
+        if (user.isIDVice() && !idViceAllowed) {
+          return <Redirect to={props.redirect} />;
+        }
+        return <>{props.children}</>;
+      } else {
+        return <Redirect to={props.redirect} />;
       }
-    />
-  );
+    } else {
+      return <Redirect to="/login" />;
+    }
+  };
+
+  if (loading) {
+    return <Loading />;
+  } else {
+    return <Route path={props.path} render={renderRoute} />;
+  }
 };
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {

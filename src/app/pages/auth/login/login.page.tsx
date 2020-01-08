@@ -56,7 +56,7 @@ interface OwnProps {}
 
 interface DispatchProps {
   login: (credentials: LoginCredentials) => Promise<any>;
-  logout: () => void;
+  logout: (hideSuccess?: boolean) => void;
 }
 
 interface StateProps {
@@ -86,7 +86,7 @@ class LoginPage extends React.Component<Props, ComponentState> {
       password: ''
     };
 
-    if (this.props.userState.user) this.props.logout();
+    this.props.logout(true);
   }
 
   onFormLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -122,8 +122,6 @@ class LoginPage extends React.Component<Props, ComponentState> {
             <LockOutlinedIcon />
           </Avatar>
           <Typography variant="h4">Sign in</Typography>
-          <IdVice />
-
           <form
             className={classes.form}
             noValidate
@@ -166,6 +164,7 @@ class LoginPage extends React.Component<Props, ComponentState> {
               {loading && <CircularProgress size={24} />}
               {!loading && 'Sign In'}
             </Button>
+            <IdVice />
             <Typography align="center" color="primary">
               <u>
                 <Link to="/register">Don't have an account ? Register</Link>
@@ -192,8 +191,8 @@ const mapDispatchToProps = (
     login: async (credentials: LoginCredentials) => {
       return await dispatch(login(credentials));
     },
-    logout: async () => {
-      await dispatch(logout());
+    logout: async (hideSuccess?: boolean) => {
+      await dispatch(logout(hideSuccess));
     }
   };
 };

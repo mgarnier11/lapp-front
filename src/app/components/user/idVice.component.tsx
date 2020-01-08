@@ -9,6 +9,9 @@ import { register, login } from '../../../store/user/actions';
 import { Helper } from '../../../helper';
 import { GamesActions } from '../../../store/games/actions';
 import { Game, GameStatus } from '../../../api/classes/game.class';
+import { QuestionTypesState } from '../../../store/questionTypes/types';
+import { GameTypesState } from '../../../store/gameTypes/types';
+import { RouterProps, withRouter } from 'react-router';
 
 interface OwnProps {}
 
@@ -18,9 +21,12 @@ interface DispatchProps {
   gameCreate: (game: Partial<Game>, hideSuccess?: boolean) => Promise<any>;
 }
 
-interface StateProps {}
+interface StateProps {
+  questionTypesState: QuestionTypesState;
+  gameTypesState: GameTypesState;
+}
 
-type Props = StateProps & OwnProps & DispatchProps;
+type Props = StateProps & OwnProps & DispatchProps & RouterProps;
 interface ComponentState {}
 
 class IdViceComponent extends React.Component<Props, ComponentState> {
@@ -53,8 +59,7 @@ class IdViceComponent extends React.Component<Props, ComponentState> {
 
   loginIDVice = async () => {
     let u = await this.props.login(Helper.getIDViceCredentials(), true);
-
-    //let g = this.props.gameCreate({status: GameStatus.created, })
+    this.props.history.push('/home');
   };
 
   render() {
@@ -65,14 +70,17 @@ class IdViceComponent extends React.Component<Props, ComponentState> {
         color="primary"
         onClick={this.handleWithoutLoginClick}
       >
-        Play without sign in
+        Play with ID-Vice
       </Button>
     );
   }
 }
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
-  return {};
+  return {
+    questionTypesState: states.questionTypesState,
+    gameTypesState: states.gameTypesState
+  };
 };
 
 const mapDispatchToProps = (
@@ -92,9 +100,11 @@ const mapDispatchToProps = (
   };
 };
 
-export const IdVice = connect<StateProps, DispatchProps, OwnProps, RootState>(
-  mapStateToProps,
-  mapDispatchToProps,
-  null,
-  { forwardRef: true }
-)(IdViceComponent);
+export const IdVice = withRouter(
+  connect<StateProps, DispatchProps, OwnProps, RootState>(
+    mapStateToProps,
+    mapDispatchToProps,
+    null,
+    { forwardRef: true }
+  )(IdViceComponent)
+);

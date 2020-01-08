@@ -12,14 +12,14 @@ export const user = (
       return {
         ...userState,
         loading: true,
-        isNotLogged: false
+        isIDVice: false
       };
     }
     case UserActionTypes.ACTION_FAILURE: {
       return {
         ...userState,
         loading: false,
-        isNotLogged: false
+        isIDVice: false
       };
     }
 
@@ -28,7 +28,7 @@ export const user = (
         ...userState,
         user: action.user,
         loading: false,
-        isNotLogged: action.user.name === 'notLoggedUser'
+        isIDVice: action.user.isIDVice()
       };
     }
 
@@ -37,7 +37,7 @@ export const user = (
         ...userState,
         user: undefined,
         loading: false,
-        isNotLogged: false
+        isIDVice: false
       };
     }
 
@@ -46,7 +46,7 @@ export const user = (
         ...userState,
         user: undefined,
         loading: false,
-        isNotLogged: false
+        isIDVice: false
       };
     }
 
@@ -55,7 +55,7 @@ export const user = (
         ...userState,
         user: action.user,
         loading: false,
-        isNotLogged: action.user.name === 'notLoggedUser'
+        isIDVice: action.user.isIDVice()
       };
     }
 
