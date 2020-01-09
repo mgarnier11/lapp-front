@@ -14,10 +14,6 @@ export class Role {
 
   public permissionLevel: number = 0;
 
-  public temp(): string {
-    return 'ok';
-  }
-
   public static New(datas: Partial<Role>): Role {
     return Object.assign(new Role(), datas);
   }
@@ -50,4 +46,6 @@ export class Role {
       obj1.permissionLevel === obj2.permissionLevel
     );
   }
+
+  public static AdminPermissionLevel = 100;
 }

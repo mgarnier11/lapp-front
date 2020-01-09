@@ -37,6 +37,7 @@ import { withRouter } from 'react-router-dom';
 import { GameActions } from '../../../store/game/actions';
 import { RouterProps } from 'react-router';
 import { yesNoController } from '../../components/dialogs/yesno.component';
+import { GameList } from '../../components/game/game.list.component';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
@@ -155,7 +156,7 @@ class HomePage extends React.Component<Props, ComponentState> {
     return (
       <Grid container spacing={1}>
         <Grid item xs={12} md={6}>
-          {this.renderGameTable(myGames, 'Games you created', true, true)}
+          <GameList games={myGames} title="Game you created" isAdmin={true} />
         </Grid>
 
         <Grid item xs={12} md={6}>

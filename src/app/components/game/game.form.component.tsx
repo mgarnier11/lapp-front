@@ -148,20 +148,24 @@ class GameFormComponent extends React.Component<Props, ComponentState> {
   };
 
   handleMaxHotLevelChange = (e: any, value: number) => {
-    this.setState({
-      game: Helper.clone(this.state.game, { maxHotLevel: value })
-    });
+    if (this.props.editable)
+      this.setState({
+        game: Helper.clone(this.state.game, { maxHotLevel: value })
+      });
   };
 
   handleNbTurnsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      game: Helper.clone(this.state.game, { nbTurns: parseInt(e.target.value) })
-    });
+    if (this.props.editable)
+      this.setState({
+        game: Helper.clone(this.state.game, {
+          nbTurns: parseInt(e.target.value)
+        })
+      });
   };
 
   handleGameTypeChange = (e: React.ChangeEvent<{ value: unknown }>) => {
     const gameTypes = this.props.gameTypesState.gameTypes;
-    if (gameTypes) {
+    if (gameTypes && this.props.editable) {
       this.setState({
         game: Helper.clone(this.state.game, {
           type: gameTypes.find(
@@ -177,7 +181,7 @@ class GameFormComponent extends React.Component<Props, ComponentState> {
   handleQuestionTypeChange = (e: React.ChangeEvent<{ value: any }>) => {
     const questionTypes = this.props.questionTypesState.questionTypes;
 
-    if (questionTypes) {
+    if (questionTypes && this.props.editable) {
       let selectedTypes: QuestionType[] = e.target.value.filter(
         (v: any) => v instanceof QuestionType
       );
@@ -202,14 +206,15 @@ class GameFormComponent extends React.Component<Props, ComponentState> {
   };
 
   removeQuestionType = (typeId: string) => {
-    this.setState({
-      game: Helper.clone(this.state.game, {
-        questionTypes: lodash.reject(
-          this.state.game.questionTypes,
-          t => t.id === typeId
-        )
-      })
-    });
+    if (this.props.editable)
+      this.setState({
+        game: Helper.clone(this.state.game, {
+          questionTypes: lodash.reject(
+            this.state.game.questionTypes,
+            t => t.id === typeId
+          )
+        })
+      });
   };
 
   handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {

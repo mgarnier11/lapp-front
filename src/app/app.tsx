@@ -41,6 +41,7 @@ import { Success } from './components/success/success.component';
 import { Error } from './components/error/error.component';
 import { MyFab } from './components/fab/fab.component';
 import { GameForm } from './componentsV2/game/form.game.component';
+import { Role } from '../api/classes/role.class';
 
 interface OwnProps {}
 
@@ -188,11 +189,15 @@ class App extends React.Component<Props, State> {
             <Guard minimalPermission={0} path="/games/:displayId" redirect="/">
               <GameMiddleware />
             </Guard>
-            <Guard minimalPermission={100} path="/roles" redirect="/home">
+            <Guard
+              minimalPermission={Role.AdminPermissionLevel}
+              path="/roles"
+              redirect="/home"
+            >
               <Roles />
             </Guard>
             <Guard
-              minimalPermission={100}
+              minimalPermission={Role.AdminPermissionLevel}
               path="/questionTypes"
               redirect="/home"
             >

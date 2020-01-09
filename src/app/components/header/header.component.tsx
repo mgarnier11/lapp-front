@@ -66,3 +66,5 @@ export const Header = connect<StateProps, DispatchProps, OwnProps, RootState>(
   mapStateToProps,
   mapDispatchToProps
 )(HeaderComponent);
+
+export const headerHeight = 64;
