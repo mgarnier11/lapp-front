@@ -6,7 +6,7 @@ import { RouteComponentProps } from 'react-router';
 import { RootState } from '../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { relog } from '../store/user/actions';
-import { CssBaseline, Fab, Modal } from '@material-ui/core';
+import { CssBaseline, Fab, Modal, Container } from '@material-ui/core';
 import { RolesActions, roleActionsInstance } from '../store/roles/actions';
 import { questionActionsInstance } from '../store/questions/actions';
 import {
@@ -39,6 +39,8 @@ import { GameMiddleware } from './components/game/game.middleware.component';
 import { Footer } from './components/footer/footer.component';
 import { Success } from './components/success/success.component';
 import { Error } from './components/error/error.component';
+import { MyFab } from './components/fab/fab.component';
+import { GameForm } from './componentsV2/game/form.game.component';
 
 interface OwnProps {}
 
@@ -73,19 +75,7 @@ class App extends React.Component<Props, State> {
       gameModalOpen: false
     };
 
-    this.props.relog();
-    this.props.roleGetAll();
-
-    this.questionSuccessfullyCreated = this.questionSuccessfullyCreated.bind(
-      this
-    );
-    this.gameSuccessfullyCreated = this.gameSuccessfullyCreated.bind(this);
-    /*
-    console.log(Helper.getPlayer(8, 150, 5, 'test'));
-
-    Helper.verify(150, 5, 'test').then(r => console.log(r));
-    console.log(MediaDeviceInfo.toString());
-    */
+    this.loadBaseDatas();
   }
 
   componentDidMount() {
@@ -103,11 +93,11 @@ class App extends React.Component<Props, State> {
     questionTypeActionsInstance.bindBaseEvents();
     gameTypeActionsInstance.bindBaseEvents();
     gamesActionsInstance.bindBaseEvents();
-    this.loadTypes();
-    //apiHandler.gameService.findGamesPerUser('5de6bcf9a23a5d40602409fb');
   }
 
-  loadTypes() {
+  loadBaseDatas() {
+    this.props.relog();
+    this.props.roleGetAll();
     this.props.questionTypeGetAll();
     this.props.gameTypeGetAll();
   }
@@ -129,28 +119,20 @@ class App extends React.Component<Props, State> {
     gamesActionsInstance.unbindEvents();
   }
 
-  questionSuccessfullyCreated(q: Question) {
-    this.closeQuestionModal();
-  }
-
-  gameSuccessfullyCreated(g: Game) {
-    this.closeGameModal();
-  }
-
-  openQuestionModal = () => {
-    this.setState({ questionModalOpen: true });
+  questionSuccessfullyCreated = (q: Question) => {
+    this.setQuestionModal(false);
   };
 
-  closeQuestionModal = () => {
-    this.setState({ questionModalOpen: false });
+  gameSuccessfullyCreated = (g: Game) => {
+    this.setGameModal(false);
   };
 
-  openGameModal = () => {
-    this.setState({ gameModalOpen: true });
+  setQuestionModal = (isOpen: boolean) => {
+    this.setState({ questionModalOpen: isOpen });
   };
 
-  closeGameModal = () => {
-    this.setState({ gameModalOpen: false });
+  setGameModal = (isOpen: boolean) => {
+    this.setState({ gameModalOpen: isOpen });
   };
 
   playingGameNext = () => {
@@ -161,70 +143,11 @@ class App extends React.Component<Props, State> {
     }
   };
 
-  renderQuestionFAB() {
-    return (
-      <Fab
-        variant="extended"
-        className="floating-action-button"
-        color="primary"
-        onClick={this.openQuestionModal}
-      >
-        New Question
-      </Fab>
-    );
-  }
-
-  renderPlayingFAB() {
-    const { game } = this.props.gameState;
-    const isDisabled =
-      this.props.userState.user!.id !== game!.creator.id || !game!.canStart();
-    let text = 'Next';
-
-    if (game) {
-      switch (game!.status) {
-        case GameStatus.created:
-          text = 'Start Game';
-          break;
-        case GameStatus.started:
-          text = 'Next Question';
-          break;
-        case GameStatus.finished:
-          text = '';
-          break;
-      }
-    }
-
-    return (
-      <Fab
-        variant="extended"
-        className="floating-action-button"
-        color="primary"
-        onClick={this.playingGameNext}
-        disabled={isDisabled}
-      >
-        {text}
-      </Fab>
-    );
-  }
-
-  renderGameFAB() {
-    return (
-      <Fab
-        variant="extended"
-        className="floating-action-button"
-        color="primary"
-        onClick={this.openGameModal}
-      >
-        New Game
-      </Fab>
-    );
-  }
-
   renderQuestionModal() {
     return (
       <Modal
         open={this.state.questionModalOpen}
-        onClose={this.closeQuestionModal}
+        onClose={() => this.setQuestionModal(false)}
       >
         <QuestionNew />
       </Modal>
@@ -233,26 +156,13 @@ class App extends React.Component<Props, State> {
 
   renderGameModal() {
     return (
-      <Modal open={this.state.gameModalOpen} onClose={this.closeGameModal}>
+      <Modal
+        open={this.state.gameModalOpen}
+        onClose={() => this.setGameModal(false)}
+      >
         <GameNew />
       </Modal>
     );
-  }
-
-  renderFAB() {
-    const questions = /questions/;
-    const game = /games\/[A-Z0-9]{5,}/;
-    const { pathname } = this.props.location;
-
-    switch (true) {
-      case questions.test(pathname):
-        return this.renderQuestionFAB();
-      case game.test(pathname):
-        if (this.props.gameState.game) return this.renderPlayingFAB();
-        else return this.renderGameFAB();
-      default:
-        return this.renderGameFAB();
-    }
   }
 
   render() {
@@ -262,46 +172,54 @@ class App extends React.Component<Props, State> {
         <CssBaseline />
 
         <Header />
-        <Switch>
-          <Guard minimalPermission={NaN} path="/home" redirect="/">
-            <Home />
-          </Guard>
-          <Guard
-            minimalPermission={0}
-            path="/questions"
-            redirect="/"
-            idViceAllowed={false}
-          >
-            <Questions />
-          </Guard>
-          <Guard minimalPermission={0} path="/games/:displayId" redirect="/">
-            <GameMiddleware />
-          </Guard>
-          <Guard minimalPermission={100} path="/roles" redirect="/home">
-            <Roles />
-          </Guard>
-          <Guard minimalPermission={100} path="/questionTypes" redirect="/home">
-            <QuestionTypes />
-          </Guard>
-          <Route exact path="/login">
-            <Login />
-          </Route>
-          <Route exact path="/register">
-            <Register />
-          </Route>
-          <Redirect from="*" to="/home" />
-        </Switch>
+        <Container component="main" style={{ paddingTop: '64px' }}>
+          <Switch>
+            <Guard minimalPermission={NaN} path="/home" redirect="/">
+              <Home />
+            </Guard>
+            <Guard
+              minimalPermission={0}
+              path="/questions"
+              redirect="/"
+              idViceAllowed={false}
+            >
+              <Questions />
+            </Guard>
+            <Guard minimalPermission={0} path="/games/:displayId" redirect="/">
+              <GameMiddleware />
+            </Guard>
+            <Guard minimalPermission={100} path="/roles" redirect="/home">
+              <Roles />
+            </Guard>
+            <Guard
+              minimalPermission={100}
+              path="/questionTypes"
+              redirect="/home"
+            >
+              <QuestionTypes />
+            </Guard>
+            <Route exact path="/login">
+              <Login />
+            </Route>
+            <Route exact path="/register">
+              <Register />
+            </Route>
+            <Redirect from="*" to="/home" />
+          </Switch>
+        </Container>
         <Footer />
         <Success />
         <Error />
-        {user ? (
+        {user && (
           <>
-            {this.renderFAB()}
+            <MyFab
+              openGameModal={() => this.setGameModal(true)}
+              openQuestionModal={() => this.setQuestionModal(true)}
+              gameNextAction={this.playingGameNext}
+            />
             {this.renderQuestionModal()}
             {this.renderGameModal()}
           </>
-        ) : (
-          <></>
         )}
       </React.Fragment>
     );

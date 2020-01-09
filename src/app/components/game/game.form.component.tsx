@@ -74,6 +74,7 @@ interface OwnProps {
   onSubmit: (game: Game) => void;
   buttonText?: string;
   disabled?: boolean;
+  editable?: boolean;
 }
 
 interface DispatchProps {
@@ -96,7 +97,8 @@ interface ComponentState {
 class GameFormComponent extends React.Component<Props, ComponentState> {
   public static defaultProps = {
     buttonText: 'Accept',
-    disabled: false
+    disabled: false,
+    editable: true
   };
 
   /**
@@ -132,15 +134,17 @@ class GameFormComponent extends React.Component<Props, ComponentState> {
   }
 
   handleNameChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    this.setState({
-      game: Helper.clone(this.state.game, { name: e.target.value })
-    });
+    if (this.props.editable)
+      this.setState({
+        game: Helper.clone(this.state.game, { name: e.target.value })
+      });
   };
 
   handleMaxDifficultyChange = (e: any, value: number) => {
-    this.setState({
-      game: Helper.clone(this.state.game, { maxDifficulty: value })
-    });
+    if (this.props.editable)
+      this.setState({
+        game: Helper.clone(this.state.game, { maxDifficulty: value })
+      });
   };
 
   handleMaxHotLevelChange = (e: any, value: number) => {
@@ -293,6 +297,7 @@ class GameFormComponent extends React.Component<Props, ComponentState> {
             variant="outlined"
             value={name}
             disabled={this.props.disabled}
+            contentEditable={false}
             onChange={this.handleNameChange}
           />
         </FormControl>

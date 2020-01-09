@@ -83,6 +83,7 @@ class GameNewComponent extends React.Component<Props, ComponentState> {
               game={Game.New({ nbTurns: 10 })}
               onSubmit={this.handleSubmit}
               buttonText="Create Game"
+              editable={false}
             />
           </CardContent>
         </Card>
