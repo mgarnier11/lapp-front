@@ -3,6 +3,14 @@ import { connect } from 'react-redux';
 import { Switch, Route, Redirect, withRouter } from 'react-router';
 import { RouteComponentProps } from 'react-router';
 
+import {
+  withStyles,
+  WithStyles,
+  StyleRules,
+  createStyles,
+  Theme
+} from '@material-ui/core/styles';
+
 import { RootState } from '../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { relog } from '../store/user/actions';
@@ -43,6 +51,19 @@ import { MyFab } from './components/fab/fab.component';
 import { GameForm } from './componentsV2/game/form.game.component';
 import { Role } from '../api/classes/role.class';
 
+const styles = (theme: Theme): StyleRules =>
+  createStyles({
+    baseContainer: {
+      paddingTop: 64
+    },
+    [theme.breakpoints.down('xs')]: {
+      baseContainer: {
+        paddingLeft: 0,
+        paddingRight: 0
+      }
+    }
+  });
+
 interface OwnProps {}
 
 interface DispatchProps {
@@ -58,8 +79,11 @@ interface StateProps {
   gameState: GameState;
 }
 
-type Props = StateProps & OwnProps & DispatchProps & RouteComponentProps;
-
+type Props = StateProps &
+  OwnProps &
+  DispatchProps &
+  RouteComponentProps &
+  WithStyles<typeof styles>;
 interface State {
   questionModalOpen: boolean;
   gameModalOpen: boolean;
@@ -168,12 +192,14 @@ class App extends React.Component<Props, State> {
 
   render() {
     const user = this.props.userState.user;
+    const classes = this.props.classes;
+
     return (
       <React.Fragment>
         <CssBaseline />
 
         <Header />
-        <Container component="main" style={{ paddingTop: '64px' }}>
+        <Container component="main" className={classes.baseContainer}>
           <Switch>
             <Guard minimalPermission={NaN} path="/home" redirect="/">
               <Home />
@@ -265,5 +291,5 @@ export default withRouter(
   connect<StateProps, DispatchProps, OwnProps, RootState>(
     mapStateToProps,
     mapDispatchToProps
-  )(App)
+  )(withStyles(styles)(App))
 );

@@ -14,6 +14,7 @@ import { UserState } from '../../../store/user/types';
 import { RootState } from '../../../store';
 import { logout } from '../../../store/user/actions';
 import { ToolbarMobile } from './toolbar.mobile';
+import { ThemeController, ThemeTypes } from '../../themeManager';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -39,7 +40,11 @@ const HeaderComponent: React.FunctionComponent<Props> = (props: Props) => {
   const user = props.userState.user;
 
   return (
-    <AppBar position="fixed" className={classes.appBar}>
+    <AppBar
+      position="fixed"
+      className={classes.appBar}
+      color={ThemeController.isLight() ? 'primary' : 'default'}
+    >
       <ToolbarMobile user={user} />
     </AppBar>
   );

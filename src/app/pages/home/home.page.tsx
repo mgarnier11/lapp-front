@@ -5,15 +5,12 @@ import { ThunkDispatch } from 'redux-thunk';
 import {
   Container,
   Grid,
+  Tabs,
+  Tab,
+  Divider,
+  Hidden,
   Typography,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  IconButton,
-  Chip
+  Box
 } from '@material-ui/core';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import {
@@ -23,21 +20,18 @@ import {
   createStyles,
   Theme
 } from '@material-ui/core/styles';
-import DeleteIcon from '@material-ui/icons/Delete';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import { withRouter } from 'react-router-dom';
+import { RouterProps } from 'react-router';
 
 import { RootState } from '../../../store';
-import { addError } from '../../../store/errors/actions';
 import { Loading } from '../../components/loading/loading.component';
 import { GamesState } from '../../../store/games/types';
 import { Game } from '../../../api/classes/game.class';
 import { UserState } from '../../../store/user/types';
 import { GamesActions } from '../../../store/games/actions';
-import { withRouter } from 'react-router-dom';
-import { GameActions } from '../../../store/game/actions';
-import { RouterProps } from 'react-router';
-import { yesNoController } from '../../components/dialogs/yesno.component';
 import { GameList } from '../../components/game/game.list.component';
+import { TabPanel } from '../../components/utils/tabPanel.component';
+import { User } from '../../../api/classes/user.class';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
@@ -51,10 +45,6 @@ interface OwnProps {}
 
 interface DispatchProps {
   gameGetAllLinked: (userId: string) => Promise<any>;
-  gameRemove: (gameId: string) => Promise<any>;
-  gameGetAll: () => Promise<any>;
-  gameGetByDisplayId: (displayId: string) => Promise<any>;
-  addError: (error: any) => void;
 }
 
 interface StateProps {
@@ -71,6 +61,7 @@ type Props = StateProps &
 
 interface ComponentState {
   games: Game[];
+  selectedTab: number;
 }
 
 class HomePage extends React.Component<Props, ComponentState> {
@@ -81,7 +72,8 @@ class HomePage extends React.Component<Props, ComponentState> {
     super(props);
 
     this.state = {
-      games: []
+      games: [],
+      selectedTab: 0
     };
   }
 
@@ -115,44 +107,75 @@ class HomePage extends React.Component<Props, ComponentState> {
     return null;
   }
 
-  handleRemoveGameClick = (gameId: string) => {
-    yesNoController!
-      .present({
-        title: 'Are you sure you want to delete this game ?',
-        acceptText: 'Yes',
-        denyText: 'No'
-      })
-      .then(() => {
-        this.props.gameRemove(gameId);
-      })
-      .catch(error => {
-        //this.props.addError(error);
-      });
-  };
-
-  handleGoToClick = (displayId: string) => {
-    this.props.gameGetByDisplayId(displayId);
-    this.props.history.push(`/games/${displayId}`);
+  handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    this.setState({ selectedTab: newValue });
   };
 
   render() {
     const classes = this.props.classes;
 
-    return (
-      <Container component="main" className={classes.root}>
-        {this.props.gamesState.games
-          ? this.renderGames(this.state.games)
-          : this.renderLoading()}
-      </Container>
+    const { loading } = this.props.gamesState;
+    const { user: me } = this.props.userState;
+    const { selectedTab } = this.state;
+
+    return loading ? (
+      this.renderLoading()
+    ) : (
+      <>
+        <Tabs
+          value={selectedTab}
+          onChange={this.handleTabChange}
+          textColor="secondary"
+          variant="fullWidth"
+        >
+          <Tab label="Games you created" wrapped />
+          <Tab label="Games you're in" wrapped />
+        </Tabs>
+        <TabPanel index={0} actualIndex={selectedTab}>
+          {this.renderUserGames(me!)}
+        </TabPanel>
+        <TabPanel index={1} actualIndex={selectedTab}>
+          {this.renderGamesUserIsIn(me!)}
+        </TabPanel>
+
+        {/*<Hidden smDown>
+          <Grid container spacing={1}>
+            <Grid item md={6}>
+              {this.renderUserGames(me!, 'Games you created')}
+            </Grid>
+            <Divider orientation="vertical" />
+            <Grid item md={6}>
+              {this.renderGamesUserIsIn(me!, "Games you're in ")}
+            </Grid>
+          </Grid>
+        </Hidden>*/}
+      </>
     );
   }
 
+  renderUserGames(user: User, title?: string) {
+    const { games } = this.props.gamesState;
+
+    let userGames: Game[] = [];
+    if (games) userGames = games.filter(g => g.creator.id === user.id);
+
+    return <GameList games={userGames} title={title} isAdmin={true} />;
+  }
+
+  renderGamesUserIsIn(user: User, title?: string) {
+    const { games } = this.props.gamesState;
+
+    let gamesUserIsIn: Game[] = [];
+    if (games)
+      gamesUserIsIn = games.filter(
+        g => g.users.find(u => u.id === user.id) !== undefined
+      );
+
+    return <GameList games={gamesUserIsIn} title={title} isAdmin={false} />;
+  }
+
+  /*
   renderGames(games: Game[]) {
-    const me = this.props.userState.user;
-    const myGames = games.filter(g => g.creator.id === me!.id);
-    const gamesImIn = games.filter(
-      g => g.users.find(u => u.id === me!.id) !== undefined
-    );
     return (
       <Grid container spacing={1}>
         <Grid item xs={12} md={6}>
@@ -160,75 +183,12 @@ class HomePage extends React.Component<Props, ComponentState> {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          {this.renderGameTable(gamesImIn, "Games you're in", false, true)}
+          <GameList games={gamesImIn} title="Games you're in" isAdmin={false} />
         </Grid>
       </Grid>
     );
   }
-
-  renderGameTable(
-    games: Game[],
-    title: string,
-    displayRemove?: boolean,
-    displayGoTo?: boolean
-  ) {
-    if (!displayRemove) displayRemove = false;
-    if (!displayGoTo) displayGoTo = false;
-    const displayActions = displayRemove || displayGoTo;
-
-    return (
-      <>
-        <Typography variant="h5">{title}</Typography>
-        <TableContainer component="div">
-          <Table size="small" stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell>Id</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Status</TableCell>
-                {displayActions && (
-                  <TableCell align="center">Actions</TableCell>
-                )}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {games.map(game => {
-                return (
-                  <TableRow key={game.id}>
-                    <TableCell>{game.displayId}</TableCell>
-                    <TableCell>{game.name}</TableCell>
-                    <TableCell>
-                      <Chip label={game.status} />
-                    </TableCell>
-                    {displayActions && (
-                      <TableCell align="center">
-                        {displayGoTo && (
-                          <IconButton
-                            color="primary"
-                            onClick={() => this.handleGoToClick(game.displayId)}
-                          >
-                            <PlayArrowIcon />
-                          </IconButton>
-                        )}
-                        {displayRemove && (
-                          <IconButton
-                            color="primary"
-                            onClick={() => this.handleRemoveGameClick(game.id)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        )}
-                      </TableCell>
-                    )}
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </>
-    );
-  }
+  */
 
   renderLoading() {
     return <Loading />;
@@ -249,18 +209,6 @@ const mapDispatchToProps = (
   return {
     gameGetAllLinked: async (userId: string) => {
       return await dispatch(GamesActions.gameGetAllLinked(userId));
-    },
-    gameRemove: async (gameId: string) => {
-      return await dispatch(GamesActions.gameRemove(gameId));
-    },
-    gameGetAll: async () => {
-      return await dispatch(GamesActions.gameGetAll());
-    },
-    gameGetByDisplayId: async (displayId: string) => {
-      return await dispatch(GameActions.gameGetByDisplayId(displayId));
-    },
-    addError: async (error: any) => {
-      await dispatch(addError(error));
     }
   };
 };

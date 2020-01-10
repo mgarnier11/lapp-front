@@ -27,6 +27,8 @@ import { User } from '../../../api/classes/user.class';
 import { ListItemLink } from '../utils/linkButtons.components';
 import { headerHeight } from './header.component';
 import { Role } from '../../../api/classes/role.class';
+import { Link } from 'react-router-dom';
+import { themeManagerRef, ThemeController } from '../../themeManager';
 
 const drawerWidth = 240;
 
@@ -114,18 +116,19 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
         >
           {drawerOpen ? <CloseIcon /> : <MenuIcon />}
         </IconButton>
+
         <Typography
           component="h1"
           variant="h6"
           align="center"
           className={classes.appName}
         >
-          App Name
+          <Link to="/home">App Name</Link>
         </Typography>
         <IconButton
           edge="end"
           color="inherit"
-          onClick={() => console.log('create back button manager')}
+          onClick={() => ThemeController.toggleTheme()}
         >
           <ArrowBackIcon />
         </IconButton>
