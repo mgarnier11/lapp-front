@@ -1,19 +1,9 @@
-import * as lodash from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import {
   Typography,
-  Select,
-  MenuItem,
   Button,
-  TextField,
-  InputLabel,
-  FormControl,
-  Input,
-  Chip,
-  Checkbox,
-  ListItemText,
   TableContainer,
   Table,
   TableHead,
@@ -36,19 +26,12 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { RouterProps, RouteComponentProps } from 'react-router';
+import { RouteComponentProps } from 'react-router';
 import { withRouter } from 'react-router-dom';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import { RootState } from '../../../store';
-import { addError } from '../../../store/errors/actions';
 import { Game, GameStatus } from '../../../api/classes/game.class';
 import { GameTypesState } from '../../../store/gameTypes/types';
-import { GamesState } from '../../../store/games/types';
-import { QuestionTypesState } from '../../../store/questionTypes/types';
-import { QuestionType } from '../../../api/classes/questionType.class';
-import { GameType } from '../../../api/classes/gameType.class';
-import { Helper } from '../../../helper';
 import { GameActions } from '../../../store/game/actions';
 import { yesNoController } from '../dialogs/yesno.component';
 import { GamesActions } from '../../../store/games/actions';
@@ -162,15 +145,11 @@ class GameListComponent extends React.Component<Props, ComponentState> {
     const getIcon = (status: GameStatus) => {
       switch (status) {
         case GameStatus.created:
-          return this.props.isAdmin ? (
-            <EditIcon color="primary" />
-          ) : (
-            <PlayArrowIcon color="primary" />
-          );
+          return this.props.isAdmin ? <EditIcon /> : <PlayArrowIcon />;
         case GameStatus.started:
-          return <PlayArrowIcon color="primary" />;
+          return <PlayArrowIcon />;
         case GameStatus.finished:
-          return <BarChartIcon color="primary" />;
+          return <BarChartIcon />;
       }
     };
 
@@ -188,7 +167,6 @@ class GameListComponent extends React.Component<Props, ComponentState> {
     return (
       <IconButton
         className={this.props.classes.myButton}
-        color="primary"
         onClick={() => this.handleDeleteClick(game.id)}
       >
         <DeleteIcon />
@@ -215,7 +193,9 @@ class GameListComponent extends React.Component<Props, ComponentState> {
             <Button
               key={gameStatus.key}
               color={
-                filteredGameStatus.includes(gameStatus) ? 'primary' : 'default'
+                filteredGameStatus.includes(gameStatus)
+                  ? 'default'
+                  : 'secondary'
               }
               onClick={() => this.toggleGameTypeFilter(gameStatus.key)}
             >
@@ -227,7 +207,7 @@ class GameListComponent extends React.Component<Props, ComponentState> {
           <Table size="small" stickyHeader>
             <TableHead>
               <TableRow>
-                <TableCell>Id</TableCell>
+                <TableCell style={{ width: 1 }}>Id</TableCell>
                 <TableCell>Name</TableCell>
                 <Hidden xsDown>
                   <TableCell>Nb Players</TableCell>

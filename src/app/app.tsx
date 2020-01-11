@@ -14,7 +14,7 @@ import {
 import { RootState } from '../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { relog } from '../store/user/actions';
-import { CssBaseline, Fab, Modal, Container } from '@material-ui/core';
+import { CssBaseline, Modal, Container } from '@material-ui/core';
 import { RolesActions, roleActionsInstance } from '../store/roles/actions';
 import { questionActionsInstance } from '../store/questions/actions';
 import {
@@ -48,7 +48,6 @@ import { Footer } from './components/footer/footer.component';
 import { Success } from './components/success/success.component';
 import { Error } from './components/error/error.component';
 import { MyFab } from './components/fab/fab.component';
-import { GameForm } from './componentsV2/game/form.game.component';
 import { Role } from '../api/classes/role.class';
 
 const styles = (theme: Theme): StyleRules =>

@@ -3,14 +3,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import {
-  Container,
-  Grid,
   Tabs,
-  Tab,
-  Divider,
-  Hidden,
-  Typography,
-  Box
+  Tab
 } from '@material-ui/core';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 import {
@@ -41,7 +35,7 @@ const styles = (theme: Theme): StyleRules =>
     }
   });
 
-interface OwnProps {}
+interface OwnProps { }
 
 interface DispatchProps {
   gameGetAllLinked: (userId: string) => Promise<any>;
@@ -112,7 +106,7 @@ class HomePage extends React.Component<Props, ComponentState> {
   };
 
   render() {
-    const classes = this.props.classes;
+    //const classes = this.props.classes;
 
     const { loading } = this.props.gamesState;
     const { user: me } = this.props.userState;
@@ -121,24 +115,23 @@ class HomePage extends React.Component<Props, ComponentState> {
     return loading ? (
       this.renderLoading()
     ) : (
-      <>
-        <Tabs
-          value={selectedTab}
-          onChange={this.handleTabChange}
-          textColor="secondary"
-          variant="fullWidth"
-        >
-          <Tab label="Games you created" wrapped />
-          <Tab label="Games you're in" wrapped />
-        </Tabs>
-        <TabPanel index={0} actualIndex={selectedTab}>
-          {this.renderUserGames(me!)}
-        </TabPanel>
-        <TabPanel index={1} actualIndex={selectedTab}>
-          {this.renderGamesUserIsIn(me!)}
-        </TabPanel>
+        <>
+          <Tabs
+            value={selectedTab}
+            onChange={this.handleTabChange}
+            variant="fullWidth"
+          >
+            <Tab label="Games you created" wrapped />
+            <Tab label="Games you're in" wrapped />
+          </Tabs>
+          <TabPanel index={0} actualIndex={selectedTab}>
+            {this.renderUserGames(me!)}
+          </TabPanel>
+          <TabPanel index={1} actualIndex={selectedTab}>
+            {this.renderGamesUserIsIn(me!)}
+          </TabPanel>
 
-        {/*<Hidden smDown>
+          {/*<Hidden smDown>
           <Grid container spacing={1}>
             <Grid item md={6}>
               {this.renderUserGames(me!, 'Games you created')}
@@ -149,8 +142,8 @@ class HomePage extends React.Component<Props, ComponentState> {
             </Grid>
           </Grid>
         </Hidden>*/}
-      </>
-    );
+        </>
+      );
   }
 
   renderUserGames(user: User, title?: string) {

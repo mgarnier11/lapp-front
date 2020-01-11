@@ -1,6 +1,5 @@
 import seedRandom from 'seedrandom';
 import uuid from 'uuid';
-import systeminformation from 'systeminformation';
 import { User, LoginCredentials } from './api/classes/user.class';
 
 const idVice = 'id-vice';

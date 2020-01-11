@@ -8,12 +8,12 @@ import { LoginCredentials, User } from '../../../api/classes/user.class';
 import { register, login } from '../../../store/user/actions';
 import { Helper } from '../../../helper';
 import { GamesActions } from '../../../store/games/actions';
-import { Game, GameStatus } from '../../../api/classes/game.class';
+import { Game } from '../../../api/classes/game.class';
 import { QuestionTypesState } from '../../../store/questionTypes/types';
 import { GameTypesState } from '../../../store/gameTypes/types';
 import { RouterProps, withRouter } from 'react-router';
 
-interface OwnProps {}
+interface OwnProps { }
 
 interface DispatchProps {
   login: (credentials: LoginCredentials, hideSuccess?: boolean) => Promise<any>;
@@ -27,7 +27,7 @@ interface StateProps {
 }
 
 type Props = StateProps & OwnProps & DispatchProps & RouterProps;
-interface ComponentState {}
+interface ComponentState { }
 
 class IdViceComponent extends React.Component<Props, ComponentState> {
   /**
@@ -58,7 +58,7 @@ class IdViceComponent extends React.Component<Props, ComponentState> {
   };
 
   loginIDVice = async () => {
-    let u = await this.props.login(Helper.getIDViceCredentials(), true);
+    /*let u = */await this.props.login(Helper.getIDViceCredentials(), true);
     this.props.history.push('/home');
   };
 

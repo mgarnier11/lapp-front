@@ -4,13 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { ThunkDispatch } from 'redux-thunk';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import {
-  Container,
-  Avatar,
-  TextField,
-  Grid,
-  MenuItem
-} from '@material-ui/core';
+import { Container, Avatar, TextField, MenuItem, Box } from '@material-ui/core';
 import {
   withStyles,
   WithStyles,
@@ -27,26 +21,16 @@ import { User } from '../../../../api/classes/user.class';
 import { logout, register } from '../../../../store/user/actions';
 import { RouterProps } from 'react-router';
 import { Role } from '../../../../api/classes/role.class';
-import { RolesActions } from '../../../../store/roles/actions';
-import { RolesState } from '../../../../store/roles/types';
 import { addError } from '../../../../store/errors/actions';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
     paper: {
-      marginTop: theme.spacing(8),
+      marginTop: theme.spacing(4),
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center'
-    },
-    avatar: {
-      margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main
-    },
-    form: {
-      width: '100%', // Fix IE 11 issue.
-      marginTop: theme.spacing(1)
     },
     submit: {
       margin: theme.spacing(3, 0, 2)
@@ -146,87 +130,79 @@ class RegisterPage extends React.Component<Props, ComponentState> {
     let { email, password, name, gender } = this.state;
 
     return (
-      <Container component="main" maxWidth="xs">
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
+      <Container component="div" maxWidth="xs" className={classes.paper}>
+        <Avatar>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Box margin={0.5}>
           <Typography variant="h4">Register</Typography>
-          <form
-            className={classes.form}
-            noValidate
-            onSubmit={this.onFormRegisterSubmit}
+        </Box>
+
+        <form noValidate onSubmit={this.onFormRegisterSubmit}>
+          <TextField
+            name="name"
+            margin="normal"
+            variant="outlined"
+            required
+            fullWidth
+            id="name"
+            label="Name"
+            autoFocus
+            value={name}
+            onChange={this.handleNameChange}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            value={email}
+            onChange={this.handleEmailChange}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            value={password}
+            onChange={this.handlePasswordChange}
+          />
+          <TextField
+            select
+            label="Gender"
+            margin="normal"
+            id="gender-select"
+            value={gender}
+            fullWidth
+            variant="outlined"
+            onChange={this.handleGenderChange}
           >
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  name="name"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="name"
-                  label="Name"
-                  autoFocus
-                  value={name}
-                  onChange={this.handleNameChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  value={email}
-                  onChange={this.handleEmailChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  value={password}
-                  onChange={this.handlePasswordChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  select
-                  label="Gender"
-                  id="gender-select"
-                  value={gender}
-                  fullWidth
-                  onChange={this.handleGenderChange}
-                >
-                  <MenuItem value={0}>Man</MenuItem>
-                  <MenuItem value={1}>Woman</MenuItem>
-                </TextField>
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Register
-            </Button>
-            <Typography align="center" color="primary">
-              <u>
-                <Link to="/login">Already have an account ? Sign in</Link>
-              </u>
-            </Typography>
-          </form>
-        </div>
+            <MenuItem value={0}>Man</MenuItem>
+            <MenuItem value={1}>Woman</MenuItem>
+          </TextField>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Register
+          </Button>
+          <Typography align="center">
+            <u>
+              <Link to="/login">Sign in instead</Link>
+            </u>
+          </Typography>
+        </form>
       </Container>
     );
   }

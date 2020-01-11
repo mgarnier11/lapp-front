@@ -6,7 +6,6 @@ import {
   SwipeableDrawer,
   makeStyles,
   List,
-  ListItem,
   ListItemIcon,
   ListItemText,
   Divider
@@ -28,7 +27,7 @@ import { ListItemLink } from '../utils/linkButtons.components';
 import { headerHeight } from './header.component';
 import { Role } from '../../../api/classes/role.class';
 import { Link } from 'react-router-dom';
-import { themeManagerRef, ThemeController } from '../../themeManager';
+import { ThemeController } from '../../theme/themeManager';
 
 const drawerWidth = 240;
 
@@ -109,11 +108,7 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
   return (
     <>
       <Toolbar className={classes.toolBar}>
-        <IconButton
-          edge="start"
-          color="inherit"
-          onClick={() => toggleDrawer(!drawerOpen)}
-        >
+        <IconButton edge="start" onClick={() => toggleDrawer(!drawerOpen)}>
           {drawerOpen ? <CloseIcon /> : <MenuIcon />}
         </IconButton>
 
@@ -125,16 +120,13 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
         >
           <Link to="/home">App Name</Link>
         </Typography>
-        <IconButton
-          edge="end"
-          color="inherit"
-          onClick={() => ThemeController.toggleTheme()}
-        >
+        <IconButton edge="end" onClick={() => ThemeController.toggleTheme()}>
           <ArrowBackIcon />
         </IconButton>
       </Toolbar>
       <SwipeableDrawer
         className={classes.drawer}
+        style={{ zIndex: 1000 }}
         open={drawerOpen}
         onClose={() => toggleDrawer(false)}
         onOpen={() => toggleDrawer(true)}

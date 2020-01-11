@@ -8,8 +8,8 @@ import {
   Container,
   Avatar,
   TextField,
-  Grid,
-  CircularProgress
+  CircularProgress,
+  Box
 } from '@material-ui/core';
 import { withRouter, Link } from 'react-router-dom';
 import { RouterProps } from 'react-router';
@@ -22,33 +22,25 @@ import {
 
 import { UserState } from '../../../../store/user/types';
 import { RootState } from '../../../../store';
-import { LoginCredentials, User } from '../../../../api/classes/user.class';
-import { login, logout, register } from '../../../../store/user/actions';
-import apiHandler from '../../../../api/apiHandler';
-import uuid from 'uuid';
-import { Helper } from '../../../../helper';
+import { LoginCredentials } from '../../../../api/classes/user.class';
+import { login, logout } from '../../../../store/user/actions';
 import { IdVice } from '../../../components/user/idVice.component';
 
 const styles = (theme: Theme): StyleRules => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(4),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
   },
   submit: {
     margin: theme.spacing(3, 0, 2)
   },
   noLogin: {
     cursor: 'pointer'
+  },
+  register: {
+    paddingTop: theme.spacing(1)
   }
 });
 
@@ -116,62 +108,59 @@ class LoginPage extends React.Component<Props, ComponentState> {
     let { email, password } = this.state;
 
     return (
-      <Container component="main" maxWidth="xs">
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
+      <Container component="div" maxWidth="xs" className={classes.paper}>
+        <Avatar>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Box margin={0.5}>
           <Typography variant="h4">Sign in</Typography>
-          <form
-            className={classes.form}
-            noValidate
-            onSubmit={this.onFormLoginSubmit}
+        </Box>
+
+        <form noValidate onSubmit={this.onFormLoginSubmit}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            value={email}
+            onChange={this.handleEmailChange}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            value={password}
+            onChange={this.handlePasswordChange}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            disabled={loading}
+            className={classes.submit}
           >
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              value={email}
-              onChange={this.handleEmailChange}
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={this.handlePasswordChange}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              disabled={loading}
-              className={classes.submit}
-            >
-              {loading && <CircularProgress size={24} />}
-              {!loading && 'Sign In'}
-            </Button>
-            <IdVice />
-            <Typography align="center" color="primary">
-              <u>
-                <Link to="/register">Don't have an account ? Register</Link>
-              </u>
-            </Typography>
-          </form>
-        </div>
+            {loading && <CircularProgress size={24} />}
+            {!loading && 'Sign In'}
+          </Button>
+          <IdVice />
+          <Typography align="center" className={classes.register}>
+            <u>
+              <Link to="/register">Register</Link>
+            </u>
+          </Typography>
+        </form>
       </Container>
     );
   }

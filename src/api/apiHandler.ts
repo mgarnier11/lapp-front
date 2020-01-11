@@ -12,7 +12,6 @@ import { RoleService } from './services/role.service';
 import { User, LoginCredentials } from './classes/user.class';
 import { ServiceNames } from './services/baseService';
 import { GameTypeService } from './services/gameType.service';
-import { Helper } from '../helper';
 
 class ApiHandler {
   //api initialization

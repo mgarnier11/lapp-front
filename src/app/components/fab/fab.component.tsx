@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route, Redirect, withRouter } from 'react-router';
+import { withRouter } from 'react-router';
 import { RouteComponentProps } from 'react-router';
 
 import { ThunkDispatch } from 'redux-thunk';
@@ -116,7 +116,6 @@ const MyButton = (props: MyButtonProps) => (
   <Fab
     variant="extended"
     className="floating-action-button"
-    color="primary"
     onClick={props.onClick}
     style={{ zIndex: 10 }}
   >

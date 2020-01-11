@@ -65,7 +65,7 @@ const styles = (theme: Theme): StyleRules =>
     chip: {
       margin: '2px',
       minWidth: `calc(50% - 4px)`,
-      zIndex: 1200
+      zIndex: 10
     }
   });
 
@@ -309,7 +309,7 @@ class GameFormComponent extends React.Component<Props, ComponentState> {
         <FormControl className={classes.ratingFormControl}>
           <Typography
             component="legend"
-            color={this.props.disabled ? 'textSecondary' : 'initial'}
+            color={this.props.disabled ? 'textSecondary' : 'inherit'}
           >
             Maximum&nbsp;Difficulty
           </Typography>
@@ -324,7 +324,7 @@ class GameFormComponent extends React.Component<Props, ComponentState> {
         <FormControl className={classes.ratingFormControl}>
           <Typography
             component="legend"
-            color={this.props.disabled ? 'textSecondary' : 'initial'}
+            color={this.props.disabled ? 'textSecondary' : 'inherit'}
           >
             Maximum&nbsp;Hot&nbsp;Level
           </Typography>

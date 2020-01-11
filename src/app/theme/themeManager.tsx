@@ -1,30 +1,17 @@
-import React, { useState, createRef } from 'react';
-import {
-  MuiThemeProvider,
-  createMuiTheme,
-  Theme
-} from '@material-ui/core/styles';
+import React, { createRef } from 'react';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme';
+import { MyDarkTheme } from './MyDarkTheme';
+import { MyLightTheme } from './MyLightTheme';
 
 export enum ThemeTypes {
   light = 'light',
   dark = 'dark'
 }
 
-const light: ThemeOptions = {
-  palette: {
-    type: 'light'
-  }
-};
-const dark: ThemeOptions = {
-  palette: {
-    type: 'dark'
-  }
-};
-
 const Themes: { [key: string]: ThemeOptions } = {
-  light: light,
-  dark: dark
+  light: MyLightTheme,
+  dark: MyDarkTheme
 };
 
 interface ComponentProps {
@@ -43,7 +30,7 @@ class ThemeManager extends React.Component<ComponentProps, ComponentState> {
     super(props);
 
     this.state = {
-      selectedTheme: ThemeTypes.light
+      selectedTheme: ThemeTypes.dark
     };
   }
 
@@ -67,6 +54,7 @@ class ThemeManager extends React.Component<ComponentProps, ComponentState> {
   };
 
   render() {
+    console.log(this.state.selectedTheme);
     const muiTheme = createMuiTheme(Themes[this.state.selectedTheme]);
 
     return (
@@ -106,6 +94,10 @@ export class ThemeController {
     if (ThemeController.isInitialized())
       return ThemeController.themeManager().getTheme() === ThemeTypes.dark;
     else return false;
+  };
+
+  public static getPrimary = (): string => {
+    return ThemeController.isDark() ? 'default' : 'primary';
   };
 
   private static isInitialized = (): boolean => {

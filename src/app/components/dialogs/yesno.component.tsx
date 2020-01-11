@@ -103,10 +103,8 @@ class YesNoComponent extends React.Component<Props, ComponentState> {
           </DialogContent>
         )}
         <DialogActions>
-          <Button onClick={this.handleAccept} color="primary">
-            {this.state.acceptText}
-          </Button>
-          <Button onClick={this.handleDeny} color="primary" autoFocus>
+          <Button onClick={this.handleAccept}>{this.state.acceptText}</Button>
+          <Button onClick={this.handleDeny} autoFocus>
             {this.state.denyText}
           </Button>
         </DialogActions>

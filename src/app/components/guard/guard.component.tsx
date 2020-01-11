@@ -7,7 +7,6 @@ import { UserState } from '../../../store/user/types';
 import { relog } from '../../../store/user/actions';
 //import { makeStyles } from '@material-ui/core';
 import { Loading } from '../loading/loading.component';
-import { render } from 'react-dom';
 
 /*
 const useStyles = makeStyles(theme => ({
@@ -27,12 +26,12 @@ interface OwnProps {
   minimalPermission: number;
   idViceAllowed?: boolean;
   children:
-    | ReactChild
-    | ReactFragment
-    | ReactPortal
-    | boolean
-    | null
-    | undefined;
+  | ReactChild
+  | ReactFragment
+  | ReactPortal
+  | boolean
+  | null
+  | undefined;
 }
 
 interface DispatchProps {
@@ -48,7 +47,7 @@ type Props = StateProps & OwnProps & DispatchProps;
 const GuardComponent: React.FunctionComponent<Props> = (props: Props) => {
   const idViceAllowed =
     props.idViceAllowed === undefined ? true : props.idViceAllowed;
-  const { minimalPermission, children, redirect } = props;
+  const { minimalPermission } = props;
   const { user, loading } = props.userState;
   //const classes = useStyles();
 
