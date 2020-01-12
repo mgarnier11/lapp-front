@@ -8,7 +8,17 @@ export const MyLightTheme: ThemeOptions = {
   palette: { ...palette, type: 'light' },
   overrides: {
     MuiAppBar: { ...MyMuiAppBar },
-    MuiFab: { ...MyMuiFab },
+    MuiFab: {
+      ...MyMuiFab,
+      root: {
+        ...MyMuiFab.root,
+        backgroundColor: palette.primary.main,
+
+        '&:hover ': {
+          backgroundColor: `${palette.primary.light} !important`
+        }
+      }
+    },
     MuiDrawer: {
       ...MyMuiDrawer
     }

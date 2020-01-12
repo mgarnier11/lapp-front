@@ -19,7 +19,7 @@ import { RootState } from '../../../store';
 import { QuestionsActions } from '../../../store/questions/actions';
 import { addError } from '../../../store/errors/actions';
 import { Question } from '../../../api/classes/question.class';
-import { Loading } from '../../components/loading/loading.component';
+import { Loading } from '../../components/utils/loading.component';
 import { QuestionTypesActions } from '../../../store/questionTypes/actions';
 import { QuestionTypesState } from '../../../store/questionTypes/types';
 import Rating from '@material-ui/lab/Rating';

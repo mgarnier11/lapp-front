@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { RootState } from '../../../store';
-import { Loading } from '../../components/loading/loading.component';
+import { Loading } from '../utils/loading.component';
 import { GameState } from '../../../store/game/types';
 import { GameActions } from '../../../store/game/actions';
 import { GameStatus } from '../../../api/classes/game.class';

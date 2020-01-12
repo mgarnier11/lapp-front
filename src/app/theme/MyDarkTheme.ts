@@ -40,12 +40,15 @@ export const MyDarkTheme: ThemeOptions = {
       }
     },
     MuiButton: {
-      root: {
-        backgroundColor: `${palette.primary.light} !important`,
+      contained: {
+        backgroundColor: `${colors.grey[700]} !important`,
         color: `${colors.common.white} !important`
       },
-      containedSecondary: {
-        backgroundColor: `${colors.grey[700]} !important`
+      containedPrimary: {
+        backgroundColor: `${palette.primary.light} !important`,
+        '&:hover': {
+          backgroundColor: `${palette.primary.main} !important`
+        }
       }
     },
     MuiFab: {
@@ -54,13 +57,18 @@ export const MyDarkTheme: ThemeOptions = {
         ...MyMuiFab.root,
         backgroundColor: palette.primary.light,
 
-        '&:hover ': {
+        '&:hover': {
           backgroundColor: `${palette.primary.main} !important`
         }
       }
     },
     MuiDrawer: {
       ...MyMuiDrawer
+    },
+    MuiCircularProgress: {
+      colorPrimary: {
+        color: palette.primary.light
+      }
     }
   }
 };

@@ -18,7 +18,7 @@ import { RootState } from '../../../store';
 import { RolesActions } from '../../../store/roles/actions';
 import { addError } from '../../../store/errors/actions';
 import { Role } from '../../../api/classes/role.class';
-import { Loading } from '../../components/loading/loading.component';
+import { Loading } from '../../components/utils/loading.component';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({

@@ -36,7 +36,7 @@ import { GameTypesState } from '../../../store/gameTypes/types';
 import { QuestionTypesState } from '../../../store/questionTypes/types';
 import { GamesActions } from '../../../store/games/actions';
 import { GameState } from '../../../store/game/types';
-import { Loading } from '../../components/loading/loading.component';
+import { Loading } from '../../components/utils/loading.component';
 import { User, GenderTable } from '../../../api/classes/user.class';
 import apiHandler from '../../../api/apiHandler';
 import { DummyUser } from '../../../api/classes/dummyUser.class';

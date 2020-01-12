@@ -86,6 +86,9 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
 
   const userItems = () => (
     <>
+      <Typography component="h6" align="center" style={{ fontSize: '150%' }}>
+        {user!.name}
+      </Typography>
       {ListItem('/me', 'Settings', <SettingsIcon />)}
       {ListItem('/login', 'Disconnect', <PowerSettingsNewIcon />)}
     </>

@@ -18,7 +18,7 @@ import { RootState } from '../../../store';
 import { QuestionTypesActions } from '../../../store/questionTypes/actions';
 import { addError } from '../../../store/errors/actions';
 import { QuestionType } from '../../../api/classes/questionType.class';
-import { Loading } from '../../components/loading/loading.component';
+import { Loading } from '../../components/utils/loading.component';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({

@@ -6,7 +6,7 @@ import { RootState } from '../../../store';
 import { UserState } from '../../../store/user/types';
 import { relog } from '../../../store/user/actions';
 //import { makeStyles } from '@material-ui/core';
-import { Loading } from '../loading/loading.component';
+import { Loading } from '../utils/loading.component';
 
 /*
 const useStyles = makeStyles(theme => ({
@@ -26,12 +26,12 @@ interface OwnProps {
   minimalPermission: number;
   idViceAllowed?: boolean;
   children:
-  | ReactChild
-  | ReactFragment
-  | ReactPortal
-  | boolean
-  | null
-  | undefined;
+    | ReactChild
+    | ReactFragment
+    | ReactPortal
+    | boolean
+    | null
+    | undefined;
 }
 
 interface DispatchProps {

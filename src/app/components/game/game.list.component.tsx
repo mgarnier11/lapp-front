@@ -193,9 +193,7 @@ class GameListComponent extends React.Component<Props, ComponentState> {
             <Button
               key={gameStatus.key}
               color={
-                filteredGameStatus.includes(gameStatus)
-                  ? 'default'
-                  : 'secondary'
+                filteredGameStatus.includes(gameStatus) ? 'primary' : 'default'
               }
               onClick={() => this.toggleGameTypeFilter(gameStatus.key)}
             >
