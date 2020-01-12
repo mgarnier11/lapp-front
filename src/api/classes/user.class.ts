@@ -14,6 +14,7 @@ export interface UserBackModel {
   _password: string;
   _role: RoleBackModel;
   _gender: number;
+  _darkMode: boolean;
 }
 
 export const GenderTable = ['Man', 'Woman'];
@@ -30,6 +31,8 @@ export class User {
   public role: Role = new Role();
 
   public gender: number = 0;
+
+  public darkMode: boolean = false;
 
   public createdGames: Game[] = [];
 
@@ -52,6 +55,7 @@ export class User {
     newObj.role = Role.fromBack(datas._role);
     newObj.gender = datas._gender;
     newObj.password = datas._password;
+    newObj.darkMode = datas._darkMode;
 
     return newObj;
   }
@@ -71,6 +75,7 @@ export class User {
       obj1.gender === obj2.gender &&
       obj1.password === obj2.password &&
       obj1.id === obj2.id &&
+      obj1.darkMode === obj2.darkMode &&
       Role.CompareObjects(obj1.role, obj2.role)
     );
   }

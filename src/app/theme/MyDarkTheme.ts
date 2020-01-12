@@ -4,71 +4,79 @@ import { MyMuiAppBar } from './components/MyMuiAppBar';
 import { colors } from '@material-ui/core';
 import { MyMuiFab } from './components/MyMuiFab';
 import { MyMuiDrawer } from './components/MyDrawer';
+import { MyOverrides } from './Overrides';
 
-export const MyDarkTheme: ThemeOptions = {
-  palette: { ...palette, type: 'dark' },
-  overrides: {
-    MuiAppBar: {
-      ...MyMuiAppBar,
-      colorPrimary: {
-        backgroundColor: palette.primary.main
+const overrides: MyOverrides = {
+  MuiAppBar: {
+    ...MyMuiAppBar,
+    colorPrimary: {
+      backgroundColor: palette.primary.main
+    }
+  },
+  MuiAvatar: {
+    colorDefault: {
+      backgroundColor: palette.secondary.main,
+      color: colors.common.black
+    }
+  },
+  MuiFormLabel: {
+    root: {
+      '&$focused': {
+        color: colors.common.white
       }
-    },
-    MuiAvatar: {
-      colorDefault: {
-        backgroundColor: palette.secondary.main,
-        color: colors.common.black
+    }
+  },
+  MuiOutlinedInput: {
+    root: {
+      '&$focused $notchedOutline': {
+        borderColor: `${palette.secondary.main} !important`
       }
-    },
-    MuiInputBase: {
-      input: {
-        boxShadow: `0 0 0 100px ${colors.grey[800]} inset !important`
+    }
+  },
+  MuiFab: {
+    ...MyMuiFab,
+    root: {
+      ...MyMuiFab.root,
+      backgroundColor: palette.primary.light,
+
+      '&:hover': {
+        backgroundColor: `${palette.primary.main} !important`
       }
-    },
-    MuiFormLabel: {
-      root: {
-        '&$focused': {
-          color: colors.common.white
-        }
-      }
-    },
-    MuiOutlinedInput: {
-      root: {
-        '&$focused $notchedOutline': {
-          borderColor: `${palette.secondary.main} !important`
-        }
-      }
-    },
-    MuiButton: {
-      contained: {
-        backgroundColor: `${colors.grey[700]} !important`,
-        color: `${colors.common.white} !important`
-      },
-      containedPrimary: {
-        backgroundColor: `${palette.primary.light} !important`,
-        '&:hover': {
-          backgroundColor: `${palette.primary.main} !important`
-        }
-      }
-    },
-    MuiFab: {
-      ...MyMuiFab,
-      root: {
-        ...MyMuiFab.root,
+    }
+  },
+  MuiDrawer: {
+    ...MyMuiDrawer
+  },
+  MuiCircularProgress: {
+    colorPrimary: {
+      color: palette.primary.light
+    }
+  },
+  MuiToggleButton: {
+    root: {
+      '&$selected': {
         backgroundColor: palette.primary.light,
-
         '&:hover': {
-          backgroundColor: `${palette.primary.main} !important`
+          backgroundColor: palette.primary.main
         }
       }
-    },
-    MuiDrawer: {
-      ...MyMuiDrawer
-    },
-    MuiCircularProgress: {
-      colorPrimary: {
-        color: palette.primary.light
+    }
+  },
+  MuiButton: {
+    root: {
+      backgroundColor: `${palette.primary.light} !important`,
+      '&:hover': {
+        backgroundColor: `${palette.primary.main} !important`
       }
     }
   }
+};
+
+export const MyDarkTheme: ThemeOptions = {
+  palette: {
+    ...palette,
+    type: 'dark'
+  },
+
+  overrides
 };

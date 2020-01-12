@@ -23,6 +23,7 @@ import { RouterProps } from 'react-router';
 import { Role } from '../../../../api/classes/role.class';
 import { addError } from '../../../../store/errors/actions';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
+import { UserForm } from '../../../components/user/user.form.component';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
@@ -34,6 +35,9 @@ const styles = (theme: Theme): StyleRules =>
     },
     submit: {
       margin: theme.spacing(3, 0, 2)
+    },
+    signIn: {
+      paddingTop: theme.spacing(1)
     }
   });
 
@@ -137,72 +141,13 @@ class RegisterPage extends React.Component<Props, ComponentState> {
         <Box margin={0.5}>
           <Typography variant="h4">Register</Typography>
         </Box>
+        <UserForm user={User.New({})} editable acceptButtonText="register" />
 
-        <form noValidate onSubmit={this.onFormRegisterSubmit}>
-          <TextField
-            name="name"
-            margin="normal"
-            variant="outlined"
-            required
-            fullWidth
-            id="name"
-            label="Name"
-            autoFocus
-            value={name}
-            onChange={this.handleNameChange}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            value={email}
-            onChange={this.handleEmailChange}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            value={password}
-            onChange={this.handlePasswordChange}
-          />
-          <TextField
-            select
-            label="Gender"
-            margin="normal"
-            id="gender-select"
-            value={gender}
-            fullWidth
-            variant="outlined"
-            onChange={this.handleGenderChange}
-          >
-            <MenuItem value={0}>Man</MenuItem>
-            <MenuItem value={1}>Woman</MenuItem>
-          </TextField>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Register
-          </Button>
-          <Typography align="center">
-            <u>
-              <Link to="/login">Sign in instead</Link>
-            </u>
-          </Typography>
-        </form>
+        <Typography align="center" className={classes.signIn}>
+          <u>
+            <Link to="/login">Sign in</Link>
+          </u>
+        </Typography>
       </Container>
     );
   }

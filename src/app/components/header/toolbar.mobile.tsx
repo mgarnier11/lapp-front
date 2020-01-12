@@ -8,7 +8,8 @@ import {
   List,
   ListItemIcon,
   ListItemText,
-  Divider
+  Divider,
+  ListItem
 } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -21,6 +22,8 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import SettingsIcon from '@material-ui/icons/Settings';
+import Brightness3Icon from '@material-ui/icons/Brightness3';
+import Brightness5Icon from '@material-ui/icons/Brightness5';
 
 import { User } from '../../../api/classes/user.class';
 import { ListItemLink } from '../utils/linkButtons.components';
@@ -51,6 +54,10 @@ const useStyles = makeStyles(theme => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column'
+  },
+  userName: {
+    fontSize: '150%',
+    marginBottom: theme.spacing(1)
   }
 }));
 
@@ -71,37 +78,50 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
     setState(open);
   };
 
-  const baseItems = () => <>{ListItem('/home', 'Home', <HomeIcon />)}</>;
+  const baseItems = () => <>{listItem('/home', 'Home', <HomeIcon />)}</>;
 
   const baseUserItems = () => (
-    <>{ListItem('/questions', 'Questions', <RateReviewIcon />)}</>
+    <>{listItem('/questions', 'Questions', <RateReviewIcon />)}</>
   );
 
   const adminItems = () => (
     <>
-      {ListItem('/roles', 'Roles', <PeopleIcon />)}
-      {ListItem('/questionTypes', 'Question Types', <ForumIcon />)}
+      {listItem('/roles', 'Roles', <PeopleIcon />)}
+      {listItem('/questionTypes', 'Question Types', <ForumIcon />)}
     </>
   );
 
-  const userItems = () => (
+  const userItems = (user: User) => (
     <>
-      <Typography component="h6" align="center" style={{ fontSize: '150%' }}>
-        {user!.name}
+      <Typography component="h6" align="center" className={classes.userName}>
+        {user.name}
       </Typography>
-      {ListItem('/me', 'Settings', <SettingsIcon />)}
-      {ListItem('/login', 'Disconnect', <PowerSettingsNewIcon />)}
+      <ListItem button onClick={ThemeController.toggleTheme}>
+        {ThemeController.isLight() ? (
+          <>
+            <ListItemIcon children={<Brightness5Icon />} />
+            <ListItemText primary="Toggle night" />
+          </>
+        ) : (
+          <>
+            <ListItemIcon children={<Brightness3Icon />} />
+            <ListItemText primary="Toggle day" />
+          </>
+        )}
+      </ListItem>
+      {listItem('/me', 'Settings', <SettingsIcon />)}
+      {listItem('/login', 'Disconnect', <PowerSettingsNewIcon />)}
     </>
   );
 
   const notLoggedItems = () => (
     <>
-      {ListItem('/login', 'Login', <ExitToAppIcon />)}
-      {ListItem('/register', 'Register', <PersonAddIcon />)}
+      {listItem('/login', 'Login', <ExitToAppIcon />)}
+      {listItem('/register', 'Register', <PersonAddIcon />)}
     </>
   );
 
-  const ListItem = (to: string, text: string, icon: JSX.Element) => (
+  const listItem = (to: string, text: string, icon: JSX.Element) => (
     <ListItemLink to={to} onClick={() => toggleDrawer(false)}>
       <ListItemIcon>{icon}</ListItemIcon>
       <ListItemText primary={text} />
@@ -147,7 +167,7 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
               </div>
               <div>
                 <Divider />
-                {!user.isIDVice() && userItems()}
+                {!user.isIDVice() && userItems(user!)}
               </div>
             </>
           ) : (

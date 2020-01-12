@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import {
   Typography,
   Button,
@@ -46,6 +48,11 @@ const styles = (theme: Theme): StyleRules =>
       marginLeft: 'auto',
       marginRight: 'auto',
       marginBottom: 6
+    },
+    filterButton: {
+      '&$selected': {
+        backgroundColor: 'red'
+      }
     },
     myButton: {
       paddingRight: 11,
@@ -188,19 +195,20 @@ class GameListComponent extends React.Component<Props, ComponentState> {
           </Typography>
         )}
 
-        <ButtonGroup variant="contained" className={classes.filterButtons}>
+        <ToggleButtonGroup className={classes.filterButtons} size="small">
           {GameListComponent.allGameStatus.map(gameStatus => (
-            <Button
+            <ToggleButton
               key={gameStatus.key}
-              color={
-                filteredGameStatus.includes(gameStatus) ? 'primary' : 'default'
-              }
+              selected={filteredGameStatus.includes(gameStatus)}
               onClick={() => this.toggleGameTypeFilter(gameStatus.key)}
+              className={classes.filterButton}
+              classes={{ root: classes.filterButton }}
+              value={0}
             >
               {gameStatus.value}
-            </Button>
+            </ToggleButton>
           ))}
-        </ButtonGroup>
+        </ToggleButtonGroup>
         <TableContainer component="div">
           <Table size="small" stickyHeader>
             <TableHead>
