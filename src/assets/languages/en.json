@@ -7,7 +7,7 @@
   },
   "gameProperties": {
     "name": "Name",
-    "nbPlayers": "Nombres de joueurs",
+    "nbPlayers": "Number Players",
     "actions": "Actions",
     "gameType": "Game Type",
     "maxDifficulty": "Maximum Difficulty",
