@@ -1,0 +1,26 @@
+{
+  "app": {
+    "title": "PartyDrink"
+  },
+  "interface": {
+    "title": "PartyDrink"
+  },
+  "gameProperties": {
+    "name": "Name",
+    "nbPlayers": "Nombres de joueurs",
+    "actions": "Actions",
+    "gameType": "Game Type",
+    "maxDifficulty": "Maximum Difficulty",
+    "maxHotLevel": "Maximum Hot Level",
+    "nbTurn": "Number Turn",
+    "name": "Name",
+  },
+  "userProperties": {
+    "type": "Type",
+    "name": "User name",
+    "gender": "Gender",
+    "actions": "Actions",
+    "genderMan": "Man",
+    "genderWoman": "Woman"
+  },
+}
