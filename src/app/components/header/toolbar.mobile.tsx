@@ -23,13 +23,13 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Brightness3Icon from '@material-ui/icons/Brightness3';
-import Brightness5Icon from '@material-ui/icons/Brightness5';
+import WbSunnyIcon from '@material-ui/icons/WbSunny';
 
 import { User } from '../../../api/classes/user.class';
 import { ListItemLink } from '../utils/linkButtons.components';
 import { headerHeight } from './header.component';
 import { Role } from '../../../api/classes/role.class';
-import { Link } from 'react-router-dom';
+import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
 import { ThemeController } from '../../theme/themeManager';
 
 const drawerWidth = 240;
@@ -65,7 +65,7 @@ interface OwnProps {
   user?: User;
 }
 
-type Props = OwnProps;
+type Props = OwnProps & RouteComponentProps;
 
 const ToolbarMobileComponent: React.FunctionComponent<Props> = (
   props: Props
@@ -99,12 +99,12 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
       <ListItem button onClick={ThemeController.toggleTheme}>
         {ThemeController.isLight() ? (
           <>
-            <ListItemIcon children={<Brightness5Icon />} />
+            <ListItemIcon children={<Brightness3Icon />} />
             <ListItemText primary="Toggle night" />
           </>
         ) : (
           <>
-            <ListItemIcon children={<Brightness3Icon />} />
+            <ListItemIcon children={<WbSunnyIcon />} />
             <ListItemText primary="Toggle day" />
           </>
         )}
@@ -143,7 +143,7 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
         >
           <Link to="/home">App Name</Link>
         </Typography>
-        <IconButton edge="end" onClick={() => ThemeController.toggleTheme()}>
+        <IconButton edge="end" onClick={() => props.history.goBack()}>
           <ArrowBackIcon />
         </IconButton>
       </Toolbar>
@@ -179,4 +179,4 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
   );
 };
 
-export const ToolbarMobile = ToolbarMobileComponent;
+export const ToolbarMobile = withRouter(ToolbarMobileComponent);

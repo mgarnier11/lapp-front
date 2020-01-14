@@ -25,24 +25,14 @@ interface StateProps {
 
 type Props = StateProps & OwnProps & DispatchProps & RouteComponentProps;
 
-interface State {}
+const FabComponent: React.FunctionComponent<Props> = props => {
+  const { user } = props.userState;
 
-class FabComponent extends React.Component<Props, State> {
-  /**
-   *
-   */
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-  }
+  const renderNewQuestionFab = () => {
+    return <MyButton onClick={props.openQuestionModal} text="New Question" />;
+  };
 
-  renderNewQuestionFab() {
-    return (
-      <MyButton onClick={this.props.openQuestionModal} text="New Question" />
-    );
-  }
-
-  renderGameFab(game: Game) {
+  const renderGameFab = (game: Game) => {
     let text = (() => {
       switch (game.status) {
         case GameStatus.created:
@@ -54,37 +44,33 @@ class FabComponent extends React.Component<Props, State> {
       }
     })();
 
-    return <MyButton onClick={this.props.gameNextAction} text={text} />;
-  }
+    return <MyButton onClick={props.gameNextAction} text={text} />;
+  };
 
-  renderNewGameFab() {
-    return <MyButton onClick={this.props.openGameModal} text="New Game" />;
-  }
+  const renderNewGameFab = () => {
+    return <MyButton onClick={props.openGameModal} text="New Game" />;
+  };
 
-  renderFab() {
+  const renderFab = () => {
     const regExQuestions = /questions/;
     const regExGame = /games\/[A-Z0-9]{5,}/;
-    const { pathname } = this.props.location;
-    const { game } = this.props.gameState;
+    const { pathname } = props.location;
+    const { game } = props.gameState;
 
     switch (true) {
       case regExQuestions.test(pathname):
-        return this.renderNewQuestionFab();
+        return renderNewQuestionFab();
       case regExGame.test(pathname):
-        if (game) return this.renderGameFab(game);
-        else return this.renderNewGameFab();
+        if (game) return renderGameFab(game);
+        else return renderNewGameFab();
       default:
-        return this.renderNewGameFab();
+        return renderNewGameFab();
     }
-  }
+  };
 
-  render() {
-    const { user } = this.props.userState;
-
-    if (user) return this.renderFab();
-    else return <></>;
-  }
-}
+  if (user) return renderFab();
+  else return <></>;
+};
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {

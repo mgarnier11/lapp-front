@@ -269,7 +269,6 @@ class GameCreatedPage extends React.Component<Props, ComponentState> {
                           </TableCell>
                           <TableCell align="right">
                             <IconButton
-                              color="primary"
                               onClick={() =>
                                 isDummy
                                   ? this.removeDummyUser(user)

@@ -79,4 +79,8 @@ export class User {
       Role.CompareObjects(obj1.role, obj2.role)
     );
   }
+
+  public static passwordMinLength = 8;
+  public static nameMinLength = 1;
+  public static emailMinLength = 1;
 }

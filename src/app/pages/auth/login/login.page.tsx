@@ -1,32 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+import { RouterProps, withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import { ThunkDispatch } from 'redux-thunk';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { Link } from 'react-router-dom';
 import {
   Container,
   Avatar,
+  Box,
+  Typography,
+  makeStyles,
   TextField,
-  CircularProgress,
-  Box
+  Button,
+  CircularProgress
 } from '@material-ui/core';
-import { withRouter, Link } from 'react-router-dom';
-import { RouterProps } from 'react-router';
-import {
-  StyleRules,
-  Theme,
-  withStyles,
-  WithStyles
-} from '@material-ui/core/styles';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
+import { User, LoginCredentials } from '../../../../api/classes/user.class';
 import { UserState } from '../../../../store/user/types';
 import { RootState } from '../../../../store';
-import { LoginCredentials } from '../../../../api/classes/user.class';
-import { login, logout } from '../../../../store/user/actions';
+import { logout, register, login } from '../../../../store/user/actions';
 import { IdVice } from '../../../components/user/idVice.component';
 
-const styles = (theme: Theme): StyleRules => ({
+const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(4),
     display: 'flex',
@@ -42,7 +38,7 @@ const styles = (theme: Theme): StyleRules => ({
   register: {
     paddingTop: theme.spacing(1)
   }
-});
+}));
 
 interface OwnProps {}
 
@@ -55,126 +51,105 @@ interface StateProps {
   userState: UserState;
 }
 
-type Props = StateProps &
-  OwnProps &
-  DispatchProps &
-  RouterProps &
-  WithStyles<typeof styles>;
+type LoginPageProps = OwnProps & DispatchProps & StateProps & RouterProps;
 
-interface ComponentState {
-  email: string;
-  password: string;
-}
+const LoginPage: React.FunctionComponent<LoginPageProps> = props => {
+  useEffect(() => {
+    if (props.userState.user) props.logout(true);
+  }, []);
 
-class LoginPage extends React.Component<Props, ComponentState> {
-  /**
-   *
-   */
-  constructor(props: Props) {
-    super(props);
+  const classes = useStyles();
 
-    this.state = {
-      email: '',
-      password: ''
-    };
+  const loading = props.userState.loading;
 
-    this.props.logout(true);
-  }
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  onFormLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    this.props
+    props
       .login({
-        email: this.state.email,
-        password: this.state.password
+        email,
+        password
       })
       .then(logged => {
-        if (logged) this.props.history.push('/home');
+        if (logged) props.history.push('/home');
       });
   };
 
-  handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ email: e.target.value });
-  };
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setEmail(e.target.value);
 
-  handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ password: e.target.value });
-  };
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setPassword(e.target.value);
 
-  render() {
-    const classes = this.props.classes;
-    const loading = this.props.userState.loading;
-    let { email, password } = this.state;
+  return (
+    <Container component="div" maxWidth="xs" className={classes.paper}>
+      <Avatar>
+        <LockOutlinedIcon />
+      </Avatar>
+      <Box margin={0.5}>
+        <Typography variant="h4">Sign in</Typography>
+      </Box>
 
-    return (
-      <Container component="div" maxWidth="xs" className={classes.paper}>
-        <Avatar>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Box margin={0.5}>
-          <Typography variant="h4">Sign in</Typography>
-        </Box>
+      <form noValidate onSubmit={handleFormSubmit}>
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          id="email"
+          label="Email Address"
+          name="email"
+          autoComplete="email"
+          autoFocus
+          value={email}
+          onChange={handleEmailChange}
+        />
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          name="password"
+          label="Password"
+          type="password"
+          id="password"
+          autoComplete="current-password"
+          value={password}
+          onChange={handlePasswordChange}
+        />
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          disabled={loading}
+          className={classes.submit}
+        >
+          {loading && <CircularProgress size={24} color="inherit" />}
+          {!loading && 'Sign In'}
+        </Button>
+        <IdVice />
+        <Typography align="center" className={classes.register}>
+          <u>
+            <Link to="/register">Register</Link>
+          </u>
+        </Typography>
+      </form>
+    </Container>
+  );
+};
 
-        <form noValidate onSubmit={this.onFormLoginSubmit}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            value={email}
-            onChange={this.handleEmailChange}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={this.handlePasswordChange}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            disabled={loading}
-            className={classes.submit}
-          >
-            {loading && <CircularProgress size={24} />}
-            {!loading && 'Sign In'}
-          </Button>
-          <IdVice />
-          <Typography align="center" className={classes.register}>
-            <u>
-              <Link to="/register">Register</Link>
-            </u>
-          </Typography>
-        </form>
-      </Container>
-    );
-  }
-}
-
-const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
+const mapStateToProps = (states: RootState): StateProps => {
   return {
     userState: states.userState
   };
 };
 
 const mapDispatchToProps = (
-  dispatch: ThunkDispatch<{}, {}, any>,
-  ownProps: OwnProps
+  dispatch: ThunkDispatch<{}, {}, any>
 ): DispatchProps => {
   return {
     login: async (credentials: LoginCredentials) => {
@@ -189,6 +164,8 @@ const mapDispatchToProps = (
 export const Login = withRouter(
   connect<StateProps, DispatchProps, OwnProps, RootState>(
     mapStateToProps,
-    mapDispatchToProps
-  )(withStyles(styles)(LoginPage))
+    mapDispatchToProps,
+    null,
+    { forwardRef: true }
+  )(LoginPage)
 );

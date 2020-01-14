@@ -13,7 +13,7 @@ import { QuestionTypesState } from '../../../store/questionTypes/types';
 import { GameTypesState } from '../../../store/gameTypes/types';
 import { RouterProps, withRouter } from 'react-router';
 
-interface OwnProps { }
+interface OwnProps {}
 
 interface DispatchProps {
   login: (credentials: LoginCredentials, hideSuccess?: boolean) => Promise<any>;
@@ -27,54 +27,39 @@ interface StateProps {
 }
 
 type Props = StateProps & OwnProps & DispatchProps & RouterProps;
-interface ComponentState { }
 
-class IdViceComponent extends React.Component<Props, ComponentState> {
-  /**
-   *
-   */
-  constructor(props: Props) {
-    super(props);
-
-    this.state = {};
-  }
-
-  handleWithoutLoginClick = async () => {
+const IdViceComponent: React.FunctionComponent<Props> = props => {
+  const handleWithoutLoginClick = async () => {
     try {
-      await this.loginIDVice();
+      await loginIDVice();
     } catch (error) {
-      await this.registerIDVice();
+      await registerIDVice();
 
-      await this.loginIDVice();
+      await loginIDVice();
     }
   };
 
-  registerIDVice = async () => {
-    let newUser = await this.props.register(
-      { email: Helper.getDeviceId() },
-      true
-    );
+  const registerIDVice = async () => {
+    let newUser = await props.register({ email: Helper.getDeviceId() }, true);
     if (newUser) Helper.saveIDVice(newUser);
   };
 
-  loginIDVice = async () => {
-    /*let u = */await this.props.login(Helper.getIDViceCredentials(), true);
-    this.props.history.push('/home');
+  const loginIDVice = async () => {
+    /*let u = */ await props.login(Helper.getIDViceCredentials(), true);
+    props.history.push('/home');
   };
 
-  render() {
-    return (
-      <Button
-        fullWidth
-        variant="contained"
-        color="primary"
-        onClick={this.handleWithoutLoginClick}
-      >
-        Play with ID-Vice
-      </Button>
-    );
-  }
-}
+  return (
+    <Button
+      fullWidth
+      variant="contained"
+      color="primary"
+      onClick={handleWithoutLoginClick}
+    >
+      Play with ID-Vice
+    </Button>
+  );
+};
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {

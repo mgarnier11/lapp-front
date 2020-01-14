@@ -37,7 +37,6 @@ import { Home } from './pages/home/home.page';
 import { Questions } from './pages/questions/questions.page';
 import { Roles } from './pages/roles/roles.page';
 import { QuestionTypes } from './pages/questionTypes/question-types.page';
-import { Login } from './pages/auth/login/login.page';
 import { Register } from './pages/auth/register/register.page';
 import { QuestionNew } from './components/question/question.new.component';
 import { GameNew } from './components/game/game.new.component';
@@ -49,6 +48,7 @@ import { Success } from './components/success/success.component';
 import { Error } from './components/error/error.component';
 import { MyFab } from './components/fab/fab.component';
 import { Role } from '../api/classes/role.class';
+import { Login } from './pages/auth/login/login.page';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({

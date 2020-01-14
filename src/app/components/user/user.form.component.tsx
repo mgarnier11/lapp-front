@@ -17,6 +17,9 @@ import {
 } from '@material-ui/core';
 import { DangerButton } from '../utils/dangerButton.component';
 import { FormControlBox } from '../utils/formControlBox.component';
+import { Game } from '../../../api/classes/game.class';
+import { Helper } from '../../../helper';
+import { addError } from '../../../store/errors/actions';
 
 interface OwnProps {
   user: User;
@@ -27,12 +30,13 @@ interface OwnProps {
   displayRole?: boolean;
   displayConfirms?: boolean;
   displaySettings?: boolean;
-  displayDelete?: boolean;
-  onSubmit?: () => void;
-  onDelete?: () => void;
+  onSubmit?: (user: User) => void;
+  onDelete?: (userId: string) => void;
 }
 
-interface DispatchProps {}
+interface DispatchProps {
+  addError: (error: any) => void;
+}
 
 interface StateProps {
   userState: UserState;
@@ -72,9 +76,52 @@ const UserFormComponent: FunctionComponent<UserFormProps> = props => {
 
   const handleDarkModeChange = () => props.editable && setDarkMode(false);
 
-  const beforeDelete = () => {};
+  const beforeDelete = () => {
+    if (props.onDelete) props.onDelete(props.user.id);
+  };
 
-  const beforeSubmit = () => {};
+  const beforeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    let submit = false;
+
+    if (props.displayConfirms) {
+      submit =
+        email.length > User.emailMinLength &&
+        email === confirmEmail &&
+        password.length > User.passwordMinLength &&
+        password === confirmPassword &&
+        name.length > User.nameMinLength;
+    } else {
+      submit =
+        email.length >= User.emailMinLength &&
+        password.length >= User.passwordMinLength &&
+        name.length >= User.nameMinLength;
+    }
+
+    if (props.onSubmit && submit) {
+      props.onSubmit(
+        Helper.clone<User>(props.user, {
+          name,
+          email,
+          password,
+          gender
+        })
+      );
+    } else if (!submit) {
+      let message = 'not long enough';
+
+      if (password.length <= User.passwordMinLength)
+        message = 'Password ' + message;
+      if (email.length <= User.emailMinLength) message = 'Email ' + message;
+      if (name.length <= User.nameMinLength) message = 'Name ' + message;
+
+      if (password !== confirmPassword) message = 'Passwords dont match';
+      if (email !== confirmEmail) message = 'Emails dont match';
+
+      props.addError({ message, code: 1 });
+    }
+  };
 
   return (
     <form noValidate onSubmit={beforeSubmit}>
@@ -177,31 +224,35 @@ const UserFormComponent: FunctionComponent<UserFormProps> = props => {
         />
       )}
       {props.displaySettings && <></>}
-      <Grid container spacing={2}>
-        {props.displayDelete && (
-          <Grid item xs>
-            <DangerButton
-              fullWidth
-              variant="contained"
-              disabled={props.disabled}
-              onClick={beforeDelete}
-            >
-              {deleteButtonText}
-            </DangerButton>
-          </Grid>
-        )}
-        <Grid item xs>
-          <Button
-            type="submit"
-            fullWidth
-            disabled={props.disabled}
-            variant="contained"
-            color="primary"
-          >
-            {acceptButtonText}
-          </Button>
+      {(props.onDelete || props.onSubmit) && (
+        <Grid container spacing={2}>
+          {props.onDelete && (
+            <Grid item xs>
+              <DangerButton
+                fullWidth
+                variant="contained"
+                disabled={props.disabled}
+                onClick={beforeDelete}
+              >
+                {deleteButtonText}
+              </DangerButton>
+            </Grid>
+          )}
+          {props.onSubmit && (
+            <Grid item xs>
+              <Button
+                type="submit"
+                fullWidth
+                disabled={props.disabled}
+                variant="contained"
+                color="primary"
+              >
+                {acceptButtonText}
+              </Button>
+            </Grid>
+          )}
         </Grid>
-      </Grid>
+      )}
     </form>
   );
 };
@@ -215,7 +266,11 @@ const mapStateToProps = (states: RootState): StateProps => {
 const mapDispatchToProps = (
   dispatch: ThunkDispatch<{}, {}, any>
 ): DispatchProps => {
-  return {};
+  return {
+    addError: async (error: any) => {
+      await dispatch(addError(error));
+    }
+  };
 };
 
 export const UserForm = connect<StateProps, DispatchProps, OwnProps, RootState>(
