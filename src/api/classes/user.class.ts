@@ -81,6 +81,6 @@ export class User {
   }
 
   public static passwordMinLength = 8;
-  public static nameMinLength = 1;
-  public static emailMinLength = 1;
+  public static nameMinLength = 0;
+  public static emailMinLength = 0;
 }

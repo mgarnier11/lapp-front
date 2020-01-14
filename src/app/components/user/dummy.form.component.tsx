@@ -7,6 +7,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import { RootState } from '../../../store';
 import { DummyUser } from '../../../api/classes/dummyUser.class';
 
+// TODO add editable prop
+// TODO add disabled prop
+// TODO add delet button
+
 const useStyles = makeStyles(theme => ({
   form: {
     display: 'flex',

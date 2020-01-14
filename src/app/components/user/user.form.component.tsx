@@ -45,8 +45,6 @@ interface StateProps {
 type UserFormProps = OwnProps & DispatchProps & StateProps;
 
 const UserFormComponent: FunctionComponent<UserFormProps> = props => {
-  const acceptButtonText = props.acceptButtonText || 'Confirm Button';
-  const deleteButtonText = props.deleteButtonText || 'Delete Button';
   const [name, setName] = useState(props.user.name);
   const [email, setEmail] = useState(props.user.email);
   const [confirmEmail, setConfirmEmail] = useState('');
@@ -54,6 +52,24 @@ const UserFormComponent: FunctionComponent<UserFormProps> = props => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [gender, setGender] = useState(props.user.gender);
   const [darkMode, setDarkMode] = useState(props.user.darkMode);
+
+  const isDenied = (): boolean => {
+    if (props.displayConfirms) {
+      return (
+        email.length <= User.emailMinLength &&
+        email !== confirmEmail &&
+        password.length <= User.passwordMinLength &&
+        password !== confirmPassword &&
+        name.length <= User.nameMinLength
+      );
+    } else {
+      return (
+        email.length <= User.emailMinLength &&
+        password.length <= User.passwordMinLength &&
+        name.length <= User.nameMinLength
+      );
+    }
+  };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     props.editable && setName(e.target.value);
@@ -83,23 +99,7 @@ const UserFormComponent: FunctionComponent<UserFormProps> = props => {
   const beforeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    let submit = false;
-
-    if (props.displayConfirms) {
-      submit =
-        email.length > User.emailMinLength &&
-        email === confirmEmail &&
-        password.length > User.passwordMinLength &&
-        password === confirmPassword &&
-        name.length > User.nameMinLength;
-    } else {
-      submit =
-        email.length >= User.emailMinLength &&
-        password.length >= User.passwordMinLength &&
-        name.length >= User.nameMinLength;
-    }
-
-    if (props.onSubmit && submit) {
+    if (!isDenied() && props.onSubmit) {
       props.onSubmit(
         Helper.clone<User>(props.user, {
           name,
@@ -108,7 +108,7 @@ const UserFormComponent: FunctionComponent<UserFormProps> = props => {
           gender
         })
       );
-    } else if (!submit) {
+    } else if (isDenied()) {
       let message = 'not long enough';
 
       if (password.length <= User.passwordMinLength)
@@ -116,8 +116,10 @@ const UserFormComponent: FunctionComponent<UserFormProps> = props => {
       if (email.length <= User.emailMinLength) message = 'Email ' + message;
       if (name.length <= User.nameMinLength) message = 'Name ' + message;
 
-      if (password !== confirmPassword) message = 'Passwords dont match';
-      if (email !== confirmEmail) message = 'Emails dont match';
+      if (props.displayConfirms) {
+        if (password !== confirmPassword) message = 'Passwords dont match';
+        if (email !== confirmEmail) message = 'Emails dont match';
+      }
 
       props.addError({ message, code: 1 });
     }
@@ -234,7 +236,7 @@ const UserFormComponent: FunctionComponent<UserFormProps> = props => {
                 disabled={props.disabled}
                 onClick={beforeDelete}
               >
-                {deleteButtonText}
+                {props.deleteButtonText}
               </DangerButton>
             </Grid>
           )}
@@ -247,7 +249,7 @@ const UserFormComponent: FunctionComponent<UserFormProps> = props => {
                 variant="contained"
                 color="primary"
               >
-                {acceptButtonText}
+                {props.acceptButtonText}
               </Button>
             </Grid>
           )}
@@ -255,6 +257,11 @@ const UserFormComponent: FunctionComponent<UserFormProps> = props => {
       )}
     </form>
   );
+};
+
+UserFormComponent.defaultProps = {
+  acceptButtonText: 'Confirm Button',
+  deleteButtonText: 'Delete Button'
 };
 
 const mapStateToProps = (states: RootState): StateProps => {

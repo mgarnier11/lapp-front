@@ -23,10 +23,6 @@ export class Question {
 
   public creator: User = new User();
 
-  public temp(): string {
-    return 'ok';
-  }
-
   public static New(datas: Partial<Question>): Question {
     return Object.assign(new Question(), datas);
   }
