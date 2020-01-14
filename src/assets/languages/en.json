@@ -1,19 +1,59 @@
 {
   "app": {
-    "title": "PartyDrink"
+    "title": "PartyDrink",
+    "home": "Home",
+    "question": "Question",
+    "darkTheme": "Dark Theme",
+    "classicTheme": "Classic Theme",
+    "settings": "Settings",
+    "disconnect": "Disconnect"
   },
   "interface": {
-    "title": "PartyDrink"
+    "title": "PartyDrink",
+    "signIn": "Sign In",
+    "emailAdress": "Email Address",
+    "password": "Password",
+    "createQuestion": "Create Question",
+    "editQuestion": "Edit Question",
+    "questionList": "Question List",
+    "settings": "Settings",
+    "typeList": "Type List",
+    "search": "Search",
+    "search": "Search",
+    "search": "Search",
+    "search": "Search",
+    "search": "Search",
+  },
+  "buttons": {
+    "signIn": "Sign In",
+    "playIdVice": "Play with Id-Vice",
+    "register": "Register",
+    "newGame": "New Game",
+    "startGame": "Start Game",
+    "updateGame": "Update Game",
+    "addTmpUser": "Add a temporary user",
+    "started": "Started",
+    "finished": "Finished",
+    "create": "Create",
+    "created": "Created",
+    "createGame": "Create Game",
+    "cancel": "Cancel",
+    "newQuestion": "New Question"
   },
   "gameProperties": {
+    "id": "Id",
     "name": "Name",
     "nbPlayers": "Number Players",
     "actions": "Actions",
-    "gameType": "Game Type",
+    "type": "Game Type",
+    "online": "Online",
+    "party": "Party",
+    "name": "Name",
     "maxDifficulty": "Maximum Difficulty",
     "maxHotLevel": "Maximum Hot Level",
     "nbTurn": "Number Turn",
-    "name": "Name",
+    "questionType": "Question Types",
+    "searchUser": "Search an existing user"
   },
   "userProperties": {
     "type": "Type",
@@ -21,6 +61,8 @@
     "gender": "Gender",
     "actions": "Actions",
     "genderMan": "Man",
-    "genderWoman": "Woman"
+    "genderWoman": "Woman",
+    "registerUser": "Registered User",
+    "tmpUser": "Temporary User"
   },
 }
