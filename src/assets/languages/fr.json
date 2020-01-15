@@ -1,0 +1,70 @@
+{
+  "app": {
+    "title": "PartyDrink",
+    "home": "Accueil",
+    "questions": "Questions",
+    "listType": "Liste des types",
+    "roles": "Rôles",
+    "darkTheme": "Thème sombre",
+    "classicTheme": "Thème clair",
+    "settings": "Paramètres",
+    "disconnect": "Déconnexion"
+  },
+  "interface": {
+    "title": "PartyDrink",
+    "signIn": "Connexion",
+    "emailAdress": "Adresse Email",
+    "password": "Mot de passe",
+    "createQuestion": "Créer une question",
+    "editQuestion": "Éditer une question",
+    "questionList": "Liste de question",
+    "typeList": "Liste des types",
+    "settings": "Paramètres"
+  },
+  "buttons": {
+    "signIn": "Connexion",
+    "playIdVice": "Jouer avec un Id-Vice",
+    "register": "Inscription",
+    "newGame": "Nouvelle partie",
+    "startGame": "Lancer partie",
+    "updateGame": "Éditer la partie",
+    "addTmpUser": "Ajouter un joueur temporaire",
+    "started": "Lancer",
+    "finished": "Finie",
+    "create": "Créer",
+    "created": "Créée",
+    "createGame": "Créer partie",
+    "cancel": "Annuler",
+    "newQuestion": "Nouvelle question"
+  },
+  "gameProperties": {
+    "id": "Id",
+    "name": "Nom",
+    "nbPlayers": "Nombre de joueur",
+    "actions": "Actions",
+    "type": "Type partie",
+    "online": "En ligne",
+    "party": "Partie",
+    "maxDifficulty": "Difficulté maximum",
+    "maxHotLevel": "Degré Hot maximum",
+    "nbTurn": "Nombre de tour",
+    "questionType": "Type de la question",
+    "searchUser": "Chercher un joueur existant"
+  },
+  "userProperties": {
+    "type": "Type",
+    "name": "Nom du joueur",
+    "gender": "Genre",
+    "actions": "Actions",
+    "genderMan": "Homme",
+    "genderWoman": "Femme",
+    "registerUser": "Utilisateur enregistré",
+    "tmpUser": "Utilisateur temporaire"
+  },
+  "questionProperties": {
+    "type": "Type",
+    "text": "Texte",
+    "difficulty": "Difficulté",
+    "hotLevel": "Degré Hot"
+  }
+}

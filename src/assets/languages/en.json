@@ -2,7 +2,9 @@
   "app": {
     "title": "PartyDrink",
     "home": "Home",
-    "question": "Question",
+    "questions": "Question",
+    "listType": "List Types",
+    "roles": "Roles",
     "darkTheme": "Dark Theme",
     "classicTheme": "Classic Theme",
     "settings": "Settings",
@@ -16,13 +18,8 @@
     "createQuestion": "Create Question",
     "editQuestion": "Edit Question",
     "questionList": "Question List",
-    "settings": "Settings",
     "typeList": "Type List",
-    "search": "Search",
-    "search": "Search",
-    "search": "Search",
-    "search": "Search",
-    "search": "Search",
+    "settings": "Settings"
   },
   "buttons": {
     "signIn": "Sign In",
@@ -48,7 +45,6 @@
     "type": "Game Type",
     "online": "Online",
     "party": "Party",
-    "name": "Name",
     "maxDifficulty": "Maximum Difficulty",
     "maxHotLevel": "Maximum Hot Level",
     "nbTurn": "Number Turn",
@@ -65,4 +61,10 @@
     "registerUser": "Registered User",
     "tmpUser": "Temporary User"
   },
+  "questionProperties": {
+    "type": "Type",
+    "text": "Text",
+    "difficulty": "Difficulty",
+    "hotLevel": "Hot Level"
+  }
 }
