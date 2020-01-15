@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { MenuItem, Button, TextField, FormControl } from '@material-ui/core';
+import {
+  MenuItem,
+  Button,
+  TextField,
+  FormControl,
+  Grid
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { RootState } from '../../../store';
@@ -24,8 +30,10 @@ const useStyles = makeStyles(theme => ({
 
 interface OwnProps {
   dummyUser: DummyUser;
-  onSubmit: (dummyUser: DummyUser) => void;
-  buttonText?: string;
+  editable: boolean;
+  disabled?: boolean;
+  acceptButtonText?: string;
+  onSubmit?: (dummyUser: DummyUser) => void;
 }
 
 interface DispatchProps {}
@@ -52,59 +60,73 @@ const DummyUserFormComponent: React.FunctionComponent<Props> = props => {
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setName(e.target.value);
+    props.editable && setName(e.target.value);
 
   const handleGenderChange = (e: React.ChangeEvent<{ value: unknown }>) =>
-    setGender(e.target.value as number);
+    props.editable && setGender(e.target.value as number);
 
   const beforeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!isDenied()) {
+    if (!isDenied() && props.onSubmit) {
       props.onSubmit(DummyUser.New({ gender, name }));
     }
   };
 
   return (
-    <form className={classes.form} onSubmit={beforeSubmit}>
-      <FormControl className={classes.formControl}>
-        <TextField
-          label="Name"
-          fullWidth
-          margin="normal"
-          variant="outlined"
-          value={name}
-          onChange={handleNameChange}
-        />
-      </FormControl>
-      <FormControl className={classes.formControl}>
-        <TextField
-          style={{ textAlign: 'left' }}
-          select
-          label="Gender"
-          id="gender-select"
-          value={gender}
-          fullWidth
-          onChange={handleGenderChange}
-        >
-          <MenuItem value={0}>Man</MenuItem>
-          <MenuItem value={1}>Woman</MenuItem>
-        </TextField>
-      </FormControl>
-      <Button
-        type="submit"
-        variant="contained"
-        color="primary"
-        disabled={isDenied()}
+    <form noValidate onSubmit={beforeSubmit}>
+      <TextField
+        name="name"
+        margin="normal"
+        variant="outlined"
+        type="text"
+        required
+        disabled={props.disabled}
+        fullWidth
+        id="name"
+        label="Name"
+        value={name}
+        onChange={handleNameChange}
+      />
+      <TextField
+        name="genderSelect"
+        margin="normal"
+        variant="outlined"
+        select
+        required
+        disabled={props.disabled}
+        fullWidth
+        id="genderSelect"
+        label="Gender"
+        value={gender}
+        onChange={handleGenderChange}
       >
-        {props.buttonText}
-      </Button>
+        <MenuItem value={0}>Man</MenuItem>
+        <MenuItem value={1}>Woman</MenuItem>
+      </TextField>
+      {props.onSubmit && (
+        <Grid container spacing={2}>
+          {props.onSubmit && (
+            <Grid item xs>
+              <Button
+                type="submit"
+                fullWidth
+                disabled={props.disabled || isDenied()}
+                variant="contained"
+                color="primary"
+              >
+                {props.acceptButtonText}
+              </Button>
+            </Grid>
+          )}
+        </Grid>
+      )}
     </form>
   );
 };
 
 DummyUserFormComponent.defaultProps = {
-  buttonText: 'Accept'
+  acceptButtonText: 'Accept'
 };
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {

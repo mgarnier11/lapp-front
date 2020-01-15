@@ -245,7 +245,7 @@ const UserFormComponent: FunctionComponent<UserFormProps> = props => {
               <Button
                 type="submit"
                 fullWidth
-                disabled={props.disabled}
+                disabled={props.disabled || isDenied()}
                 variant="contained"
                 color="primary"
               >

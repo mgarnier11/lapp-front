@@ -5,9 +5,6 @@ import {
   MenuItem,
   Button,
   TextField,
-  FormControl,
-  InputLabel,
-  Select,
   Grid,
   Typography
 } from '@material-ui/core';
@@ -15,17 +12,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import { RootState } from '../../../store';
-import { DummyUser } from '../../../api/classes/dummyUser.class';
 import Rating from '@material-ui/lab/Rating';
-import { QuestionType } from '../../../api/classes/questionType.class';
 import { QuestionTypesState } from '../../../store/questionTypes/types';
 import { QuestionsState } from '../../../store/questions/types';
 import { Question } from '../../../api/classes/question.class';
 import { DangerButton } from '../utils/dangerButton.component';
 import { Helper } from '../../../helper';
-import { addError } from '../../../store/errors/actions';
-
-// TODO check props
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -46,9 +38,7 @@ interface OwnProps {
   onDelete?: (questionId: string) => void;
 }
 
-interface DispatchProps {
-  addError: (error: any) => void;
-}
+interface DispatchProps {}
 
 interface StateProps {
   questionTypesState: QuestionTypesState;
@@ -219,11 +209,7 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<{}, {}, any>,
   ownProps: OwnProps
 ): DispatchProps => {
-  return {
-    addError: async (error: any) => {
-      await dispatch(addError(error));
-    }
-  };
+  return {};
 };
 
 export const QuestionForm = connect<

@@ -1,44 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import {
-  Container,
-  Typography,
-  Card,
-  CardContent,
-  CardHeader,
-  Grid,
-  Select,
-  MenuItem,
-  Button,
-  TextField,
-  InputLabel,
-  FormControl
-} from '@material-ui/core';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
-import {
-  withStyles,
-  WithStyles,
-  createStyles,
-  StyleRules,
-  Theme,
-  makeStyles
-} from '@material-ui/core/styles';
-import Rating from '@material-ui/lab/Rating';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import { Container, Card, CardContent, CardHeader } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { RootState } from '../../../store';
 import { QuestionsActions } from '../../../store/questions/actions';
-import { addError } from '../../../store/errors/actions';
 import { Question } from '../../../api/classes/question.class';
-import { QuestionTypesActions } from '../../../store/questionTypes/actions';
-import { QuestionTypesState } from '../../../store/questionTypes/types';
-import { QuestionsState } from '../../../store/questions/types';
-import { Helper } from '../../../helper';
 import { QuestionForm } from './question.form.component';
-
-// TODO clear imports
-// TODO checl questionform props
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -86,6 +55,7 @@ const QuestionNewComponent: React.FunctionComponent<Props> = props => {
           <QuestionForm
             question={Question.New({})}
             editable
+            acceptButtonText="Create question"
             onSubmit={handleSubmit}
           />
         </CardContent>

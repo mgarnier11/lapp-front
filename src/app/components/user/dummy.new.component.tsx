@@ -55,8 +55,9 @@ const DummyUserNewComponent: React.FunctionComponent<Props> = props => {
         <CardContent className={classes.cardContent}>
           <DummyUserForm
             dummyUser={DummyUser.New({})}
+            editable
             onSubmit={handleSubmit}
-            buttonText="Create user"
+            acceptButtonText="Create temporary user"
           />
         </CardContent>
       </Card>
