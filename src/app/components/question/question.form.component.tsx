@@ -77,9 +77,12 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
   const handleHotLevelChange = (e: any, value: number) =>
     props.editable && setHotLevel(value);
 
-  const handleTypeChange = (e: React.ChangeEvent<{ value: unknown }>) =>
+  const handleTypeChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+    console.log(e);
+
     props.editable &&
-    setType(questionTypes!.find(t => t.id === (e.target.value as string))!);
+      setType(questionTypes!.find(t => t.id === (e.target.value as string))!);
+  };
 
   const beforeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

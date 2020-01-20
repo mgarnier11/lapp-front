@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Container, Card, CardContent, CardHeader } from '@material-ui/core';
-import { WithSnackbarProps } from 'notistack';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { RootState } from '../../../store';

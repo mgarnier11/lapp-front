@@ -53,6 +53,7 @@ interface ComponentState {
   roles: Role[];
 }
 
+// TODO Convert to rolesPage to funtionnal component
 class RolesPage extends React.Component<Props, ComponentState> {
   /**
    *

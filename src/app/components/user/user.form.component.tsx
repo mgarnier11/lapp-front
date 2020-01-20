@@ -4,20 +4,8 @@ import { ThunkDispatch } from 'redux-thunk';
 import { User } from '../../../api/classes/user.class';
 import { UserState } from '../../../store/user/types';
 import { RootState } from '../../../store';
-import {
-  TextField,
-  Grid,
-  Button,
-  Typography,
-  MenuItem,
-  Box,
-  FormControl,
-  Switch,
-  FormControlLabel
-} from '@material-ui/core';
+import { TextField, Grid, Button, MenuItem } from '@material-ui/core';
 import { DangerButton } from '../utils/dangerButton.component';
-import { FormControlBox } from '../utils/formControlBox.component';
-import { Game } from '../../../api/classes/game.class';
 import { Helper } from '../../../helper';
 import { addError } from '../../../store/errors/actions';
 
@@ -51,7 +39,7 @@ const UserFormComponent: FunctionComponent<UserFormProps> = props => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [gender, setGender] = useState(props.user.gender);
-  const [darkMode, setDarkMode] = useState(props.user.darkMode);
+  //const [darkMode, setDarkMode] = useState(props.user.darkMode);
 
   const isDenied = (): boolean => {
     if (props.displayConfirms) {
@@ -90,7 +78,7 @@ const UserFormComponent: FunctionComponent<UserFormProps> = props => {
   const handleGenderChange = (e: React.ChangeEvent<{ value: unknown }>) =>
     props.editable && setGender(e.target.value as number);
 
-  const handleDarkModeChange = () => props.editable && setDarkMode(false);
+  //const handleDarkModeChange = () => props.editable && setDarkMode(false);
 
   const beforeDelete = () => {
     if (props.onDelete) props.onDelete(props.user.id);

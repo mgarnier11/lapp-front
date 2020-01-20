@@ -16,10 +16,10 @@ import {
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
-import { User, LoginCredentials } from '../../../../api/classes/user.class';
+import { LoginCredentials } from '../../../../api/classes/user.class';
 import { UserState } from '../../../../store/user/types';
 import { RootState } from '../../../../store';
-import { logout, register, login } from '../../../../store/user/actions';
+import { logout, login } from '../../../../store/user/actions';
 import { IdVice } from '../../../components/user/idVice.component';
 
 const useStyles = makeStyles(theme => ({
@@ -56,7 +56,7 @@ type LoginPageProps = OwnProps & DispatchProps & StateProps & RouterProps;
 const LoginPage: React.FunctionComponent<LoginPageProps> = props => {
   useEffect(() => {
     if (props.userState.user) props.logout(true);
-  }, []);
+  }, [props]);
 
   const classes = useStyles();
 

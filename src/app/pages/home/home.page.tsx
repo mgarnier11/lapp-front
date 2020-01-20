@@ -54,7 +54,7 @@ interface ComponentState {
   games: Game[];
   selectedTab: number;
 }
-
+// TODO Convert to homePage to funtionnal component
 class HomePage extends React.Component<Props, ComponentState> {
   /**
    *

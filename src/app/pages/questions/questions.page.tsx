@@ -57,7 +57,7 @@ interface ComponentState {
   columns: Array<Column<Question>>;
   questions: Question[];
 }
-
+// TODO Convert to questionsPage to funtionnal component
 class QuestionsPage extends React.Component<Props, ComponentState> {
   /**
    *

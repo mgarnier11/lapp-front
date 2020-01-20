@@ -5,7 +5,6 @@ import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import {
   Typography,
-  Button,
   TableContainer,
   Table,
   TableHead,
@@ -13,7 +12,6 @@ import {
   TableCell,
   TableBody,
   IconButton,
-  ButtonGroup,
   Box,
   Hidden
 } from '@material-ui/core';
@@ -48,11 +46,6 @@ const styles = (theme: Theme): StyleRules =>
       marginLeft: 'auto',
       marginRight: 'auto',
       marginBottom: 6
-    },
-    filterButton: {
-      '&$selected': {
-        backgroundColor: 'red'
-      }
     },
     myButton: {
       paddingRight: 11,

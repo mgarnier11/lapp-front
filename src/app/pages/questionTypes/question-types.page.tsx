@@ -53,6 +53,7 @@ interface ComponentState {
   questionTypes: QuestionType[];
 }
 
+// TODO Convert to questionTypePage to funtionnal component
 class QuestionTypesPage extends React.Component<Props, ComponentState> {
   /**
    *

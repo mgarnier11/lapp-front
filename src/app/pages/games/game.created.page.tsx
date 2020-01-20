@@ -87,6 +87,7 @@ interface ComponentState {
   foundUsers: User[];
 }
 
+// TODO Convert to gameCreatedPage to funtionnal component
 class GameCreatedPage extends React.Component<Props, ComponentState> {
   /**
    *
@@ -205,7 +206,7 @@ class GameCreatedPage extends React.Component<Props, ComponentState> {
               <GameForm
                 game={game}
                 onSubmit={this.handleSubmit}
-                buttonText="Update Game"
+                editable
                 disabled={isDisabled}
               />
             </Grid>
