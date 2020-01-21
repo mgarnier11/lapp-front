@@ -145,6 +145,7 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
             Difficulty
           </Typography>
           <Rating
+            readOnly={!props.editable}
             name="difficulty"
             value={difficulty}
             onChange={handleDifficultyChange}
@@ -155,6 +156,7 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
             Hot Level
           </Typography>
           <Rating
+            readOnly={!props.editable}
             name="hotLevel"
             className={classes.hotLevelRating}
             value={hotLevel}

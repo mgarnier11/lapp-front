@@ -23,6 +23,7 @@ import { Loading } from '../../components/utils/loading.component';
 import { QuestionTypesActions } from '../../../store/questionTypes/actions';
 import { QuestionTypesState } from '../../../store/questionTypes/types';
 import Rating from '@material-ui/lab/Rating';
+import { QuestionList } from '../../components/question/question.list.component';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
@@ -214,6 +215,8 @@ class QuestionsPage extends React.Component<Props, ComponentState> {
   }
 
   renderTable(questions: Question[]) {
+    return <QuestionList questions={questions} />;
+    /*
     return (
       <MaterialTable
         title="Questions Table"
@@ -237,6 +240,7 @@ class QuestionsPage extends React.Component<Props, ComponentState> {
         options={{ pageSize: 10, pageSizeOptions: [10, 25, 50] }}
       />
     );
+    */
   }
 
   renderLoading() {

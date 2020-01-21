@@ -20,7 +20,7 @@ import { GamesState } from '../../../store/games/types';
 import { Game } from '../../../api/classes/game.class';
 import { UserState } from '../../../store/user/types';
 import { GamesActions } from '../../../store/games/actions';
-import { GameList } from '../../components/game/game.list.component';
+import { GameList } from '../../components/game/old.game.list.component';
 import { TabPanel } from '../../components/utils/tabPanel.component';
 import { User } from '../../../api/classes/user.class';
 

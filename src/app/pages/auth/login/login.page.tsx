@@ -56,7 +56,7 @@ type LoginPageProps = OwnProps & DispatchProps & StateProps & RouterProps;
 const LoginPage: React.FunctionComponent<LoginPageProps> = props => {
   useEffect(() => {
     if (props.userState.user) props.logout(true);
-  }, [props]);
+  }, []);
 
   const classes = useStyles();
 
