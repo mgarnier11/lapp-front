@@ -9,7 +9,9 @@ import {
   Typography,
   IconButton,
   Grid,
-  Box
+  Box,
+  Avatar,
+  Collapse
 } from '@material-ui/core';
 
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -17,6 +19,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
 import Rating from '@material-ui/lab/Rating';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles(theme => ({
   deleteButton: {
@@ -25,6 +28,22 @@ const useStyles = makeStyles(theme => ({
   hotLevelRating: {
     color: '#FD6C9E',
     textAlign: 'center'
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest
+    })
+  },
+  expanded: {
+    transform: 'rotate(180deg)'
+  },
+  cardHeader: {
+    paddingBottom: 0
+  },
+  cardContent: {
+    paddingBottom: '0 !important'
   }
 }));
 
@@ -46,32 +65,63 @@ const QuestionItemComponent: React.FunctionComponent<Props> = props => {
 
   const { question } = props;
 
+  const [expanded, setExpanded] = React.useState(false);
+
+  const handleExpandClick = () => setExpanded(!expanded);
+
   return (
-    <Card style={{ marginTop: 20 }}>
-      <CardHeader title={question.type.name} />
-      <CardContent>
-        <Typography variant="body1">{question.text}</Typography>
-        <Grid container spacing={1}>
-          <Grid item xs={6}>
-            <Box textAlign="center">
-              <Typography>Difficulty</Typography>
-              <Rating readOnly name="difficulty" value={question.difficulty} />
-            </Box>
+    <Card>
+      <CardHeader
+        avatar={<Avatar>R</Avatar>}
+        title={<Typography variant="h6">{question.text}</Typography>}
+        className={classes.cardHeader}
+        action={
+          <IconButton
+            className={
+              classes.expand + (expanded ? ' ' + classes.expanded : '')
+            }
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="show more"
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+        }
+      />
+      <Collapse in={expanded} unmountOnExit>
+        <CardContent className={classes.cardContent}>
+          <Grid container spacing={1}>
+            <Grid item xs={6}>
+              <Box textAlign="center">
+                <Typography variant="subtitle2">Difficulty</Typography>
+                <Rating
+                  readOnly
+                  name="difficulty"
+                  value={question.difficulty}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={6}>
+              <Box textAlign="center">
+                <Typography variant="subtitle2">Hot Level</Typography>
+                <Rating
+                  readOnly
+                  name="hotLevel"
+                  className={classes.hotLevelRating}
+                  value={question.hotLevel}
+                  icon={<FavoriteIcon fontSize="inherit" />}
+                />
+              </Box>
+            </Grid>
           </Grid>
-          <Grid item xs={6}>
-            <Box textAlign="center">
-              <Typography>Hot Level</Typography>
-              <Rating
-                readOnly
-                name="hotLevel"
-                className={classes.hotLevelRating}
-                value={question.hotLevel}
-                icon={<FavoriteIcon fontSize="inherit" />}
-              />
-            </Box>
-          </Grid>
-        </Grid>
-      </CardContent>
+          <Box marginTop={1}>
+            <Typography variant="subtitle2">
+              Type : {question.type.name}
+            </Typography>
+            add creator's user.item.component
+          </Box>
+        </CardContent>
+      </Collapse>
       <CardActions disableSpacing>
         {!props.onDetails && (
           <IconButton onClick={() => props.onDetails}>
