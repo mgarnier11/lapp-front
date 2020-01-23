@@ -31,6 +31,7 @@ import { headerHeight } from './header.component';
 import { Role } from '../../../api/classes/role.class';
 import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
 import { ThemeController } from '../../theme/themeManager';
+import { UserItem } from '../user/user.item.component';
 
 const drawerWidth = 240;
 
@@ -93,9 +94,7 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
 
   const userItems = (user: User) => (
     <>
-      <Typography component="h6" align="center" className={classes.userName}>
-        {user.name}
-      </Typography>
+      <UserItem user={user} />
       <ListItem button onClick={ThemeController.toggleTheme}>
         {ThemeController.isLight() ? (
           <>

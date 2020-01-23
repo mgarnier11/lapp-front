@@ -20,6 +20,7 @@ import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
 import Rating from '@material-ui/lab/Rating';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { UserItem } from '../user/user.item.component';
 
 const useStyles = makeStyles(theme => ({
   deleteButton: {
@@ -118,7 +119,7 @@ const QuestionItemComponent: React.FunctionComponent<Props> = props => {
             <Typography variant="subtitle2">
               Type : {question.type.name}
             </Typography>
-            add creator's user.item.component
+            <UserItem user={question.creator} />
           </Box>
         </CardContent>
       </Collapse>
