@@ -118,7 +118,8 @@ export const register = (
 };
 
 export const logout = (
-  hideSuccess?: boolean
+  hideSuccess?: boolean,
+  hideError?: boolean
 ): ThunkAction<Promise<boolean>, {}, {}, AnyAction> => {
   return async (
     dispatch: ThunkDispatch<{}, {}, AnyAction>
@@ -134,7 +135,7 @@ export const logout = (
         })
         .catch(error => {
           dispatch(userActionFailureCreator());
-          dispatch(addError(error));
+          if (!hideError) dispatch(addError(error));
           resolve(false);
         });
     });

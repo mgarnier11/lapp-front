@@ -71,7 +71,8 @@ export const games = (
       return {
         ...gameState,
         games: action.games,
-        loading: false
+        loading: false,
+        isStarting: false
       };
     }
     default:

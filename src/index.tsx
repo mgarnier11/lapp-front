@@ -10,13 +10,18 @@ import App from './app/app';
 import * as serviceWorker from './serviceWorker';
 
 import ThemeManager, { themeManagerRef } from './app/theme/themeManager';
+import { AppStarting } from './app/starting.app';
+import { CssBaseline } from '@material-ui/core';
 
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <ThemeManager ref={themeManagerRef}>
         <SnackbarProvider maxSnack={10}>
-          <App />
+          <CssBaseline />
+          <AppStarting>
+            <App />
+          </AppStarting>
         </SnackbarProvider>
       </ThemeManager>
     </BrowserRouter>

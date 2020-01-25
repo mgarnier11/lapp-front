@@ -64,6 +64,7 @@ const useStyles = makeStyles(theme => ({
 
 interface OwnProps {
   user?: User;
+  logout: (hideSuccess?: boolean) => Promise<any>;
 }
 
 type Props = OwnProps & RouteComponentProps;
@@ -109,7 +110,17 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
         )}
       </ListItem>
       {listItem('/me', 'Settings', <SettingsIcon />)}
-      {listItem('/login', 'Disconnect', <PowerSettingsNewIcon />)}
+      <ListItemLink
+        to="/signin"
+        onClick={() => {
+          props.logout(true).then(() => window.location.reload());
+        }}
+      >
+        <ListItemIcon>
+          <PowerSettingsNewIcon />
+        </ListItemIcon>
+        <ListItemText primary={'Disconnect'} />
+      </ListItemLink>
     </>
   );
 
@@ -140,7 +151,7 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
           align="center"
           className={classes.appName}
         >
-          <Link to="/home">App Name</Link>
+          <Link to="/home">Party Drink</Link>
         </Typography>
         <IconButton edge="end" onClick={() => props.history.goBack()}>
           <ArrowBackIcon />
@@ -166,7 +177,7 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
               </div>
               <div>
                 <Divider />
-                {!user.isIDVice() && userItems(user!)}
+                {userItems(user!)}
               </div>
             </>
           ) : (

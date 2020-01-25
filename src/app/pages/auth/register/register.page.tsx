@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { RouterProps, withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -48,6 +48,10 @@ interface StateProps {
 type RegisterPageProps = OwnProps & DispatchProps & StateProps & RouterProps;
 
 const RegisterPage: React.FunctionComponent<RegisterPageProps> = props => {
+  useEffect(() => {
+    props.logout(true);
+  }, []);
+
   const classes = useStyles();
 
   const handleFormSubmit = (user: User) => {
@@ -95,8 +99,8 @@ const mapDispatchToProps = (
     register: async (userDatas: Partial<User>) => {
       return await dispatch(register(userDatas));
     },
-    logout: async () => {
-      await dispatch(logout());
+    logout: async (hideSuccess?: boolean) => {
+      await dispatch(logout(hideSuccess));
     }
   };
 };

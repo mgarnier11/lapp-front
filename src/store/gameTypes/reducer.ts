@@ -77,7 +77,8 @@ export const gameTypes = (
       return {
         ...gameTypeState,
         gameTypes: action.gameTypes,
-        loading: false
+        loading: false,
+        isStarting: false
       };
     }
     default:

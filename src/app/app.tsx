@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route, Redirect, withRouter } from 'react-router';
+import { Switch, Redirect, withRouter } from 'react-router';
 import { RouteComponentProps } from 'react-router';
 
 import {
@@ -13,23 +13,16 @@ import {
 
 import { RootState } from '../store';
 import { ThunkDispatch } from 'redux-thunk';
-import { relog } from '../store/user/actions';
-import { CssBaseline, Modal, Container } from '@material-ui/core';
-import { RolesActions, roleActionsInstance } from '../store/roles/actions';
+import { Modal, Container, CssBaseline } from '@material-ui/core';
+import { roleActionsInstance } from '../store/roles/actions';
 import { questionActionsInstance } from '../store/questions/actions';
-import {
-  questionTypeActionsInstance,
-  QuestionTypesActions
-} from '../store/questionTypes/actions';
+import { questionTypeActionsInstance } from '../store/questionTypes/actions';
 import { UserState } from '../store/user/types';
 import apiHandler from '../api/apiHandler';
 import { Question } from '../api/classes/question.class';
 import { Game, GameStatus } from '../api/classes/game.class';
 import { ServiceEvents } from '../api/services/baseService';
-import {
-  gameTypeActionsInstance,
-  GameTypesActions
-} from '../store/gameTypes/actions';
+import { gameTypeActionsInstance } from '../store/gameTypes/actions';
 import { gamesActionsInstance, GamesActions } from '../store/games/actions';
 import { GameState } from '../store/game/types';
 import { Helper } from '../helper';
@@ -37,7 +30,6 @@ import { Home } from './pages/home/home.page';
 import { Questions } from './pages/questions/questions.page';
 import { Roles } from './pages/roles/roles.page';
 import { QuestionTypes } from './pages/questionTypes/question-types.page';
-import { Register } from './pages/auth/register/register.page';
 import { QuestionNew } from './components/question/question.new.component';
 import { GameNew } from './components/game/game.new.component';
 import { Header } from './components/header/header.component';
@@ -48,7 +40,6 @@ import { Success } from './components/success/success.component';
 import { Error } from './components/error/error.component';
 import { MyFab } from './components/fab/fab.component';
 import { Role } from '../api/classes/role.class';
-import { Login } from './pages/auth/login/login.page';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
@@ -66,10 +57,6 @@ const styles = (theme: Theme): StyleRules =>
 interface OwnProps {}
 
 interface DispatchProps {
-  relog: () => void;
-  roleGetAll: () => void;
-  questionTypeGetAll: () => void;
-  gameTypeGetAll: () => void;
   gameUpdate: (game: Game) => Promise<any>;
 }
 
@@ -83,6 +70,7 @@ type Props = StateProps &
   DispatchProps &
   RouteComponentProps &
   WithStyles<typeof styles>;
+
 interface State {
   questionModalOpen: boolean;
   gameModalOpen: boolean;
@@ -98,8 +86,6 @@ class App extends React.Component<Props, State> {
       questionModalOpen: false,
       gameModalOpen: false
     };
-
-    this.loadBaseDatas();
   }
 
   componentDidMount() {
@@ -117,13 +103,6 @@ class App extends React.Component<Props, State> {
     questionTypeActionsInstance.bindBaseEvents();
     gameTypeActionsInstance.bindBaseEvents();
     gamesActionsInstance.bindBaseEvents();
-  }
-
-  loadBaseDatas() {
-    this.props.relog();
-    this.props.roleGetAll();
-    this.props.questionTypeGetAll();
-    this.props.gameTypeGetAll();
   }
 
   componentWillUnmount() {
@@ -167,36 +146,13 @@ class App extends React.Component<Props, State> {
     }
   };
 
-  renderQuestionModal() {
-    return (
-      <Modal
-        open={this.state.questionModalOpen}
-        onClose={() => this.setQuestionModal(false)}
-      >
-        <QuestionNew />
-      </Modal>
-    );
-  }
-
-  renderGameModal() {
-    return (
-      <Modal
-        open={this.state.gameModalOpen}
-        onClose={() => this.setGameModal(false)}
-      >
-        <GameNew />
-      </Modal>
-    );
-  }
-
   render() {
     const user = this.props.userState.user;
     const classes = this.props.classes;
 
     return (
-      <React.Fragment>
+      <>
         <CssBaseline />
-
         <Header />
         <Container component="main" className={classes.baseContainer}>
           <Switch>
@@ -228,12 +184,6 @@ class App extends React.Component<Props, State> {
             >
               <QuestionTypes />
             </Guard>
-            <Route exact path="/login">
-              <Login />
-            </Route>
-            <Route exact path="/register">
-              <Register />
-            </Route>
             <Redirect from="*" to="/home" />
           </Switch>
         </Container>
@@ -247,11 +197,21 @@ class App extends React.Component<Props, State> {
               openQuestionModal={() => this.setQuestionModal(true)}
               gameNextAction={this.playingGameNext}
             />
-            {this.renderQuestionModal()}
-            {this.renderGameModal()}
+            <Modal
+              open={this.state.questionModalOpen}
+              onClose={() => this.setQuestionModal(false)}
+            >
+              <QuestionNew />
+            </Modal>
+            <Modal
+              open={this.state.gameModalOpen}
+              onClose={() => this.setGameModal(false)}
+            >
+              <GameNew />
+            </Modal>
           </>
         )}
-      </React.Fragment>
+      </>
     );
   }
 }
@@ -268,18 +228,6 @@ const mapDispatchToProps = (
   ownProps: OwnProps
 ): DispatchProps => {
   return {
-    gameTypeGetAll: () => {
-      dispatch(GameTypesActions.gameTypeGetAll());
-    },
-    questionTypeGetAll: () => {
-      dispatch(QuestionTypesActions.questionTypeGetAll());
-    },
-    relog: async () => {
-      await dispatch(relog(false));
-    },
-    roleGetAll: async () => {
-      await dispatch(RolesActions.roleGetAll());
-    },
     gameUpdate: async (game: Game) => {
       return await dispatch(GamesActions.gameUpdate(game));
     }

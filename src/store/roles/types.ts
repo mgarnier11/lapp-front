@@ -20,6 +20,10 @@ export enum RolesActionTypes {
 export interface RolesState {
   readonly roles?: Role[];
   readonly loading: boolean;
+  readonly isStarting: boolean;
 }
 
-export const defaultRolesState: RolesState = { loading: false };
+export const defaultRolesState: RolesState = {
+  loading: false,
+  isStarting: true
+};

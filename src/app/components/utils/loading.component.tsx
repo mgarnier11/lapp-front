@@ -8,15 +8,23 @@ const useStyles = makeStyles(theme => ({
       marginLeft: theme.spacing(2)
     },
     justifyContent: 'center',
+    alignItems: 'center',
     paddingTop: theme.spacing(2)
   }
 }));
 
-export const Loading = () => {
+interface Props {
+  fullHeight?: boolean;
+}
+
+export const Loading: React.FunctionComponent<Props> = (props: Props) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <div
+      className={classes.root}
+      style={{ height: props.fullHeight ? '100%' : 'auto' }}
+    >
       <CircularProgress />
     </div>
   );

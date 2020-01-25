@@ -47,7 +47,6 @@ interface OwnProps {}
 interface DispatchProps {
   questionUpdate: (question: Question) => Promise<any>;
   questionRemove: (questionId: string) => Promise<any>;
-  questionGetAll: () => void;
 }
 
 interface StateProps {
@@ -58,10 +57,6 @@ interface StateProps {
 type Props = StateProps & OwnProps & DispatchProps;
 
 const QuestionsPage: React.FunctionComponent<Props> = (props: Props) => {
-  useEffect(() => {
-    props.questionGetAll();
-  }, []);
-
   const classes = useStyles();
 
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -164,9 +159,6 @@ const mapDispatchToProps = (
     },
     questionRemove: async (questionId: string) => {
       return await dispatch(QuestionsActions.questionRemove(questionId));
-    },
-    questionGetAll: async () => {
-      await dispatch(QuestionsActions.questionGetAll());
     }
   };
 };

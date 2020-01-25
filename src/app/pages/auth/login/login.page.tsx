@@ -44,7 +44,7 @@ interface OwnProps {}
 
 interface DispatchProps {
   login: (credentials: LoginCredentials) => Promise<any>;
-  logout: (hideSuccess?: boolean) => void;
+  logout: (hideSuccess?: boolean, hideError?: boolean) => void;
 }
 
 interface StateProps {
@@ -55,7 +55,7 @@ type LoginPageProps = OwnProps & DispatchProps & StateProps & RouterProps;
 
 const LoginPage: React.FunctionComponent<LoginPageProps> = props => {
   useEffect(() => {
-    if (props.userState.user) props.logout(true);
+    props.logout(true, true);
   }, []);
 
   const classes = useStyles();
@@ -74,6 +74,8 @@ const LoginPage: React.FunctionComponent<LoginPageProps> = props => {
         password
       })
       .then(logged => {
+        console.log(logged);
+
         if (logged) props.history.push('/home');
       });
   };
@@ -155,8 +157,8 @@ const mapDispatchToProps = (
     login: async (credentials: LoginCredentials) => {
       return await dispatch(login(credentials));
     },
-    logout: async (hideSuccess?: boolean) => {
-      await dispatch(logout(hideSuccess));
+    logout: async (hideSuccess?: boolean, hideError?: boolean) => {
+      await dispatch(logout(hideSuccess, hideError));
     }
   };
 };

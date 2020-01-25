@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 interface OwnProps {}
 
 interface DispatchProps {
-  logout: () => void;
+  logout: (hideSuccess?: boolean) => Promise<any>;
 }
 
 interface StateProps {
@@ -34,7 +34,7 @@ const HeaderComponent: React.FunctionComponent<Props> = (props: Props) => {
 
   return (
     <AppBar position="fixed" className={classes.appBar}>
-      <ToolbarMobile user={user} />
+      <ToolbarMobile user={user} logout={props.logout} />
     </AppBar>
   );
 };
@@ -50,8 +50,8 @@ const mapDispatchToProps = (
   ownProps: OwnProps
 ): DispatchProps => {
   return {
-    logout: async () => {
-      await dispatch(logout());
+    logout: async (hideSuccess?: boolean) => {
+      return await dispatch(logout(hideSuccess));
     }
   };
 };
