@@ -1,37 +1,46 @@
-import * as lodash from 'lodash';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { Container, Select, MenuItem, TextField } from '@material-ui/core';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
-import MaterialTable, { Column, EditComponentProps } from 'material-table';
 import {
-  withStyles,
-  WithStyles,
-  StyleRules,
-  createStyles,
-  Theme
-} from '@material-ui/core/styles';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-
+  Container,
+  Box,
+  Modal,
+  Card,
+  CardHeader,
+  CardContent
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { QuestionsState } from '../../../store/questions/types';
 import { RootState } from '../../../store';
 import { QuestionsActions } from '../../../store/questions/actions';
-import { addError } from '../../../store/errors/actions';
 import { Question } from '../../../api/classes/question.class';
 import { Loading } from '../../components/utils/loading.component';
-import { QuestionTypesActions } from '../../../store/questionTypes/actions';
 import { QuestionTypesState } from '../../../store/questionTypes/types';
-import Rating from '@material-ui/lab/Rating';
 import { QuestionList } from '../../components/question/question.list.component';
+import { QuestionForm } from '../../components/question/question.form.component';
+import { yesNoController } from '../../components/dialogs/yesno.component';
 
-const styles = (theme: Theme): StyleRules =>
-  createStyles({
-    root: {
-      paddingTop: theme.spacing(2),
-      paddingBottom: theme.spacing(12)
-    }
-  });
+const useStyles = makeStyles(theme => ({
+  root: {
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(12)
+  },
+  modalRootContent: {
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 'fit-content',
+    outline: 'none'
+  },
+  modalCardTitle: {
+    textAlign: 'center',
+    paddingBottom: 0
+  },
+  modalCardContent: {
+    paddingTop: 0
+  }
+}));
 
 interface OwnProps {}
 
@@ -39,8 +48,6 @@ interface DispatchProps {
   questionUpdate: (question: Question) => Promise<any>;
   questionRemove: (questionId: string) => Promise<any>;
   questionGetAll: () => void;
-  questionTypeGetAll: () => void;
-  addError: (error: any) => void;
 }
 
 interface StateProps {
@@ -48,205 +55,97 @@ interface StateProps {
   questionTypesState: QuestionTypesState;
 }
 
-type Props = StateProps &
-  OwnProps &
-  DispatchProps &
-  WithSnackbarProps &
-  WithStyles<typeof styles>;
+type Props = StateProps & OwnProps & DispatchProps;
 
-interface ComponentState {
-  columns: Array<Column<Question>>;
-  questions: Question[];
-}
-// TODO Convert to questionsPage to funtionnal component
-class QuestionsPage extends React.Component<Props, ComponentState> {
-  /**
-   *
-   */
-  constructor(props: Props) {
-    super(props);
+const QuestionsPage: React.FunctionComponent<Props> = (props: Props) => {
+  useEffect(() => {
+    props.questionGetAll();
+  }, []);
 
-    this.state = {
-      columns: [
-        {
-          title: 'Text',
-          field: 'text',
-          editComponent: rowData => (
-            <TextField
-              style={{ width: '100%', margin: '0' }}
-              multiline
-              margin="normal"
-              variant="outlined"
-              value={rowData.rowData.text}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                rowData.onChange(e.target.value)
-              }
-            />
-          )
-        },
-        {
-          title: 'Type',
-          field: 'type',
-          render: rowData => rowData.type.name,
-          editComponent: rowData => (
-            <Select
-              style={{ textAlign: 'left', width: '100%' }}
-              labelId="type-select-label"
-              id="type-select"
-              value={rowData.rowData.type.id}
-              onChange={(e: React.ChangeEvent<{ value: unknown }>) => {
-                this.handleTypeChange(e, rowData);
-              }}
-            >
-              {this.props.questionTypesState.questionTypes ? (
-                this.props.questionTypesState.questionTypes.map(t => (
-                  <MenuItem value={t.id} key={t.id}>
-                    {t.name}
-                  </MenuItem>
-                ))
-              ) : (
-                <MenuItem disabled>Loading...</MenuItem>
-              )}
-            </Select>
-          )
-        },
-        {
-          title: 'Difficulty',
-          field: 'difficulty',
-          render: rowData => (
-            <Rating name="difficulty" value={rowData.difficulty} readOnly />
-          ),
-          editComponent: rowData => (
-            <Rating
-              name="difficulty"
-              value={rowData.rowData.difficulty}
-              onChange={(e: any, value: number) => rowData.onChange(value)}
-            />
-          )
-        },
-        {
-          title: 'Hot Level',
-          field: 'hotLevel',
-          render: rowData => (
-            <Rating
-              name="hotLevel"
-              style={{ color: '#FD6C9E' }}
-              value={rowData.hotLevel}
-              readOnly
-              icon={<FavoriteIcon fontSize="inherit" />}
-            />
-          ),
-          editComponent: rowData => (
-            <Rating
-              name="hotLevel"
-              style={{ color: '#FD6C9E' }}
-              value={rowData.rowData.hotLevel}
-              onChange={(e: any, value: number) => rowData.onChange(value)}
-              icon={<FavoriteIcon fontSize="inherit" />}
-            />
-          )
-        }
-      ],
-      questions: []
-    };
-  }
+  const classes = useStyles();
 
-  handleTypeChange = (
-    e: React.ChangeEvent<{ value: unknown }>,
-    rowData: EditComponentProps<Question>
-  ) => {
-    const questionTypes = this.props.questionTypesState.questionTypes;
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [question, setQuestion] = React.useState(Question.New({}));
+  const [allowUpdate, setAllowUpdate] = React.useState(false);
 
-    if (questionTypes) {
-      rowData.onChange(
-        questionTypes.find(t => t.id === (e.target.value as string))!
-      );
-    }
+  const openModal = () => setModalOpen(true);
+
+  const closeModal = () => setModalOpen(false);
+
+  const handleUpdate = (updatedQuestion: Question) => {
+    closeModal();
+
+    props.questionUpdate(updatedQuestion);
   };
 
-  reloadDatas() {
-    if (
-      !this.props.questionsState.questions &&
-      !this.props.questionsState.loading
-    ) {
-      this.props.questionGetAll();
-    }
-    if (
-      !this.props.questionTypesState.questionTypes &&
-      !this.props.questionTypesState.loading
-    ) {
-      this.props.questionTypeGetAll();
-    }
-  }
+  const handleOnDetails = (clickedQuestion: Question) => {
+    setQuestion(clickedQuestion);
+    setAllowUpdate(false);
 
-  componentDidMount() {
-    this.reloadDatas();
-  }
+    openModal();
+  };
 
-  componentDidUpdate() {
-    this.reloadDatas();
-  }
+  const handleOnUpdate = (clickedQuestion: Question) => {
+    setQuestion(clickedQuestion);
+    setAllowUpdate(true);
 
-  static getDerivedStateFromProps(nextProps: Props, prevState: ComponentState) {
-    let nextQuestions = nextProps.questionsState.questions;
-    if (nextQuestions) {
-      let prevQuestions = prevState.questions;
+    openModal();
+  };
 
-      if (!Question.CompareArrays(nextQuestions, prevQuestions)) {
-        return {
-          questions: lodash.cloneDeep(nextQuestions)
-        };
-      }
-    }
+  const handleOnDelete = (questionId: string) => {
+    yesNoController!
+      .present({
+        title: 'Are you sure you want to delete this question ?',
+        acceptText: 'Yes',
+        denyText: 'No'
+      })
+      .then(() => {
+        props.questionRemove(questionId);
+      })
+      .catch(error => {
+        //this.props.addError(error);
+      });
+  };
 
-    return null;
-  }
-
-  render() {
-    const classes = this.props.classes;
-
-    return (
-      <Container component="main" className={classes.root}>
-        {this.props.questionsState.questions
-          ? this.renderTable(this.state.questions)
-          : this.renderLoading()}
-      </Container>
-    );
-  }
-
-  renderTable(questions: Question[]) {
-    return <QuestionList questions={questions} />;
-    /*
-    return (
-      <MaterialTable
-        title="Questions Table"
-        columns={this.state.columns}
-        data={questions}
-        editable={{
-          onRowUpdate: (newData, oldData) =>
-            new Promise(async (resolve, reject) => {
-              let updatedQuestion = Question.New(newData);
-              let updated = await this.props.questionUpdate(updatedQuestion);
-              if (updated) resolve();
-              else reject();
-            }),
-          onRowDelete: oldData =>
-            new Promise(async (resolve, reject) => {
-              let deleted = await this.props.questionRemove(oldData.id);
-              if (deleted) resolve();
-              else reject();
-            })
-        }}
-        options={{ pageSize: 10, pageSizeOptions: [10, 25, 50] }}
-      />
-    );
-    */
-  }
-
-  renderLoading() {
-    return <Loading />;
-  }
-}
+  return (
+    <>
+      <Box component="div" className={classes.root}>
+        {props.questionsState.questions ? (
+          <QuestionList
+            questions={props.questionsState.questions}
+            onDetails={handleOnDetails}
+            onUpdate={handleOnUpdate}
+            onDelete={handleOnDelete}
+          />
+        ) : (
+          <Loading />
+        )}
+      </Box>
+      <Modal open={modalOpen} onClose={closeModal}>
+        <Container
+          component="div"
+          className={classes.modalRootContent}
+          tabIndex={-1}
+        >
+          <Card raised={true}>
+            <CardHeader
+              className={classes.modalCardTitle}
+              title={allowUpdate ? 'Edit Question' : 'Question Details'}
+            />
+            <CardContent className={classes.modalCardContent}>
+              <QuestionForm
+                question={question}
+                editable={allowUpdate}
+                acceptButtonText="Update"
+                onSubmit={handleUpdate}
+              />
+            </CardContent>
+          </Card>
+        </Container>
+      </Modal>
+    </>
+  );
+};
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
@@ -268,12 +167,6 @@ const mapDispatchToProps = (
     },
     questionGetAll: async () => {
       await dispatch(QuestionsActions.questionGetAll());
-    },
-    questionTypeGetAll: async () => {
-      await dispatch(QuestionTypesActions.questionTypeGetAll());
-    },
-    addError: async (error: any) => {
-      await dispatch(addError(error));
     }
   };
 };
@@ -286,4 +179,4 @@ export const Questions = connect<
 >(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(withSnackbar(QuestionsPage)));
+)(QuestionsPage);

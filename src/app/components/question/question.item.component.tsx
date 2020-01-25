@@ -21,6 +21,10 @@ import Rating from '@material-ui/lab/Rating';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { UserItem } from '../user/user.item.component';
+import { UserState } from '../../../store/user/types';
+import { RootState } from '../../../store';
+import { ThunkDispatch } from 'redux-thunk';
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
   deleteButton: {
@@ -57,7 +61,9 @@ interface OwnProps {
 
 interface DispatchProps {}
 
-interface StateProps {}
+interface StateProps {
+  userState: UserState;
+}
 
 type Props = StateProps & OwnProps & DispatchProps;
 
@@ -65,6 +71,7 @@ const QuestionItemComponent: React.FunctionComponent<Props> = props => {
   const classes = useStyles();
 
   const { question } = props;
+  const user = props.userState.user!;
 
   const [expanded, setExpanded] = React.useState(false);
 
@@ -91,54 +98,56 @@ const QuestionItemComponent: React.FunctionComponent<Props> = props => {
       />
       <Collapse in={expanded} unmountOnExit>
         <CardContent className={classes.cardContent}>
-          <Grid container spacing={1}>
-            <Grid item xs={6}>
-              <Box textAlign="center">
-                <Typography variant="subtitle2">Difficulty</Typography>
-                <Rating
-                  readOnly
-                  name="difficulty"
-                  value={question.difficulty}
-                />
-              </Box>
+          <UserItem user={question.creator} />
+          <Box marginTop={1}>
+            <Grid container spacing={1}>
+              <Grid item xs={6}>
+                <Box textAlign="center">
+                  <Typography variant="subtitle2">Difficulty</Typography>
+                  <Rating
+                    readOnly
+                    name="difficulty"
+                    value={question.difficulty}
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={6}>
+                <Box textAlign="center">
+                  <Typography variant="subtitle2">Hot Level</Typography>
+                  <Rating
+                    readOnly
+                    name="hotLevel"
+                    className={classes.hotLevelRating}
+                    value={question.hotLevel}
+                    icon={<FavoriteIcon fontSize="inherit" />}
+                  />
+                </Box>
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <Box textAlign="center">
-                <Typography variant="subtitle2">Hot Level</Typography>
-                <Rating
-                  readOnly
-                  name="hotLevel"
-                  className={classes.hotLevelRating}
-                  value={question.hotLevel}
-                  icon={<FavoriteIcon fontSize="inherit" />}
-                />
-              </Box>
-            </Grid>
-          </Grid>
+          </Box>
           <Box marginTop={1}>
             <Typography variant="subtitle2">
               Type : {question.type.name}
             </Typography>
-            <UserItem user={question.creator} />
           </Box>
         </CardContent>
       </Collapse>
       <CardActions disableSpacing>
-        {!props.onDetails && (
-          <IconButton onClick={() => props.onDetails}>
+        {props.onDetails && (
+          <IconButton onClick={() => props.onDetails!(question)}>
             <ZoomOutMapIcon />
           </IconButton>
         )}
 
-        {!props.onUpdate && (
-          <IconButton onClick={() => props.onUpdate}>
+        {props.onUpdate && user.id === question.creator.id && (
+          <IconButton onClick={() => props.onUpdate!(question)}>
             <EditIcon />
           </IconButton>
         )}
 
-        {!props.onDelete && (
+        {props.onDelete && user.id === question.creator.id && (
           <IconButton
-            onClick={() => props.onDelete}
+            onClick={() => props.onDelete!(question.id)}
             className={classes.deleteButton}
           >
             <DeleteIcon />
@@ -149,4 +158,25 @@ const QuestionItemComponent: React.FunctionComponent<Props> = props => {
   );
 };
 
-export const QuestionItem = QuestionItemComponent;
+const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
+  return {
+    userState: states.userState
+  };
+};
+
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<{}, {}, any>,
+  ownProps: OwnProps
+): DispatchProps => {
+  return {};
+};
+
+export const QuestionItem = connect<
+  StateProps,
+  DispatchProps,
+  OwnProps,
+  RootState
+>(
+  mapStateToProps,
+  mapDispatchToProps
+)(QuestionItemComponent);

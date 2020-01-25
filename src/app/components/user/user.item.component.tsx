@@ -1,19 +1,6 @@
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
-import {
-  MenuItem,
-  Button,
-  TextField,
-  Grid,
-  Box,
-  Avatar,
-  Typography,
-  makeStyles
-} from '@material-ui/core';
+import React from 'react';
+import { Box, Avatar, Typography, makeStyles } from '@material-ui/core';
 
-import { RootState } from '../../../store';
-import { DummyUser } from '../../../api/classes/dummyUser.class';
 import { User } from '../../../api/classes/user.class';
 
 import PersonIcon from '@material-ui/icons/Person';
@@ -21,12 +8,18 @@ import PersonIcon from '@material-ui/icons/Person';
 const useStyles = makeStyles(theme => ({
   box: {
     marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    width: 'fit-content'
   },
   avatar: {
+    width: 30,
+    height: 30,
     marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(3)
+    marginRight: theme.spacing(1)
   }
 }));
 
@@ -46,7 +39,7 @@ const UserItemComponent: React.FunctionComponent<Props> = (props: Props) => {
   const { user } = props;
 
   return (
-    <Box className={classes.box}>
+    <Box className={classes.box} textAlign="center">
       <Avatar className={classes.avatar}>
         <PersonIcon />
       </Avatar>

@@ -11,10 +11,6 @@ import * as serviceWorker from './serviceWorker';
 
 import ThemeManager, { themeManagerRef } from './app/theme/themeManager';
 
-setTimeout(() => {
-  console.log('ok');
-}, 5000);
-
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>

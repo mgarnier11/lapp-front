@@ -61,7 +61,9 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
 
     return (
       questionLoading ||
-      (questionTypes ? !questionTypes.includes(type) : true) ||
+      (questionTypes
+        ? !(questionTypes.findIndex(t => t.id === type.id) > -1)
+        : true) ||
       difficulty === 0 ||
       hotLevel === 0 ||
       text.length === 0
@@ -104,13 +106,13 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
         name="typeSelect"
         margin="normal"
         variant="outlined"
-        select
-        required
+        select={props.editable}
+        required={!props.editable}
         disabled={props.disabled}
         fullWidth
         id="typeSelect"
         label="Question type"
-        value={type.id}
+        value={props.editable ? type.id : type.name}
         onChange={handleTypeChange}
       >
         {questionTypes ? (
@@ -141,10 +143,15 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
       />
       <Grid container spacing={3}>
         <Grid item xs={6}>
-          <Typography component="legend" align="center">
+          <Typography
+            component="legend"
+            align="center"
+            color={props.disabled ? 'textSecondary' : 'initial'}
+          >
             Difficulty
           </Typography>
           <Rating
+            disabled={props.disabled}
             readOnly={!props.editable}
             name="difficulty"
             value={difficulty}
@@ -152,10 +159,15 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography component="legend" align="center">
+          <Typography
+            component="legend"
+            align="center"
+            color={props.disabled ? 'textSecondary' : 'initial'}
+          >
             Hot Level
           </Typography>
           <Rating
+            disabled={props.disabled}
             readOnly={!props.editable}
             name="hotLevel"
             className={classes.hotLevelRating}
@@ -167,7 +179,7 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
       </Grid>
       {(props.onDelete || props.onSubmit) && (
         <Grid container spacing={2}>
-          {props.onDelete && (
+          {props.onDelete && props.editable && (
             <Grid item xs>
               <DangerButton
                 fullWidth
@@ -179,7 +191,7 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
               </DangerButton>
             </Grid>
           )}
-          {props.onSubmit && (
+          {props.onSubmit && props.editable && (
             <Grid item xs>
               <Button
                 type="submit"
