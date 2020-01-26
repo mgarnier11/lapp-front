@@ -81,7 +81,7 @@ const AppStartingComponent: React.FunctionComponent<Props> = (props: Props) => {
     <>
       {loading ? (
         <>
-          <Box style={{ height: '100%', paddingTop: '30%' }}>
+          <Box style={{ height: '100%', paddingTop: '250px' }}>
             <Typography component="h1" variant="h4" align="center">
               Party Drink
             </Typography>

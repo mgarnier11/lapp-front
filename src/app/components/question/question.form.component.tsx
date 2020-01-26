@@ -34,6 +34,8 @@ interface OwnProps {
   disabled?: boolean;
   acceptButtonText?: string;
   deleteButtonText?: string;
+  displayExtraInfos?: boolean;
+  //TODO make display more infos work (creator, creation date...)
   onSubmit?: (question: Question) => void;
   onDelete?: (questionId: string) => void;
 }

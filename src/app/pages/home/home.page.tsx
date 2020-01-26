@@ -28,7 +28,7 @@ const styles = (theme: Theme): StyleRules =>
   createStyles({
     root: {
       paddingTop: theme.spacing(2),
-      paddingBottom: theme.spacing(12)
+      paddingBottom: theme.spacing(10)
     }
   });
 

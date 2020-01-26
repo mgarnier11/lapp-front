@@ -3,6 +3,7 @@ import { palette } from './palette';
 import { MyMuiAppBar } from './components/MyMuiAppBar';
 import { colors } from '@material-ui/core';
 import { MyMuiFab } from './components/MyMuiFab';
+import { MyMuiExpansionPanelSummary } from './components/MyMuiExpansionPanelSummary';
 import { MyMuiDrawer } from './components/MyDrawer';
 import { MyOverrides } from './Overrides';
 
@@ -69,6 +70,9 @@ const overrides: MyOverrides = {
         backgroundColor: `${palette.primary.main} !important`
       }
     }
+  },
+  MuiExpansionPanelSummary: {
+    ...MyMuiExpansionPanelSummary
   }
 };
 

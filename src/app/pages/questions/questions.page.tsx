@@ -7,7 +7,8 @@ import {
   Modal,
   Card,
   CardHeader,
-  CardContent
+  CardContent,
+  Backdrop
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { QuestionsState } from '../../../store/questions/types';
@@ -22,8 +23,7 @@ import { yesNoController } from '../../components/dialogs/yesno.component';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(12)
+    paddingBottom: theme.spacing(10)
   },
   modalRootContent: {
     position: 'absolute',
@@ -116,6 +116,7 @@ const QuestionsPage: React.FunctionComponent<Props> = (props: Props) => {
           <Loading />
         )}
       </Box>
+
       <Modal open={modalOpen} onClose={closeModal}>
         <Container
           component="div"
@@ -130,6 +131,7 @@ const QuestionsPage: React.FunctionComponent<Props> = (props: Props) => {
             <CardContent className={classes.modalCardContent}>
               <QuestionForm
                 question={question}
+                disabled={!allowUpdate}
                 editable={allowUpdate}
                 acceptButtonText="Update"
                 onSubmit={handleUpdate}
