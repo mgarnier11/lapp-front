@@ -112,11 +112,8 @@ class YesNoComponent extends React.Component<Props, ComponentState> {
     );
   }
 }
-const ref = React.createRef<YesNoComponent>();
+export const yesNoRef = React.createRef<YesNoComponent>();
 
-ReactDOM.render(
-  <YesNoComponent ref={ref} />,
-  document.getElementById('yesnoRoot')
-);
+export const YesNo = YesNoComponent;
 
-export const yesNoController = ref.current;
+export const yesNoController = () => yesNoRef.current;

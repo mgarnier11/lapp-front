@@ -111,7 +111,7 @@ class GameListComponent extends React.Component<Props, ComponentState> {
   };
 
   handleDeleteClick = (gameId: string) => {
-    yesNoController!
+    yesNoController()!
       .present({
         title: 'Are you sure you want to delete this game ?',
         acceptText: 'Yes',

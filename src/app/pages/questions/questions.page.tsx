@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import {
@@ -7,8 +7,7 @@ import {
   Modal,
   Card,
   CardHeader,
-  CardContent,
-  Backdrop
+  CardContent
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { QuestionsState } from '../../../store/questions/types';
@@ -88,9 +87,9 @@ const QuestionsPage: React.FunctionComponent<Props> = (props: Props) => {
   };
 
   const handleOnDelete = (questionId: string) => {
-    yesNoController!
+    yesNoController()!
       .present({
-        title: 'Are you sure you want to delete this question ?',
+        title: 'Are you sure you want to delete this question\u00a0?',
         acceptText: 'Yes',
         denyText: 'No'
       })
