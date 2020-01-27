@@ -6,7 +6,8 @@ import {
   Button,
   TextField,
   Grid,
-  Typography
+  Typography,
+  Box
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -18,6 +19,9 @@ import { QuestionsState } from '../../../store/questions/types';
 import { Question } from '../../../api/classes/question.class';
 import { DangerButton } from '../utils/dangerButton.component';
 import { Helper } from '../../../helper';
+import { OutlinedDiv } from '../utils/outlinedDiv.component';
+import { UserItem } from '../user/user.item.component';
+import { QuestionType } from '../../../api/classes/questionType.class';
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -35,7 +39,6 @@ interface OwnProps {
   acceptButtonText?: string;
   deleteButtonText?: string;
   displayExtraInfos?: boolean;
-  //TODO make display more infos work (creator, creation date...)
   onSubmit?: (question: Question) => void;
   onDelete?: (questionId: string) => void;
 }
@@ -63,9 +66,7 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
 
     return (
       questionLoading ||
-      (questionTypes
-        ? !(questionTypes.findIndex(t => t.id === type.id) > -1)
-        : true) ||
+      !questionTypes!.find(t => QuestionType.CompareObjects(t, type)) ||
       difficulty === 0 ||
       hotLevel === 0 ||
       text.length === 0
@@ -100,6 +101,14 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
 
   const beforeDelete = () => {
     if (props.onDelete) props.onDelete(props.question.id);
+  };
+
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric'
   };
 
   return (
@@ -179,6 +188,33 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
           />
         </Grid>
       </Grid>
+      {props.displayExtraInfos && props.question && (
+        <>
+          <OutlinedDiv label="Creator" disabled={props.disabled} fullWidth>
+            <UserItem user={props.question.creator} />
+          </OutlinedDiv>
+          <OutlinedDiv
+            label="Creation Date"
+            disabled={props.disabled}
+            fullWidth
+          >
+            <Box m={1}>
+              {props.question.creationDate.toLocaleDateString(
+                'fr-FR',
+                dateOptions
+              )}
+            </Box>
+          </OutlinedDiv>
+          <OutlinedDiv label="Update Date" disabled={props.disabled} fullWidth>
+            <Box m={1}>
+              {props.question.updateDate.toLocaleDateString(
+                'fr-FR',
+                dateOptions
+              )}
+            </Box>
+          </OutlinedDiv>
+        </>
+      )}
       {(props.onDelete || props.onSubmit) && (
         <Grid container spacing={2}>
           {props.onDelete && props.editable && (

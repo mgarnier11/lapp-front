@@ -125,11 +125,13 @@ const QuestionItemComponent: React.FunctionComponent<Props> = props => {
               </Grid>
             </Grid>
           </Box>
+          {/*
           <Box marginTop={1}>
             <Typography variant="subtitle2">
               Type : {question.type.name}
             </Typography>
-          </Box>
+           </Box>
+           */}
         </CardContent>
       </Collapse>
       <CardActions disableSpacing>

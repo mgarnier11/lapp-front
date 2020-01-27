@@ -12,6 +12,8 @@ const InputComponent: React.FunctionComponent<any> = (props: any) => {
 interface OutlinedDivProps {
   children: React.ReactNode;
   label: string;
+  disabled?: boolean;
+  fullWidth?: boolean;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -32,6 +34,8 @@ export const OutlinedDiv: React.FunctionComponent<OutlinedDivProps> = (
       className={classes.root}
       variant="outlined"
       label={props.label}
+      disabled={props.disabled}
+      fullWidth={props.fullWidth}
       multiline
       InputLabelProps={{ shrink: true }}
       InputProps={{

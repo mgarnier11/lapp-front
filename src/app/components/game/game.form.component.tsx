@@ -158,7 +158,7 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
   return (
     <form onSubmit={beforeSubmit}>
       <TextField
-        style={{ textAlign: 'left' }}
+        style={{ textAlign: 'left', marginTop: 0 }}
         name="typeSelect"
         margin="normal"
         variant="outlined"
@@ -194,11 +194,9 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
         value={name}
         onChange={handleNameChange}
       />
-      <Grid container spacing={3}>
+      <Grid container spacing={3} style={{ textAlign: 'center' }}>
         <Grid item xs={6}>
-          <Typography component="legend" align="center">
-            Maximum&nbsp;Difficulty
-          </Typography>
+          <Typography component="legend">Maximum&nbsp;Difficulty</Typography>
           <Rating
             name="maxDifficulty"
             value={maxDifficulty}
@@ -206,7 +204,7 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography component="legend" align="center">
+          <Typography component="legend">
             Maximum&nbsp;Hot&nbsp;Level
           </Typography>
           <Rating
@@ -236,7 +234,11 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
           <Chip
             label={t.name}
             key={t.id}
-            color={questionTypes.includes(t) ? 'primary' : 'default'}
+            color={
+              questionTypes.find(type => QuestionType.CompareObjects(t, type))
+                ? 'primary'
+                : 'default'
+            }
             className={classes.questionTypeChip}
             onClick={() => switchQuestionType(t.id)}
           />

@@ -8,6 +8,8 @@ export interface QuestionBackModel {
   _difficulty: number;
   _hotLevel: number;
   _creator: UserBackModel;
+  _creationDate: string;
+  _updateDate: string;
 }
 
 export class Question {
@@ -23,12 +25,17 @@ export class Question {
 
   public creator: User = new User();
 
+  public creationDate: Date = new Date();
+
+  public updateDate: Date = new Date();
+
   public static New(datas: Partial<Question>): Question {
     return Object.assign(new Question(), datas);
   }
 
   public static fromBack(datas: QuestionBackModel) {
     let newObj = new Question();
+    console.log(datas);
 
     newObj.id = datas._id;
     newObj.type = QuestionType.fromBack(datas._type);
@@ -36,6 +43,8 @@ export class Question {
     newObj.difficulty = datas._difficulty;
     newObj.hotLevel = datas._hotLevel;
     newObj.creator = User.fromBack(datas._creator);
+    newObj.creationDate = new Date(datas._creationDate);
+    newObj.updateDate = new Date(datas._updateDate);
 
     return newObj;
   }

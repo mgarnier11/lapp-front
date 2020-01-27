@@ -132,6 +132,7 @@ const QuestionsPage: React.FunctionComponent<Props> = (props: Props) => {
                 question={question}
                 disabled={!allowUpdate}
                 editable={allowUpdate}
+                displayExtraInfos={!allowUpdate}
                 acceptButtonText="Update"
                 onSubmit={handleUpdate}
               />

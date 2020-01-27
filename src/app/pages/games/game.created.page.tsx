@@ -201,13 +201,14 @@ class GameCreatedPage extends React.Component<Props, ComponentState> {
     return (
       <>
         <Container maxWidth="md" className={classes.root}>
-          <Grid container spacing={1}>
+          <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <GameForm
                 game={game}
                 onSubmit={this.handleSubmit}
                 editable
                 disabled={isDisabled}
+                acceptButtonText="Update Game"
               />
             </Grid>
             <Grid item xs={12} md={6}>

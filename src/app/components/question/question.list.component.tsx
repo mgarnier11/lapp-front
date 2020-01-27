@@ -89,12 +89,14 @@ const QuestionListComponent: React.FunctionComponent<Props> = props => {
 
   const { questions } = props;
 
-  const filteredQuestions = questions.filter(
-    q =>
-      q.difficulty <= maxDifficultyFilter &&
-      q.hotLevel <= maxHotLevelFilter &&
-      (userQuestionsOnly ? q.creator.id === props.userState.user!.id : true)
-  );
+  const filteredQuestions = questions
+    .filter(
+      q =>
+        q.difficulty <= maxDifficultyFilter &&
+        q.hotLevel <= maxHotLevelFilter &&
+        (userQuestionsOnly ? q.creator.id === props.userState.user!.id : true)
+    )
+    .sort((q1, q2) => q1.creationDate.getTime() - q2.creationDate.getTime());
 
   const questionCols = Helper.explodeArray(
     filteredQuestions,
@@ -128,7 +130,7 @@ const QuestionListComponent: React.FunctionComponent<Props> = props => {
         </Grid>
         <Grid item xs={12} sm={12} md={4} className={classes.filterLine}>
           <Box mr={2}>
-            <Typography>My Questions only</Typography>
+            <Typography>My questions only</Typography>
           </Box>
           <Switch
             checked={userQuestionsOnly}
