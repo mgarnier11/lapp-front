@@ -62,7 +62,10 @@ class QuestionTypesPage extends React.Component<Props, ComponentState> {
     super(props);
 
     this.state = {
-      columns: [{ title: 'Name', field: 'name' }],
+      columns: [
+        { title: 'Name', field: 'name' },
+        { title: 'Description', field: 'description' }
+      ],
       questionTypes: []
     };
   }

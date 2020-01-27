@@ -65,7 +65,9 @@ export class Question {
       obj1.hotLevel === obj2.hotLevel &&
       obj1.text === obj2.text &&
       QuestionType.CompareObjects(obj1.type, obj2.type) &&
-      User.CompareObjects(obj1.creator, obj2.creator)
+      User.CompareObjects(obj1.creator, obj2.creator) &&
+      obj1.creationDate === obj2.creationDate &&
+      obj1.updateDate === obj2.updateDate
     );
   }
 }

@@ -1,12 +1,15 @@
 export interface QuestionTypeBackModel {
   _id: string;
   _name: string;
+  _description: string;
 }
 
 export class QuestionType {
   public id: string = '';
 
   public name: string = '';
+
+  public description: string = '';
 
   public temp(): string {
     return 'ok';
@@ -19,8 +22,11 @@ export class QuestionType {
   public static fromBack(datas: QuestionTypeBackModel) {
     let newObj = new QuestionType();
 
+    console.log(datas);
+
     newObj.id = datas._id;
     newObj.name = datas._name;
+    newObj.description = datas._description;
 
     return newObj;
   }
@@ -43,7 +49,8 @@ export class QuestionType {
       obj1 !== undefined &&
       obj2 !== undefined &&
       obj1.id === obj2.id &&
-      obj1.name === obj2.name
+      obj1.name === obj2.name &&
+      obj1.description === obj2.description
     );
   }
 }
