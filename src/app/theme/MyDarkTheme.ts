@@ -39,9 +39,11 @@ const overrides: MyOverrides = {
     root: {
       ...MyMuiFab.root,
       backgroundColor: palette.primary.light,
-
       '&:hover': {
-        backgroundColor: `${palette.primary.main} !important`
+        backgroundColor: palette.primary.main
+      },
+      '@media (hover: none)': {
+        backgroundColor: `${palette.primary.light} !important`
       }
     }
   },
@@ -59,15 +61,21 @@ const overrides: MyOverrides = {
         backgroundColor: palette.primary.light,
         '&:hover': {
           backgroundColor: palette.primary.main
+        },
+        '@media (hover: none)': {
+          backgroundColor: `${palette.primary.light} !important`
         }
       }
     }
   },
   MuiButton: {
-    root: {
-      backgroundColor: `${palette.primary.light} !important`,
+    containedPrimary: {
+      backgroundColor: palette.primary.light,
       '&:hover': {
-        backgroundColor: `${palette.primary.main} !important`
+        backgroundColor: palette.primary.main
+      },
+      '@media (hover: none)': {
+        backgroundColor: `${palette.primary.light} !important`
       }
     }
   },

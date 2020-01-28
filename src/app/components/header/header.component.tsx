@@ -11,7 +11,7 @@ import { ToolbarMobile } from './toolbar.mobile';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
-    zIndex: theme.zIndex.drawer + 100
+    zIndex: 1250
   }
 }));
 

@@ -93,11 +93,7 @@ const QuestionItemComponent: React.FunctionComponent<Props> = props => {
               <Avatar>{question.type.name.substr(0, 1).toUpperCase()}</Avatar>
             </Tooltip>
           }
-          title={
-            <Typography variant="body1">
-              {expanded ? 'Type : ' + question.type.name : question.text}
-            </Typography>
-          }
+          title={<Typography variant="body1">{question.text}</Typography>}
           className={classes.cardHeader}
           action={
             <IconButton
@@ -116,52 +112,16 @@ const QuestionItemComponent: React.FunctionComponent<Props> = props => {
         />
         <Collapse in={expanded} unmountOnExit>
           <CardContent className={classes.cardContent}>
-            {/*<UserItem user={question.creator} />
-          <Box marginTop={1}>
-            <Grid container spacing={1}>
-              <Grid item xs={6}>
-                <Box textAlign="center">
-                  <Typography variant="subtitle2">Difficulty</Typography>
-                  <Rating
-                    readOnly
-                    name="difficulty"
-                    value={question.difficulty}
-                  />
-                </Box>
-              </Grid>
-              <Grid item xs={6}>
-                <Box textAlign="center">
-                  <Typography variant="subtitle2">Hot Level</Typography>
-                  <Rating
-                    readOnly
-                    name="hotLevel"
-                    className={classes.hotLevelRating}
-                    value={question.hotLevel}
-                    icon={<FavoriteIcon fontSize="inherit" />}
-                  />
-                </Box>
-              </Grid>
-            </Grid>
-      
-          </Box>
-          */}
             <QuestionForm
               question={question}
               editable={user.id === question.creator.id}
-              disabled={!(user.id === question.creator.id)}
               displayType={false}
+              displayText={user.id === question.creator.id}
               acceptButtonText="Update"
               onSubmit={props.onUpdate}
               deleteButtonText="Delete"
               onDelete={props.onDelete}
             />
-            {/*
-          <Box marginTop={1}>
-            <Typography variant="subtitle2">
-              Type : {question.type.name}
-            </Typography>
-           </Box>
-           */}
           </CardContent>
         </Collapse>
         {/*

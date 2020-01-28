@@ -159,7 +159,7 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
       </Toolbar>
       <SwipeableDrawer
         className={classes.drawer}
-        style={{ zIndex: 1000 }}
+        style={{ zIndex: 1200 }}
         open={drawerOpen}
         onClose={() => toggleDrawer(false)}
         onOpen={() => toggleDrawer(true)}

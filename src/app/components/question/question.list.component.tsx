@@ -54,8 +54,17 @@ const useStyles = makeStyles(theme => ({
   hotLevelRating: {
     color: '#FD6C9E'
   },
-  drawerRoot: {
-    marginTop: 112
+  drawerFilterRoot: {},
+  drawerFilterPaper: {
+    marginTop: 112,
+    padding: theme.spacing(2)
+  },
+  filterButton: {
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    zIndex: 1150,
+    position: 'fixed',
+    height: 48
   }
 }));
 
@@ -87,11 +96,8 @@ const QuestionListComponent: React.FunctionComponent<Props> = props => {
 
   const handleDifficultyLevel = (e: any, newValue: number) =>
     setMaxDifficultyFilter(newValue);
-  const handleMaxHotLevel = (e: any, newValue: number) => {
-    e.preventDefault();
-    console.log('test');
+  const handleMaxHotLevel = (e: any, newValue: number) =>
     setMaxHotLevelFilter(newValue);
-  };
   const handleUserQuestions = (e: React.ChangeEvent<HTMLInputElement>) =>
     setUserQuestionsOnly(e.target.checked);
 
@@ -174,9 +180,10 @@ const QuestionListComponent: React.FunctionComponent<Props> = props => {
         </ClickAwayListener>
         */}
         <Button
-          color="primary"
           variant="contained"
+          color="primary"
           fullWidth
+          className={classes.filterButton}
           onClick={() => setFilterOpen(!filterOpen)}
         >
           Filters
@@ -184,9 +191,10 @@ const QuestionListComponent: React.FunctionComponent<Props> = props => {
         <Drawer
           open={filterOpen}
           anchor="top"
-          style={{ zIndex: 1298 }}
-          classes={{ paper: classes.drawerRoot }}
+          className={classes.drawerFilterRoot}
+          classes={{ paper: classes.drawerFilterPaper }}
           onClose={() => setFilterOpen(false)}
+          style={{ zIndex: 1100 }}
         >
           {renderFilters()}
         </Drawer>

@@ -25,10 +25,13 @@ const overrides: MyOverrides = {
   MuiToggleButton: {
     root: {
       '&$selected': {
-        backgroundColor: palette.primary.main,
+        backgroundColor: palette.primary.light,
         color: colors.common.white,
         '&:hover': {
-          backgroundColor: palette.primary.light
+          backgroundColor: palette.primary.main
+        },
+        '@media (hover: none)': {
+          backgroundColor: `${palette.primary.light} !important`
         }
       }
     }

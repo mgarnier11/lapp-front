@@ -57,12 +57,11 @@ class ThemeManager extends React.Component<ComponentProps, ComponentState> {
     console.log(this.state.selectedTheme);
     const muiTheme = createMuiTheme(Themes[this.state.selectedTheme]);
 
-    return this.props.children;
-    /*
+    return (
       <MuiThemeProvider theme={muiTheme}>
         {this.props.children}
       </MuiThemeProvider>
-      */
+    );
   }
 }
 
