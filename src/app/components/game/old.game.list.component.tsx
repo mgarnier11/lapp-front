@@ -13,7 +13,8 @@ import {
   TableBody,
   IconButton,
   Box,
-  Hidden
+  Hidden,
+  Tooltip
 } from '@material-ui/core';
 import {
   withStyles,
@@ -35,6 +36,8 @@ import { GameTypesState } from '../../../store/gameTypes/types';
 import { GameActions } from '../../../store/game/actions';
 import { yesNoController } from '../dialogs/yesno.component';
 import { GamesActions } from '../../../store/games/actions';
+
+// TODO :
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
@@ -153,24 +156,39 @@ class GameListComponent extends React.Component<Props, ComponentState> {
       }
     };
 
+    const getTooltipTitle = (status: GameStatus) => {
+      switch (status) {
+        case GameStatus.created:
+          return 'Edit';
+        case GameStatus.started:
+          return 'Play';
+        case GameStatus.finished:
+          return 'Stats';
+      }
+    };
+
     return (
-      <IconButton
-        className={this.props.classes.myButton}
-        onClick={() => this.handleGameClick(game.displayId)}
-      >
-        {getIcon(game.status)}
-      </IconButton>
+      <Tooltip title={getTooltipTitle(game.status)}>
+        <IconButton
+          className={this.props.classes.myButton}
+          onClick={() => this.handleGameClick(game.displayId)}
+        >
+          {getIcon(game.status)}
+        </IconButton>
+      </Tooltip>
     );
   }
 
   renderDeleteButton(game: Game) {
     return (
-      <IconButton
-        className={this.props.classes.myButton}
-        onClick={() => this.handleDeleteClick(game.id)}
-      >
-        <DeleteIcon />
-      </IconButton>
+      <Tooltip title="Delete">
+        <IconButton
+          className={this.props.classes.myButton}
+          onClick={() => this.handleDeleteClick(game.id)}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </Tooltip>
     );
   }
 

@@ -11,7 +11,10 @@ import {
   Grid,
   Box,
   Avatar,
-  Collapse
+  Collapse,
+  Tooltip,
+  ClickAwayListener,
+  ButtonBase
 } from '@material-ui/core';
 
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -20,11 +23,13 @@ import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
 import Rating from '@material-ui/lab/Rating';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 import { UserItem } from '../user/user.item.component';
 import { UserState } from '../../../store/user/types';
 import { RootState } from '../../../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
+import { QuestionForm } from './question.form.component';
 
 const useStyles = makeStyles(theme => ({
   deleteButton: {
@@ -45,10 +50,13 @@ const useStyles = makeStyles(theme => ({
     transform: 'rotate(180deg)'
   },
   cardHeader: {
-    paddingBottom: 0
+    //paddingBottom: 0
   },
   cardContent: {
-    paddingBottom: '0 !important'
+    paddingTop: '0 !important'
+  },
+  alignSelf: {
+    alignSelf: 'baseline'
   }
 }));
 
@@ -56,7 +64,6 @@ interface OwnProps {
   question: Question;
   onDelete?: (questionId: string) => void;
   onUpdate?: (question: Question) => void;
-  onDetails?: (question: Question) => void;
 }
 
 interface DispatchProps {}
@@ -78,27 +85,38 @@ const QuestionItemComponent: React.FunctionComponent<Props> = props => {
   const handleExpandClick = () => setExpanded(!expanded);
 
   return (
-    <Card>
-      <CardHeader
-        avatar={<Avatar>R</Avatar>}
-        title={<Typography variant="h6">{question.text}</Typography>}
-        className={classes.cardHeader}
-        action={
-          <IconButton
-            className={
-              classes.expand + (expanded ? ' ' + classes.expanded : '')
-            }
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="show more"
-          >
-            <ExpandMoreIcon />
-          </IconButton>
-        }
-      />
-      <Collapse in={expanded} unmountOnExit>
-        <CardContent className={classes.cardContent}>
-          <UserItem user={question.creator} />
+    <ClickAwayListener onClickAway={() => setExpanded(false)}>
+      <Card>
+        <CardHeader
+          avatar={
+            <Tooltip title={question.type.name}>
+              <Avatar>{question.type.name.substr(0, 1).toUpperCase()}</Avatar>
+            </Tooltip>
+          }
+          title={
+            <Typography variant="body1">
+              {expanded ? 'Type : ' + question.type.name : question.text}
+            </Typography>
+          }
+          className={classes.cardHeader}
+          action={
+            <IconButton
+              className={
+                classes.expand + (expanded ? ' ' + classes.expanded : '')
+              }
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="show more"
+            >
+              <ExpandMoreIcon />
+            </IconButton>
+          }
+          classes={{ avatar: classes.alignSelf }}
+          onClick={() => setExpanded(!expanded)}
+        />
+        <Collapse in={expanded} unmountOnExit>
+          <CardContent className={classes.cardContent}>
+            {/*<UserItem user={question.creator} />
           <Box marginTop={1}>
             <Grid container spacing={1}>
               <Grid item xs={6}>
@@ -124,39 +142,60 @@ const QuestionItemComponent: React.FunctionComponent<Props> = props => {
                 </Box>
               </Grid>
             </Grid>
+      
           </Box>
-          {/*
+          */}
+            <QuestionForm
+              question={question}
+              editable={user.id === question.creator.id}
+              disabled={!(user.id === question.creator.id)}
+              displayType={false}
+              acceptButtonText="Update"
+              onSubmit={props.onUpdate}
+              deleteButtonText="Delete"
+              onDelete={props.onDelete}
+            />
+            {/*
           <Box marginTop={1}>
             <Typography variant="subtitle2">
               Type : {question.type.name}
             </Typography>
            </Box>
            */}
-        </CardContent>
-      </Collapse>
+          </CardContent>
+        </Collapse>
+        {/*
       <CardActions disableSpacing>
         {props.onDetails && (
-          <IconButton onClick={() => props.onDetails!(question)}>
-            <ZoomOutMapIcon />
-          </IconButton>
+          <Tooltip title="Details">
+            <IconButton onClick={() => props.onDetails!(question)}>
+              <ZoomOutMapIcon />
+            </IconButton>
+          </Tooltip>
         )}
 
         {props.onUpdate && user.id === question.creator.id && (
-          <IconButton onClick={() => props.onUpdate!(question)}>
-            <EditIcon />
-          </IconButton>
+          <Tooltip title="Edit">
+            <IconButton onClick={() => props.onUpdate!(question)}>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
         )}
 
         {props.onDelete && user.id === question.creator.id && (
-          <IconButton
-            onClick={() => props.onDelete!(question.id)}
-            className={classes.deleteButton}
-          >
-            <DeleteIcon />
-          </IconButton>
+          <Tooltip title="Delete">
+            <IconButton
+              onClick={() => props.onDelete!(question.id)}
+              className={classes.deleteButton}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
         )}
       </CardActions>
-    </Card>
+        */}
+      </Card>
+    </ClickAwayListener>
   );
 };
 

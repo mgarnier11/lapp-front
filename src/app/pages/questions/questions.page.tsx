@@ -58,32 +58,8 @@ type Props = StateProps & OwnProps & DispatchProps;
 const QuestionsPage: React.FunctionComponent<Props> = (props: Props) => {
   const classes = useStyles();
 
-  const [modalOpen, setModalOpen] = React.useState(false);
-  const [question, setQuestion] = React.useState(Question.New({}));
-  const [allowUpdate, setAllowUpdate] = React.useState(false);
-
-  const openModal = () => setModalOpen(true);
-
-  const closeModal = () => setModalOpen(false);
-
-  const handleUpdate = (updatedQuestion: Question) => {
-    closeModal();
-
-    props.questionUpdate(updatedQuestion);
-  };
-
-  const handleOnDetails = (clickedQuestion: Question) => {
-    setQuestion(clickedQuestion);
-    setAllowUpdate(false);
-
-    openModal();
-  };
-
   const handleOnUpdate = (clickedQuestion: Question) => {
-    setQuestion(clickedQuestion);
-    setAllowUpdate(true);
-
-    openModal();
+    props.questionUpdate(clickedQuestion);
   };
 
   const handleOnDelete = (questionId: string) => {
@@ -102,45 +78,17 @@ const QuestionsPage: React.FunctionComponent<Props> = (props: Props) => {
   };
 
   return (
-    <>
-      <Box component="div" className={classes.root}>
-        {props.questionsState.questions ? (
-          <QuestionList
-            questions={props.questionsState.questions}
-            onDetails={handleOnDetails}
-            onUpdate={handleOnUpdate}
-            onDelete={handleOnDelete}
-          />
-        ) : (
-          <Loading />
-        )}
-      </Box>
-
-      <Modal open={modalOpen} onClose={closeModal}>
-        <Container
-          component="div"
-          className={classes.modalRootContent}
-          tabIndex={-1}
-        >
-          <Card raised={true}>
-            <CardHeader
-              className={classes.modalCardTitle}
-              title={allowUpdate ? 'Edit Question' : 'Question Details'}
-            />
-            <CardContent className={classes.modalCardContent}>
-              <QuestionForm
-                question={question}
-                disabled={!allowUpdate}
-                editable={allowUpdate}
-                displayExtraInfos={!allowUpdate}
-                acceptButtonText="Update"
-                onSubmit={handleUpdate}
-              />
-            </CardContent>
-          </Card>
-        </Container>
-      </Modal>
-    </>
+    <Box component="div" className={classes.root}>
+      {props.questionsState.questions ? (
+        <QuestionList
+          questions={props.questionsState.questions}
+          onUpdate={handleOnUpdate}
+          onDelete={handleOnDelete}
+        />
+      ) : (
+        <Loading />
+      )}
+    </Box>
   );
 };
 

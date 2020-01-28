@@ -11,7 +11,10 @@ import {
   Typography,
   Hidden,
   ClickAwayListener,
-  Switch
+  Switch,
+  colors,
+  Button,
+  Drawer
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -50,6 +53,9 @@ const useStyles = makeStyles(theme => ({
   },
   hotLevelRating: {
     color: '#FD6C9E'
+  },
+  drawerRoot: {
+    marginTop: 112
   }
 }));
 
@@ -59,7 +65,6 @@ interface OwnProps {
   questions: Question[];
   onDelete?: (questionId: string) => void;
   onUpdate?: (question: Question) => void;
-  onDetails?: (question: Question) => void;
 }
 
 interface StateProps {
@@ -82,8 +87,11 @@ const QuestionListComponent: React.FunctionComponent<Props> = props => {
 
   const handleDifficultyLevel = (e: any, newValue: number) =>
     setMaxDifficultyFilter(newValue);
-  const handleMaxHotLevel = (e: any, newValue: number) =>
+  const handleMaxHotLevel = (e: any, newValue: number) => {
+    e.preventDefault();
+    console.log('test');
     setMaxHotLevelFilter(newValue);
+  };
   const handleUserQuestions = (e: React.ChangeEvent<HTMLInputElement>) =>
     setUserQuestionsOnly(e.target.checked);
 
@@ -111,7 +119,7 @@ const QuestionListComponent: React.FunctionComponent<Props> = props => {
             <Typography>Max Difficulty</Typography>
           </Box>
           <Rating
-            name="difficulty"
+            name="maxDifficulty"
             value={maxDifficultyFilter}
             onChange={handleDifficultyLevel}
           />
@@ -121,7 +129,7 @@ const QuestionListComponent: React.FunctionComponent<Props> = props => {
             <Typography>Max Hot Level</Typography>
           </Box>
           <Rating
-            name="hotLevel"
+            name="maxHotLevel"
             className={classes.hotLevelRating}
             value={maxHotLevelFilter}
             onChange={handleMaxHotLevel}
@@ -145,11 +153,13 @@ const QuestionListComponent: React.FunctionComponent<Props> = props => {
   return (
     <Box>
       <Hidden smUp>
+        {/*
         <ClickAwayListener onClickAway={() => setFilterOpen(false)}>
           <ExpansionPanel
             className={classes.filters}
             elevation={2}
             expanded={filterOpen}
+            style={{ backgroundColor: theme.palette.primary.light }}
           >
             <ExpansionPanelSummary
               onClick={() => setFilterOpen(!filterOpen)}
@@ -162,6 +172,24 @@ const QuestionListComponent: React.FunctionComponent<Props> = props => {
             <ExpansionPanelDetails>{renderFilters()}</ExpansionPanelDetails>
           </ExpansionPanel>
         </ClickAwayListener>
+        */}
+        <Button
+          color="primary"
+          variant="contained"
+          fullWidth
+          onClick={() => setFilterOpen(!filterOpen)}
+        >
+          Filters
+        </Button>
+        <Drawer
+          open={filterOpen}
+          anchor="top"
+          style={{ zIndex: 1298 }}
+          classes={{ paper: classes.drawerRoot }}
+          onClose={() => setFilterOpen(false)}
+        >
+          {renderFilters()}
+        </Drawer>
       </Hidden>
       <Hidden xsDown>{renderFilters()}</Hidden>
       <Grid className={classes.questionsGrid} container>
@@ -186,7 +214,6 @@ const QuestionListComponent: React.FunctionComponent<Props> = props => {
                   question={question}
                   onDelete={props.onDelete}
                   onUpdate={props.onUpdate}
-                  onDetails={props.onDetails}
                 />
               </Grid>
             ))}

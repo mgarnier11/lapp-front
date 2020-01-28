@@ -22,8 +22,6 @@ export class QuestionType {
   public static fromBack(datas: QuestionTypeBackModel) {
     let newObj = new QuestionType();
 
-    console.log(datas);
-
     newObj.id = datas._id;
     newObj.name = datas._name;
     newObj.description = datas._description;

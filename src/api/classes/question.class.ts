@@ -35,7 +35,6 @@ export class Question {
 
   public static fromBack(datas: QuestionBackModel) {
     let newObj = new Question();
-    console.log(datas);
 
     newObj.id = datas._id;
     newObj.type = QuestionType.fromBack(datas._type);

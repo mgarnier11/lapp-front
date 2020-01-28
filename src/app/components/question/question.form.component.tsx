@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import {
@@ -25,7 +25,7 @@ import { QuestionType } from '../../../api/classes/questionType.class';
 
 const useStyles = makeStyles(theme => ({
   form: {
-    maxWidth: 267
+    //maxWidth: 267
   },
   hotLevelRating: {
     color: '#FD6C9E'
@@ -39,6 +39,8 @@ interface OwnProps {
   acceptButtonText?: string;
   deleteButtonText?: string;
   displayExtraInfos?: boolean;
+  displayType?: boolean;
+  displayText?: boolean;
   onSubmit?: (question: Question) => void;
   onDelete?: (questionId: string) => void;
 }
@@ -53,6 +55,11 @@ interface StateProps {
 type Props = StateProps & OwnProps & DispatchProps;
 
 const QuestionFormComponent: React.FunctionComponent<Props> = props => {
+  let t;
+  useEffect(() => {
+    t = React.createRef();
+  }, []);
+
   const classes = useStyles();
   const { questionTypes } = props.questionTypesState;
 
@@ -82,12 +89,9 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
   const handleHotLevelChange = (e: any, value: number) =>
     props.editable && setHotLevel(value);
 
-  const handleTypeChange = (e: React.ChangeEvent<{ value: unknown }>) => {
-    console.log(e);
-
+  const handleTypeChange = (e: React.ChangeEvent<{ value: unknown }>) =>
     props.editable &&
-      setType(questionTypes!.find(t => t.id === (e.target.value as string))!);
-  };
+    setType(questionTypes!.find(t => t.id === (e.target.value as string))!);
 
   const beforeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -113,50 +117,54 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
 
   return (
     <form noValidate onSubmit={beforeSubmit} className={classes.form}>
-      <TextField
-        name="typeSelect"
-        margin="normal"
-        variant="outlined"
-        select={props.editable}
-        required={!props.editable}
-        disabled={props.disabled}
-        fullWidth
-        id="typeSelect"
-        label="Question type"
-        value={props.editable ? type.id : type.name}
-        onChange={handleTypeChange}
-      >
-        {questionTypes ? (
-          questionTypes.map(t => (
-            <MenuItem value={t.id} key={t.id}>
-              {t.name}
-            </MenuItem>
-          ))
-        ) : (
-          <MenuItem disabled>Loading...</MenuItem>
-        )}
-      </TextField>
-      <TextField
-        name="text"
-        margin="normal"
-        variant="outlined"
-        type="text"
-        required
-        disabled={props.disabled}
-        fullWidth
-        multiline
-        rows={4}
-        rowsMax={6}
-        id="text"
-        label="Text"
-        value={text}
-        onChange={handleTextChange}
-      />
-      <Grid container spacing={3}>
+      {props.displayType && (
+        <TextField
+          name="typeSelect"
+          margin="normal"
+          variant="outlined"
+          select={props.editable}
+          required={!props.editable}
+          disabled={props.disabled}
+          fullWidth
+          id="typeSelect"
+          label="Question type"
+          value={props.editable ? type.id : type.name}
+          onChange={handleTypeChange}
+        >
+          {questionTypes ? (
+            questionTypes.map(t => (
+              <MenuItem value={t.id} key={t.id}>
+                {t.name}
+              </MenuItem>
+            ))
+          ) : (
+            <MenuItem disabled>Loading...</MenuItem>
+          )}
+        </TextField>
+      )}
+      {props.displayText && (
+        <TextField
+          name="text"
+          margin="normal"
+          variant="outlined"
+          type="text"
+          required
+          disabled={props.disabled}
+          fullWidth
+          multiline
+          rows={4}
+          rowsMax={6}
+          id="text"
+          label="Text"
+          value={text}
+          onChange={handleTextChange}
+        />
+      )}
+
+      <Grid container spacing={3} style={{ textAlign: 'center' }}>
         <Grid item xs={6}>
           <Typography
             component="legend"
-            align="center"
             color={props.disabled ? 'textSecondary' : 'initial'}
           >
             Difficulty
@@ -172,12 +180,12 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
         <Grid item xs={6}>
           <Typography
             component="legend"
-            align="center"
             color={props.disabled ? 'textSecondary' : 'initial'}
           >
             Hot Level
           </Typography>
           <Rating
+            ref={t}
             disabled={props.disabled}
             readOnly={!props.editable}
             name="hotLevel"
@@ -250,7 +258,9 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
 
 QuestionFormComponent.defaultProps = {
   acceptButtonText: 'Confirm Button',
-  deleteButtonText: 'Delete Button'
+  deleteButtonText: 'Delete Button',
+  displayType: true,
+  displayText: true
 };
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
@@ -272,6 +282,6 @@ export const QuestionForm = connect<
   DispatchProps,
   OwnProps,
   RootState
->(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(
+>(mapStateToProps, mapDispatchToProps, null, { forwardRef: false })(
   QuestionFormComponent
 );

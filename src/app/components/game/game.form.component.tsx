@@ -209,6 +209,7 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
           </Typography>
           <Rating
             name="maxHotLevel"
+            disabled={props.disabled}
             className={classes.hotLevelRating}
             value={maxHotLevel}
             onChange={handleMaxHotLevelChange}
@@ -239,6 +240,7 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
                 ? 'primary'
                 : 'default'
             }
+            disabled={props.disabled}
             className={classes.questionTypeChip}
             onClick={() => switchQuestionType(t.id)}
           />

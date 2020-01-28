@@ -59,7 +59,7 @@ export class Helper {
     nbTurns: number,
     nbPlayers: number,
     seed: string
-  ) {
+  ): number {
     let rng = seedRandom(seed);
 
     let playersNbTurns: number[] = [...new Array(nbPlayers)].fill(
