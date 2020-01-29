@@ -26,7 +26,7 @@ class ApiHandler {
 
   constructor() {
     this._feathers
-      .configure(FeathersSocketIOClient(this._socket)) // add socket.io plugin
+      .configure(FeathersSocketIOClient(this._socket, { timeout: 30000 })) // add socket.io plugin
       .configure(
         this._feathersAuthClient({
           // add authentication plugin

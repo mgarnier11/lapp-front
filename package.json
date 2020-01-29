@@ -3,10 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.26",
-    "@fortawesome/free-solid-svg-icons": "^5.12.0",
-    "@fortawesome/react-fontawesome": "^0.1.8",
-    "@types/react-fontawesome": "^1.6.4",
     "serve": "^11.2.0"
   },
   "scripts": {
@@ -33,6 +29,10 @@
     ]
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.26",
+    "@fortawesome/free-solid-svg-icons": "^5.12.0",
+    "@fortawesome/react-fontawesome": "^0.1.8",
+    "@types/react-fontawesome": "^1.6.4",
     "lodash": "^4.17.15",
     "@feathersjs/authentication-client": "^4.3.11",
     "@feathersjs/client": "^4.3.10",
