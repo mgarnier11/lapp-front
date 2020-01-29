@@ -1,7 +1,13 @@
+import {
+  QuestionTemplate,
+  QuestionTemplateBackModel
+} from './questionTemplate.class';
+
 export interface QuestionTypeBackModel {
   _id: string;
   _name: string;
   _description: string;
+  _template: QuestionTemplateBackModel;
 }
 
 export class QuestionType {
@@ -11,9 +17,7 @@ export class QuestionType {
 
   public description: string = '';
 
-  public temp(): string {
-    return 'ok';
-  }
+  public template: QuestionTemplate = new QuestionTemplate();
 
   public static New(datas: Partial<QuestionType>): QuestionType {
     return Object.assign(new QuestionType(), datas);
@@ -25,6 +29,7 @@ export class QuestionType {
     newObj.id = datas._id;
     newObj.name = datas._name;
     newObj.description = datas._description;
+    newObj.template = QuestionTemplate.fromBack(datas._template);
 
     return newObj;
   }
@@ -48,7 +53,8 @@ export class QuestionType {
       obj2 !== undefined &&
       obj1.id === obj2.id &&
       obj1.name === obj2.name &&
-      obj1.description === obj2.description
+      obj1.description === obj2.description &&
+      QuestionTemplate.CompareObjects(obj1.template, obj2.template)
     );
   }
 }

@@ -21,6 +21,8 @@ import { UserState } from '../store/user/types';
 import { Error } from './components/error/error.component';
 import { Loading } from './components/utils/loading.component';
 import { Box, Typography } from '@material-ui/core';
+import { QuestionTemplatesState } from '../store/questionTemplates/types';
+import { QuestionTemplatesActions } from '../store/questionTemplates/actions';
 
 interface OwnProps {
   children?: ReactNode;
@@ -33,6 +35,7 @@ interface DispatchProps {
   questionTypeGetAll: () => Promise<any>;
   gameTypeGetAll: () => Promise<any>;
   questionGetAll: () => Promise<any>;
+  questionTemplateGetAll: () => Promise<any>;
 }
 
 interface StateProps {
@@ -42,6 +45,7 @@ interface StateProps {
   rolesState: RolesState;
   questionTypesState: QuestionTypesState;
   questionsState: QuestionsState;
+  questionTemplatesState: QuestionTemplatesState;
 }
 
 type Props = StateProps & OwnProps & DispatchProps;
@@ -64,7 +68,8 @@ const AppStartingComponent: React.FunctionComponent<Props> = (props: Props) => {
         props.roleGetAll(),
         props.questionTypeGetAll(),
         props.gameTypeGetAll(),
-        props.questionGetAll()
+        props.questionGetAll(),
+        props.questionTemplateGetAll()
       ]).then(values => {
         if (values.every(v => v === true)) {
           setLoading(false);
@@ -115,7 +120,8 @@ const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
     gameTypesState: states.gameTypesState,
     questionTypesState: states.questionTypesState,
     questionsState: states.questionsState,
-    rolesState: states.rolesState
+    rolesState: states.rolesState,
+    questionTemplatesState: states.questionTemplatesState
   };
 };
 
@@ -138,6 +144,9 @@ const mapDispatchToProps = (
     },
     roleGetAll: async () => {
       return await dispatch(RolesActions.roleGetAll());
+    },
+    questionTemplateGetAll: async () => {
+      return await dispatch(QuestionTemplatesActions.questionTemplateGetAll());
     },
     relog: async () => {
       return await dispatch(relog(false));

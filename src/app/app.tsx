@@ -40,6 +40,7 @@ import { Success } from './components/success/success.component';
 import { Error } from './components/error/error.component';
 import { MyFab } from './components/fab/fab.component';
 import { Role } from '../api/classes/role.class';
+import { questionTemplateActionsInstance } from '../store/questionTemplates/actions';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
@@ -103,6 +104,7 @@ class App extends React.Component<Props, State> {
     questionTypeActionsInstance.bindBaseEvents();
     gameTypeActionsInstance.bindBaseEvents();
     gamesActionsInstance.bindBaseEvents();
+    questionTemplateActionsInstance.bindBaseEvents();
   }
 
   componentWillUnmount() {
@@ -120,6 +122,7 @@ class App extends React.Component<Props, State> {
     questionTypeActionsInstance.unbindEvents();
     gameTypeActionsInstance.unbindEvents();
     gamesActionsInstance.unbindEvents();
+    questionTemplateActionsInstance.unbindEvents();
   }
 
   questionSuccessfullyCreated = (q: Question) => {
