@@ -1,27 +1,21 @@
 import React, { useState } from 'react';
-import { useTheme, makeStyles } from '@material-ui/core/styles';
+import { useTheme, makeStyles, withStyles } from '@material-ui/core/styles';
 import { Question } from '../../../api/classes/question.class';
 import {
   Grid,
   useMediaQuery,
   Box,
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
   Typography,
   Hidden,
-  ClickAwayListener,
   Switch,
-  colors,
   Button,
-  Drawer
+  Drawer,
+  Slider
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import { QuestionItem } from './question.item.component';
 import { Helper } from '../../../helper';
-import Rating from '@material-ui/lab/Rating';
 import { ThunkDispatch } from 'redux-thunk';
 import { RootState } from '../../../store';
 import { UserState } from '../../../store/user/types';
@@ -41,30 +35,46 @@ const useStyles = makeStyles(theme => ({
   questionItem: {
     padding: theme.spacing(1)
   },
-  filters: {
-    width: '100%',
-    position: 'fixed',
-    zIndex: 1
-  },
-  filterLine: {
-    display: 'flex',
-    alignItems: 'center',
-    minHeight: 46
-  },
   hotLevelRating: {
     color: '#FD6C9E'
   },
-  drawerFilterRoot: {},
-  drawerFilterPaper: {
-    marginTop: 112,
-    padding: theme.spacing(2)
+  filtersLine: {
+    [theme.breakpoints.up('sm')]: {
+      paddingLeft: '16px !important',
+      paddingRight: '16px !important'
+    },
+    display: 'flex',
+    alignItems: 'center'
   },
-  filterButton: {
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
+  filtersDrawerRoot: {},
+  filtersDrawerPaper: {
+    marginTop: 112,
+    padding: theme.spacing(1)
+  },
+  filtersSlider: {
+    display: 'flex',
+    alignItems: 'center'
+  },
+  filtersButton: {
+    display: 'flex',
+    textAlign: 'left',
+    borderRadius: 0,
     zIndex: 1150,
     position: 'fixed',
     height: 48
+  },
+  filtersButtonIcon: {
+    marginLeft: 'auto',
+    transform: 'rotate(0deg)',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest
+    })
+  },
+  filtersButtonIconExpanded: {
+    transform: 'rotate(180deg)'
+  },
+  valueLabel: {
+    zIndex: 1500
   }
 }));
 
@@ -82,6 +92,44 @@ interface StateProps {
 
 type Props = DispatchProps & OwnProps & StateProps;
 
+const StarSlider = withStyles({
+  root: {
+    marginLeft: 'auto',
+    marginRight: '10px',
+    width: '55%',
+    color: '#FFB400'
+  },
+  thumb: {
+    '&::before': {
+      content: '"★"',
+      fontSize: '250%'
+    }
+  },
+  valueLabel: {
+    zIndex: 1300,
+    top: -40
+  }
+})(Slider);
+
+const HeartSlider = withStyles({
+  root: {
+    marginLeft: 'auto',
+    marginRight: '10px',
+    width: '55%',
+    color: '#FD6C9E'
+  },
+  thumb: {
+    '&::before': {
+      content: '"❤"',
+      fontSize: '210%'
+    }
+  },
+  valueLabel: {
+    zIndex: 1300,
+    top: -40
+  }
+})(Slider);
+
 const QuestionListComponent: React.FunctionComponent<Props> = props => {
   const classes = useStyles();
   const theme = useTheme();
@@ -90,24 +138,32 @@ const QuestionListComponent: React.FunctionComponent<Props> = props => {
   const isLg = useMediaQuery(theme.breakpoints.up('lg'));
 
   const [filterOpen, setFilterOpen] = useState(false);
-  const [maxDifficultyFilter, setMaxDifficultyFilter] = useState(5);
-  const [maxHotLevelFilter, setMaxHotLevelFilter] = useState(5);
+  const [maxDifficultyFilters, setMaxDifficultyFilters] = React.useState<
+    number[]
+  >([1, 5]);
+  const [maxHotLevelFilters, setMaxHotLevelFilters] = React.useState<number[]>([
+    1,
+    5
+  ]);
   const [userQuestionsOnly, setUserQuestionsOnly] = useState(false);
 
-  const handleDifficultyLevel = (e: any, newValue: number) =>
-    setMaxDifficultyFilter(newValue);
-  const handleMaxHotLevel = (e: any, newValue: number) =>
-    setMaxHotLevelFilter(newValue);
   const handleUserQuestions = (e: React.ChangeEvent<HTMLInputElement>) =>
     setUserQuestionsOnly(e.target.checked);
+
+  const handleMaxDifficultyChange = (event: any, newValue: number | number[]) =>
+    setMaxDifficultyFilters(newValue as number[]);
+  const handleMaxHotLevelChange = (event: any, newValue: number | number[]) =>
+    setMaxHotLevelFilters(newValue as number[]);
 
   const { questions } = props;
 
   const filteredQuestions = questions
     .filter(
       q =>
-        q.difficulty <= maxDifficultyFilter &&
-        q.hotLevel <= maxHotLevelFilter &&
+        q.difficulty >= maxDifficultyFilters[0] &&
+        q.difficulty <= maxDifficultyFilters[1] &&
+        q.hotLevel >= maxHotLevelFilters[0] &&
+        q.hotLevel <= maxHotLevelFilters[1] &&
         (userQuestionsOnly ? q.creator.id === props.userState.user!.id : true)
     )
     .sort((q1, q2) => q1.creationDate.getTime() - q2.creationDate.getTime());
@@ -120,29 +176,7 @@ const QuestionListComponent: React.FunctionComponent<Props> = props => {
   const renderFilters = () => {
     return (
       <Grid container spacing={1}>
-        <Grid item xs={12} sm={6} md={4} className={classes.filterLine}>
-          <Box mr={2}>
-            <Typography>Max Difficulty</Typography>
-          </Box>
-          <Rating
-            name="maxDifficulty"
-            value={maxDifficultyFilter}
-            onChange={handleDifficultyLevel}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={4} className={classes.filterLine}>
-          <Box mr={2}>
-            <Typography>Max Hot Level</Typography>
-          </Box>
-          <Rating
-            name="maxHotLevel"
-            className={classes.hotLevelRating}
-            value={maxHotLevelFilter}
-            onChange={handleMaxHotLevel}
-            icon={<FavoriteIcon fontSize="inherit" />}
-          />
-        </Grid>
-        <Grid item xs={12} sm={12} md={4} className={classes.filterLine}>
+        <Grid item xs={12} sm={12} md={4} className={classes.filtersLine}>
           <Box mr={2}>
             <Typography>My questions only</Typography>
           </Box>
@@ -152,6 +186,34 @@ const QuestionListComponent: React.FunctionComponent<Props> = props => {
             value="checkedA"
           />
         </Grid>
+        <Grid item xs={12} sm={6} md={4} className={classes.filtersLine}>
+          <Box mr={2}>
+            <Typography>Max Difficulty</Typography>
+          </Box>
+          <StarSlider
+            value={maxDifficultyFilters}
+            onChange={handleMaxDifficultyChange}
+            valueLabelDisplay="auto"
+            marks
+            step={1}
+            min={1}
+            max={5}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4} className={classes.filtersLine}>
+          <Box mr={2}>
+            <Typography>Max Hot Level</Typography>
+          </Box>
+          <HeartSlider
+            value={maxHotLevelFilters}
+            onChange={handleMaxHotLevelChange}
+            valueLabelDisplay="auto"
+            marks
+            step={1}
+            min={1}
+            max={5}
+          />
+        </Grid>
       </Grid>
     );
   };
@@ -159,40 +221,25 @@ const QuestionListComponent: React.FunctionComponent<Props> = props => {
   return (
     <Box>
       <Hidden smUp>
-        {/*
-        <ClickAwayListener onClickAway={() => setFilterOpen(false)}>
-          <ExpansionPanel
-            className={classes.filters}
-            elevation={2}
-            expanded={filterOpen}
-            style={{ backgroundColor: theme.palette.primary.light }}
-          >
-            <ExpansionPanelSummary
-              onClick={() => setFilterOpen(!filterOpen)}
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="filters-content"
-              id="filters-header"
-            >
-              <Typography>Filters</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>{renderFilters()}</ExpansionPanelDetails>
-          </ExpansionPanel>
-        </ClickAwayListener>
-        */}
         <Button
           variant="contained"
           color="primary"
           fullWidth
-          className={classes.filterButton}
+          className={classes.filtersButton}
           onClick={() => setFilterOpen(!filterOpen)}
         >
           Filters
+          <ExpandMoreIcon
+            className={`${classes.filtersButtonIcon} ${
+              filterOpen ? classes.filtersButtonIconExpanded : ''
+            }`}
+          />
         </Button>
         <Drawer
           open={filterOpen}
           anchor="top"
-          className={classes.drawerFilterRoot}
-          classes={{ paper: classes.drawerFilterPaper }}
+          className={classes.filtersDrawerRoot}
+          classes={{ paper: classes.filtersDrawerPaper }}
           onClose={() => setFilterOpen(false)}
           style={{ zIndex: 1100 }}
         >

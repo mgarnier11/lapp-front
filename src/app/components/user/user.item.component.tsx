@@ -40,7 +40,10 @@ const UserItemComponent: React.FunctionComponent<Props> = (props: Props) => {
 
   return (
     <Box className={classes.box} textAlign="center">
-      <Avatar className={classes.avatar}>
+      <Avatar
+        className={classes.avatar}
+        src={`https://api.adorable.io/avatars/30/${user.email}.png`}
+      >
         <PersonIcon />
       </Avatar>
       <Typography>{user.name}</Typography>

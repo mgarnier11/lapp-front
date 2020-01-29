@@ -1,14 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import {
-  Container,
-  Box,
-  Modal,
-  Card,
-  CardHeader,
-  CardContent
-} from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { QuestionsState } from '../../../store/questions/types';
 import { RootState } from '../../../store';
@@ -17,7 +10,6 @@ import { Question } from '../../../api/classes/question.class';
 import { Loading } from '../../components/utils/loading.component';
 import { QuestionTypesState } from '../../../store/questionTypes/types';
 import { QuestionList } from '../../components/question/question.list.component';
-import { QuestionForm } from '../../components/question/question.form.component';
 import { yesNoController } from '../../components/dialogs/yesno.component';
 
 const useStyles = makeStyles(theme => ({

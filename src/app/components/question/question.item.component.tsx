@@ -5,26 +5,16 @@ import {
   Card,
   CardHeader,
   CardContent,
-  CardActions,
   Typography,
   IconButton,
-  Grid,
-  Box,
   Avatar,
   Collapse,
   Tooltip,
-  ClickAwayListener,
-  ButtonBase
+  ClickAwayListener
 } from '@material-ui/core';
 
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
-import Rating from '@material-ui/lab/Rating';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { UserItem } from '../user/user.item.component';
 import { UserState } from '../../../store/user/types';
 import { RootState } from '../../../store';
 import { ThunkDispatch } from 'redux-thunk';
