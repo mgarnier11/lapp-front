@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import {
-  Box,
-  Modal,
-  Container,
-  Card,
-  CardHeader,
-  CardContent
-} from '@material-ui/core';
+import { Box, Modal, Fab } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+
 import { QuestionTemplatesState } from '../../../store/questionTemplates/types';
 import { RootState } from '../../../store';
 import { QuestionTemplatesActions } from '../../../store/questionTemplates/actions';
@@ -17,8 +12,7 @@ import { QuestionTemplate } from '../../../api/classes/questionTemplate.class';
 import { Loading } from '../../components/utils/loading.component';
 import { QuestionTemplateList } from '../../components/questionTemplate/questionTemplate.list.component';
 import { yesNoController } from '../../components/dialogs/yesno.component';
-import { QuestionForm } from '../../components/question/question.form.component';
-import { QuestionTemplateForm } from '../../components/questionTemplate/questionTemplate.form.component';
+import { QuestionTemplateModal } from '../../components/questionTemplate/questionTemplate.modal.component';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,6 +38,7 @@ const useStyles = makeStyles(theme => ({
 interface OwnProps {}
 
 interface DispatchProps {
+  questionTemplateCreate: (questionTempalte: QuestionTemplate) => Promise<any>;
   questionTemplateUpdate: (questionTemplate: QuestionTemplate) => Promise<any>;
   questionTemplateRemove: (questionTemplateId: string) => Promise<any>;
 }
@@ -54,19 +49,27 @@ interface StateProps {
 
 type Props = StateProps & OwnProps & DispatchProps;
 
+interface ModalProps {
+  open: boolean;
+  questionTemplate: QuestionTemplate;
+  title?: string;
+  onSubmit?: (questionTemplate: QuestionTemplate) => void;
+  submitButtonText?: string;
+}
+
 const QuestionTemplatesPage: React.FunctionComponent<Props> = (
   props: Props
 ) => {
   const classes = useStyles();
 
-  const [modalOpen, setModalOpen] = useState(false);
-  const [questionTemplate, setQuestionTemplate] = React.useState(
-    QuestionTemplate.New({})
-  );
+  const [modalProps, setModalProps] = useState({
+    open: false,
+    questionTemplate: QuestionTemplate.New({})
+  } as ModalProps);
 
-  const openModal = () => setModalOpen(true);
+  const openModal = () => setModalProps({ ...modalProps, open: true });
 
-  const closeModal = () => setModalOpen(false);
+  const closeModal = () => setModalProps({ ...modalProps, open: false });
 
   const handleUpdate = (updatedQuestionTemplate: QuestionTemplate) => {
     closeModal();
@@ -74,10 +77,30 @@ const QuestionTemplatesPage: React.FunctionComponent<Props> = (
     props.questionTemplateUpdate(updatedQuestionTemplate);
   };
 
-  const handleOnUpdate = (clickedQuestionTemplate: QuestionTemplate) => {
-    setQuestionTemplate(clickedQuestionTemplate);
+  const handleCreate = (createdQuestionTemplate: QuestionTemplate) => {
+    closeModal();
 
-    openModal();
+    props.questionTemplateCreate(createdQuestionTemplate);
+  };
+
+  const handleOnUpdate = (clickedQuestionTemplate: QuestionTemplate) => {
+    setModalProps({
+      open: true,
+      onSubmit: handleUpdate,
+      questionTemplate: clickedQuestionTemplate,
+      title: 'Edit template',
+      submitButtonText: 'Confirm update'
+    });
+  };
+
+  const handleOnCreate = () => {
+    setModalProps({
+      open: true,
+      onSubmit: handleCreate,
+      questionTemplate: QuestionTemplate.New({}),
+      title: 'Create a new template',
+      submitButtonText: 'Create'
+    });
   };
 
   const handleOnDelete = (questionTemplateId: string) => {
@@ -108,27 +131,21 @@ const QuestionTemplatesPage: React.FunctionComponent<Props> = (
           <Loading />
         )}
       </Box>
-      <Modal open={modalOpen} onClose={closeModal}>
-        <Container
-          component="div"
-          className={classes.modalRootContent}
-          tabIndex={-1}
-        >
-          <Card raised={true}>
-            <CardHeader
-              className={classes.modalCardTitle}
-              title="Edit template"
-            />
-            <CardContent className={classes.modalCardContent}>
-              <QuestionTemplateForm
-                questionTemplate={questionTemplate}
-                editable
-                onSubmit={handleUpdate}
-                acceptButtonText="Confirm update"
-              />
-            </CardContent>
-          </Card>
-        </Container>
+      <Fab
+        className="floating-action-button"
+        onClick={handleOnCreate}
+        style={{ zIndex: 10 }}
+      >
+        <AddIcon />
+      </Fab>
+      <Modal open={modalProps.open} onClose={closeModal}>
+        <QuestionTemplateModal
+          questionTemplate={modalProps.questionTemplate}
+          editable
+          title={modalProps.title}
+          acceptButtonText={modalProps.submitButtonText}
+          onSubmit={modalProps.onSubmit}
+        />
       </Modal>
     </>
   );
@@ -145,6 +162,11 @@ const mapDispatchToProps = (
   ownProps: OwnProps
 ): DispatchProps => {
   return {
+    questionTemplateCreate: async (questionTemplate: QuestionTemplate) => {
+      return await dispatch(
+        QuestionTemplatesActions.questionTemplateCreate(questionTemplate)
+      );
+    },
     questionTemplateUpdate: async (questionTemplate: QuestionTemplate) => {
       return await dispatch(
         QuestionTemplatesActions.questionTemplateUpdate(questionTemplate)

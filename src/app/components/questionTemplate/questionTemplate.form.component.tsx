@@ -43,7 +43,7 @@ const QuestionTemplateFormComponent: React.FunctionComponent<Props> = props => {
   );
 
   const isDenied = (): boolean => {
-    return name.length === 0 || clientPath.length === 0;
+    return name.length === 0; // || clientPath.length === 0;
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) =>

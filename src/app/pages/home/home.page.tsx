@@ -127,18 +127,6 @@ class HomePage extends React.Component<Props, ComponentState> {
         <TabPanel index={1} actualIndex={selectedTab}>
           {this.renderGamesUserIsIn(me!)}
         </TabPanel>
-
-        {/*<Hidden smDown>
-          <Grid container spacing={1}>
-            <Grid item md={6}>
-              {this.renderUserGames(me!, 'Games you created')}
-            </Grid>
-            <Divider orientation="vertical" />
-            <Grid item md={6}>
-              {this.renderGamesUserIsIn(me!, "Games you're in ")}
-            </Grid>
-          </Grid>
-        </Hidden>*/}
       </>
     );
   }
