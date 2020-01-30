@@ -37,8 +37,6 @@ import { GameActions } from '../../../store/game/actions';
 import { yesNoController } from '../dialogs/yesno.component';
 import { GamesActions } from '../../../store/games/actions';
 
-// TODO :
-
 const styles = (theme: Theme): StyleRules =>
   createStyles({
     root: {

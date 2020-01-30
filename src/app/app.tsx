@@ -11,7 +11,6 @@ import { gamesActionsInstance } from '../store/games/actions';
 import { Home } from './pages/home/home.page';
 import { Questions } from './pages/questions/questions.page';
 import { Roles } from './pages/roles/roles.page';
-import { QuestionTypes } from './pages/questionTypes/question-types.page';
 import { Header } from './components/header/header.component';
 import { Guard } from './components/guard/guard.component';
 import { GameMiddleware } from './components/game/game.middleware.component';
@@ -21,6 +20,7 @@ import { Error } from './components/error/error.component';
 import { questionTemplateActionsInstance } from '../store/questionTemplates/actions';
 import { QuestionTemplates } from './pages/questionTemplates/questionTemplates.page';
 import { Role } from '../api/classes/role.class';
+import { QuestionTypes } from './pages/questionTypes/questionTypes.page';
 
 const useStyles = makeStyles(theme => ({
   baseContainer: {

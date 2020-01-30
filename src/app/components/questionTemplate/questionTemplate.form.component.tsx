@@ -1,26 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
-import {
-  MenuItem,
-  Button,
-  TextField,
-  Grid,
-  Typography,
-  Box
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import React, { useState } from 'react';
+import { Button, TextField, Grid } from '@material-ui/core';
+// import { makeStyles } from '@material-ui/core/styles';
 
-import { RootState } from '../../../store';
-import Rating from '@material-ui/lab/Rating';
 import { DangerButton } from '../utils/dangerButton.component';
 import { Helper } from '../../../helper';
-import { OutlinedDiv } from '../utils/outlinedDiv.component';
-import { UserItem } from '../user/user.item.component';
 import { QuestionTemplate } from '../../../api/classes/questionTemplate.class';
 
-const useStyles = makeStyles(theme => ({}));
+// const useStyles = makeStyles(theme => ({}));
 
 interface OwnProps {
   questionTemplate: QuestionTemplate;
@@ -35,7 +21,7 @@ interface OwnProps {
 type Props = OwnProps;
 
 const QuestionTemplateFormComponent: React.FunctionComponent<Props> = props => {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   const [name, setName] = useState(props.questionTemplate.name);
   const [clientPath, setClientPath] = useState(
@@ -69,18 +55,15 @@ const QuestionTemplateFormComponent: React.FunctionComponent<Props> = props => {
   return (
     <form noValidate onSubmit={beforeSubmit}>
       <TextField
-        name="text"
+        name="name"
         margin="normal"
         variant="outlined"
         type="text"
         required
         disabled={props.disabled}
         fullWidth
-        multiline
-        rows={4}
-        rowsMax={6}
-        id="text"
-        label="Text"
+        id="name"
+        label="Name"
         value={name}
         onChange={handleNameChange}
       />

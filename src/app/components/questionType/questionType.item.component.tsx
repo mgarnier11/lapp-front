@@ -11,7 +11,7 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
-import { QuestionTemplate } from '../../../api/classes/questionTemplate.class';
+import { QuestionType } from '../../../api/classes/questionType.class';
 
 const useStyles = makeStyles(theme => ({
   cardContent: {
@@ -20,28 +20,27 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface OwnProps {
-  questionTemplate: QuestionTemplate;
-  onDelete?: (questionTemplateId: string) => void;
-  onUpdate?: (questionTemplate: QuestionTemplate) => void;
+  questionType: QuestionType;
+  onDelete?: (questionTypeId: string) => void;
+  onUpdate?: (questionType: QuestionType) => void;
 }
 
 type Props = OwnProps;
 
-const QuestionTemplateItemComponent: React.FunctionComponent<Props> = props => {
+const QuestionTypeItemComponent: React.FunctionComponent<Props> = props => {
   const classes = useStyles();
 
-  const { questionTemplate } = props;
+  const { questionType } = props;
 
-  const handleEdit = () => props.onUpdate && props.onUpdate(questionTemplate);
+  const handleEdit = () => props.onUpdate && props.onUpdate(questionType);
 
-  const handleDelete = () =>
-    props.onDelete && props.onDelete(questionTemplate.id);
+  const handleDelete = () => props.onDelete && props.onDelete(questionType.id);
 
   return (
     <Card>
-      <CardHeader title={questionTemplate.name} />
+      <CardHeader title={questionType.name} />
       <CardContent className={classes.cardContent}>
-        {questionTemplate.clientPath}
+        {questionType.description}
       </CardContent>
       {(props.onDelete || props.onUpdate) && (
         <CardActions>
@@ -65,4 +64,4 @@ const QuestionTemplateItemComponent: React.FunctionComponent<Props> = props => {
   );
 };
 
-export const QuestionTemplateItem = QuestionTemplateItemComponent;
+export const QuestionTypeItem = QuestionTypeItemComponent;

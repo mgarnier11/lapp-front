@@ -11,7 +11,6 @@ const useStyles = makeStyles(theme => ({
     left: '50%',
     top: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 'fit-content',
     outline: 'none'
   },
   cardTitle: {
