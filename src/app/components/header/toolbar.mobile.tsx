@@ -24,6 +24,7 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Brightness3Icon from '@material-ui/icons/Brightness3';
 import WbSunnyIcon from '@material-ui/icons/WbSunny';
+import FilterIcon from '@material-ui/icons/Filter';
 
 import { User } from '../../../api/classes/user.class';
 import { ListItemLink } from '../utils/linkButtons.components';
@@ -90,6 +91,7 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
     <>
       {listItem('/roles', 'Roles', <PeopleIcon />)}
       {listItem('/questionTypes', 'Question Types', <ForumIcon />)}
+      {listItem('/questionTemplates', 'Question Templates', <FilterIcon />)}
     </>
   );
 

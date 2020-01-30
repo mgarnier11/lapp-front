@@ -39,9 +39,6 @@ const useStyles = makeStyles(theme => ({
   expanded: {
     transform: 'rotate(180deg)'
   },
-  cardHeader: {
-    //paddingBottom: 0
-  },
   cardContent: {
     paddingTop: '0 !important'
   },
@@ -84,7 +81,6 @@ const QuestionItemComponent: React.FunctionComponent<Props> = props => {
             </Tooltip>
           }
           title={<Typography variant="body1">{question.text}</Typography>}
-          className={classes.cardHeader}
           action={
             <IconButton
               className={

@@ -41,6 +41,7 @@ import { Error } from './components/error/error.component';
 import { MyFab } from './components/fab/fab.component';
 import { Role } from '../api/classes/role.class';
 import { questionTemplateActionsInstance } from '../store/questionTemplates/actions';
+import { QuestionTemplates } from './pages/questionTemplates/questionTemplates.page';
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({
@@ -179,6 +180,13 @@ class App extends React.Component<Props, State> {
               redirect="/home"
             >
               <Roles />
+            </Guard>
+            <Guard
+              minimalPermission={Role.AdminPermissionLevel}
+              path="/questionTemplates"
+              redirect="/home"
+            >
+              <QuestionTemplates />
             </Guard>
             <Guard
               minimalPermission={Role.AdminPermissionLevel}

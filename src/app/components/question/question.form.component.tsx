@@ -55,11 +55,6 @@ interface StateProps {
 type Props = StateProps & OwnProps & DispatchProps;
 
 const QuestionFormComponent: React.FunctionComponent<Props> = props => {
-  let t;
-  useEffect(() => {
-    t = React.createRef();
-  }, []);
-
   const classes = useStyles();
   const { questionTypes } = props.questionTypesState;
 
@@ -185,7 +180,6 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
             Hot Level
           </Typography>
           <Rating
-            ref={t}
             disabled={props.disabled}
             readOnly={!props.editable}
             name="hotLevel"

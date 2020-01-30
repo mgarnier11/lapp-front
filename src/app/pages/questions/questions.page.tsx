@@ -15,21 +15,6 @@ import { yesNoController } from '../../components/dialogs/yesno.component';
 const useStyles = makeStyles(theme => ({
   root: {
     paddingBottom: theme.spacing(10)
-  },
-  modalRootContent: {
-    position: 'absolute',
-    left: '50%',
-    top: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 'fit-content',
-    outline: 'none'
-  },
-  modalCardTitle: {
-    textAlign: 'center',
-    paddingBottom: 0
-  },
-  modalCardContent: {
-    paddingTop: 0
   }
 }));
 
