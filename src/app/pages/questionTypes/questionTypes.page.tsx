@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { Box, Modal, Fab } from '@material-ui/core';
+import { Box, Modal, Fab, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 
@@ -16,22 +16,8 @@ import { QuestionTypeDialog } from '../../components/questionType/questionType.d
 
 const useStyles = makeStyles(theme => ({
   root: {
-    paddingBottom: theme.spacing(10)
-  },
-  modalRootContent: {
-    position: 'absolute',
-    left: '50%',
-    top: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 'fit-content',
-    outline: 'none'
-  },
-  modalCardTitle: {
-    textAlign: 'center',
-    paddingBottom: 0
-  },
-  modalCardContent: {
-    paddingTop: 0
+    paddingBottom: theme.spacing(10),
+    paddingTop: theme.spacing(1)
   }
 }));
 
@@ -121,6 +107,9 @@ const QuestionTypesPage: React.FunctionComponent<Props> = (props: Props) => {
   return (
     <>
       <Box component="div" className={classes.root}>
+        <Typography component="h2" variant="h5" align="center">
+          Question types
+        </Typography>
         {props.questionTypesState.questionTypes ? (
           <QuestionTypeList
             questionTypes={props.questionTypesState.questionTypes}
@@ -140,7 +129,6 @@ const QuestionTypesPage: React.FunctionComponent<Props> = (props: Props) => {
       </Fab>
 
       <QuestionTypeDialog
-        dialog={true}
         dialogProps={{
           open: modalProps.open,
           onClose: closeModal

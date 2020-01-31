@@ -1,31 +1,63 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
+import React, { useState } from 'react';
 import {
-  MenuItem,
   Button,
   TextField,
   Grid,
+  DialogProps,
+  DialogContent,
+  DialogTitle,
+  DialogActions,
+  IconButton,
+  Container,
+  Dialog,
+  Box,
+  Card,
+  CardHeader,
+  CardContent,
+  CardActions,
   Typography,
-  Box
+  MenuItem
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+
+import CheckIcon from '@material-ui/icons/Check';
+import DeleteIcon from '@material-ui/icons/Delete';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
-import { RootState } from '../../../store';
-import Rating from '@material-ui/lab/Rating';
-import { QuestionTypesState } from '../../../store/questionTypes/types';
-import { QuestionsState } from '../../../store/questions/types';
-import { Question } from '../../../api/classes/question.class';
-import { DangerButton } from '../utils/dangerButton.component';
+import {
+  DangerButton,
+  DangerIconButton
+} from '../utils/dangerButton.component';
 import { Helper } from '../../../helper';
+import { Question } from '../../../api/classes/question.class';
+import { QuestionType } from '../../../api/classes/questionType.class';
+import { QuestionTypesState } from '../../../store/questionTypes/types';
+import Rating from '@material-ui/lab/Rating';
 import { OutlinedDiv } from '../utils/outlinedDiv.component';
 import { UserItem } from '../user/user.item.component';
-import { QuestionType } from '../../../api/classes/questionType.class';
+import { RootState } from '../../../store';
+import { ThunkDispatch } from 'redux-thunk';
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
-  form: {
-    //maxWidth: 267
+  root: {},
+  title: {
+    padding: '8px 16px',
+    paddingTop: 12
+  },
+  content: {
+    padding: '0px 16px'
+  },
+  actions: {
+    padding: '8px 16px',
+    '& :first-child': {
+      marginLeft: 'auto'
+    }
+  },
+  ratingsGrid: {
+    width: 'calc(100% + 16px)',
+    marginLeft: -8,
+    textAlign: 'center'
   },
   hotLevelRating: {
     color: '#FD6C9E'
@@ -33,6 +65,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface OwnProps {
+  dialogProps?: DialogProps;
   question: Question;
   editable: boolean;
   disabled?: boolean;
@@ -41,20 +74,21 @@ interface OwnProps {
   displayExtraInfos?: boolean;
   displayType?: boolean;
   displayText?: boolean;
-  onSubmit?: (question: Question) => void;
+  onAccept?: (question: Question) => void;
   onDelete?: (questionId: string) => void;
+  title?: string;
+  hideCardShadow?: boolean;
 }
 
 interface DispatchProps {}
 
 interface StateProps {
   questionTypesState: QuestionTypesState;
-  questionsState: QuestionsState;
 }
 
 type Props = StateProps & OwnProps & DispatchProps;
 
-const QuestionFormComponent: React.FunctionComponent<Props> = props => {
+const QuestionDialogComponent: React.FunctionComponent<Props> = props => {
   const classes = useStyles();
   const { questionTypes } = props.questionTypesState;
 
@@ -64,10 +98,7 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
   const [type, setType] = useState(props.question.type);
 
   const isDenied = (): boolean => {
-    const questionLoading = props.questionsState.loading;
-
     return (
-      questionLoading ||
       !questionTypes!.find(t => QuestionType.CompareObjects(t, type)) ||
       difficulty === 0 ||
       hotLevel === 0 ||
@@ -88,18 +119,23 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
     props.editable &&
     setType(questionTypes!.find(t => t.id === (e.target.value as string))!);
 
-  const beforeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!isDenied() && props.onSubmit) {
-      props.onSubmit(
-        Helper.clone(props.question, { text, difficulty, hotLevel, type })
-      );
-    }
-  };
+  React.useEffect(() => {
+    setText(props.question.text || '');
+    setDifficulty(props.question.difficulty || 1);
+    setHotLevel(props.question.hotLevel || 1);
+    setType(props.question.type || Helper.clone(questionTypes![0]));
+  }, [props.question]);
 
   const beforeDelete = () => {
     if (props.onDelete) props.onDelete(props.question.id);
+  };
+
+  const beforeAccept = () => {
+    if (!isDenied() && props.onAccept) {
+      props.onAccept(
+        Helper.clone(props.question, { text, difficulty, hotLevel, type })
+      );
+    }
   };
 
   const dateOptions: Intl.DateTimeFormatOptions = {
@@ -110,8 +146,8 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
     minute: 'numeric'
   };
 
-  return (
-    <form noValidate onSubmit={beforeSubmit} className={classes.form}>
+  const renderForm = () => (
+    <Box>
       {props.displayType && (
         <TextField
           name="typeSelect"
@@ -156,7 +192,7 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
         />
       )}
 
-      <Grid container spacing={3} style={{ textAlign: 'center' }}>
+      <Grid container className={classes.ratingsGrid}>
         <Grid item xs={6}>
           <Typography
             component="legend"
@@ -217,51 +253,103 @@ const QuestionFormComponent: React.FunctionComponent<Props> = props => {
           </OutlinedDiv>
         </>
       )}
-      {(props.onDelete || props.onSubmit) && (
-        <Grid container spacing={2}>
-          {props.onDelete && props.editable && (
-            <Grid item xs>
-              <DangerButton
-                fullWidth
-                variant="contained"
-                disabled={props.disabled}
-                onClick={beforeDelete}
-              >
-                {props.deleteButtonText}
-              </DangerButton>
-            </Grid>
-          )}
-          {props.onSubmit && props.editable && (
-            <Grid item xs>
-              <Button
-                type="submit"
-                fullWidth
-                disabled={props.disabled || isDenied()}
-                variant="contained"
-                color="primary"
-              >
-                {props.acceptButtonText}
-              </Button>
-            </Grid>
-          )}
-        </Grid>
-      )}
-    </form>
+    </Box>
   );
+
+  const renderAcceptButton = () => {
+    if (props.acceptButtonText) {
+      return (
+        <Button
+          disabled={props.disabled || isDenied()}
+          variant="contained"
+          color="primary"
+          onClick={beforeAccept}
+        >
+          {props.acceptButtonText}
+        </Button>
+      );
+    } else {
+      return (
+        <IconButton
+          disabled={props.disabled || isDenied()}
+          onClick={beforeAccept}
+        >
+          <CheckIcon />
+        </IconButton>
+      );
+    }
+  };
+
+  const renderDeleteButton = () => {
+    if (props.deleteButtonText) {
+      return (
+        <DangerButton
+          variant="contained"
+          disabled={props.disabled}
+          onClick={beforeDelete}
+        >
+          {props.deleteButtonText}
+        </DangerButton>
+      );
+    } else {
+      return (
+        <DangerIconButton disabled={props.disabled} onClick={beforeDelete}>
+          <DeleteIcon />
+        </DangerIconButton>
+      );
+    }
+  };
+  const renderDialog = () => (
+    <Dialog
+      {...(props.dialogProps || { open: false })}
+      className={classes.root}
+    >
+      {props.title && (
+        <DialogTitle disableTypography className={classes.title}>
+          <Typography component="h3" variant="h5" align="center">
+            {props.title}
+          </Typography>
+        </DialogTitle>
+      )}
+      <DialogContent className={classes.content}>{renderForm()}</DialogContent>
+      {(props.onDelete || props.onAccept) && (
+        <DialogActions className={classes.actions}>
+          {props.onDelete && renderDeleteButton()}
+          {props.onAccept && renderAcceptButton()}
+        </DialogActions>
+      )}
+    </Dialog>
+  );
+
+  const renderCard = () => (
+    <Card
+      className={classes.root}
+      raised={false}
+      style={{ boxShadow: props.hideCardShadow ? 'none' : '' }}
+    >
+      {props.title && (
+        <CardHeader title={props.title} className={classes.title} />
+      )}
+      <CardContent className={classes.content}>{renderForm()}</CardContent>
+      {(props.onDelete || props.onAccept) && props.editable && (
+        <CardActions className={classes.actions}>
+          {props.onDelete && renderDeleteButton()}
+          {props.onAccept && renderAcceptButton()}
+        </CardActions>
+      )}
+    </Card>
+  );
+
+  return props.dialogProps ? renderDialog() : renderCard();
 };
 
-QuestionFormComponent.defaultProps = {
-  acceptButtonText: 'Confirm Button',
-  deleteButtonText: 'Delete Button',
-  displayType: true,
-  displayText: true
+QuestionDialogComponent.defaultProps = {
+  displayText: true,
+  displayType: true
 };
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
-  return {
-    questionTypesState: states.questionTypesState,
-    questionsState: states.questionsState
-  };
+  return { questionTypesState: states.questionTypesState };
 };
 
 const mapDispatchToProps = (
@@ -271,11 +359,11 @@ const mapDispatchToProps = (
   return {};
 };
 
-export const QuestionForm = connect<
+export const QuestionDialog = connect<
   StateProps,
   DispatchProps,
   OwnProps,
   RootState
->(mapStateToProps, mapDispatchToProps, null, { forwardRef: false })(
-  QuestionFormComponent
+>(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(
+  QuestionDialogComponent
 );

@@ -13,7 +13,7 @@ import { Loading } from '../../components/utils/loading.component';
 import { QuestionTypesState } from '../../../store/questionTypes/types';
 import { QuestionList } from '../../components/question/question.list.component';
 import { yesNoController } from '../../components/dialogs/yesno.component';
-import { QuestionModal } from '../../components/question/question.modal.component';
+import { QuestionDialog } from '../../components/question/question.dialog.component';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -40,7 +40,7 @@ interface ModalProps {
   open: boolean;
   question: Question;
   title?: string;
-  onSubmit?: (question: Question) => void;
+  onAccept?: (question: Question) => void;
   submitButtonText?: string;
 }
 const QuestionsPage: React.FunctionComponent<Props> = (props: Props) => {
@@ -64,7 +64,7 @@ const QuestionsPage: React.FunctionComponent<Props> = (props: Props) => {
   const handleOnCreate = () => {
     setModalProps({
       open: true,
-      onSubmit: handleCreate,
+      onAccept: handleCreate,
       question: Question.New({}),
       title: 'Create a new question',
       submitButtonText: 'Create'
@@ -112,15 +112,14 @@ const QuestionsPage: React.FunctionComponent<Props> = (props: Props) => {
         <AddIcon />
       </Fab>
 
-      <Modal open={modalProps.open} onClose={closeModal}>
-        <QuestionModal
-          question={modalProps.question}
-          editable
-          title={modalProps.title}
-          acceptButtonText={modalProps.submitButtonText}
-          onSubmit={modalProps.onSubmit}
-        />
-      </Modal>
+      <QuestionDialog
+        dialogProps={{ open: modalProps.open, onClose: closeModal }}
+        question={modalProps.question}
+        editable
+        title={modalProps.title}
+        acceptButtonText={modalProps.submitButtonText}
+        onAccept={modalProps.onAccept}
+      />
     </>
   );
 };

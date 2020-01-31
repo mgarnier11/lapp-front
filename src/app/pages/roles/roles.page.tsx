@@ -1,163 +1,147 @@
-import * as lodash from 'lodash';
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { Container } from '@material-ui/core';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
-import MaterialTable, { Column } from 'material-table';
-import {
-  withStyles,
-  WithStyles,
-  StyleRules,
-  createStyles,
-  Theme
-} from '@material-ui/core/styles';
+import { Box, Modal, Fab, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
 
 import { RolesState } from '../../../store/roles/types';
 import { RootState } from '../../../store';
 import { RolesActions } from '../../../store/roles/actions';
-import { addError } from '../../../store/errors/actions';
 import { Role } from '../../../api/classes/role.class';
 import { Loading } from '../../components/utils/loading.component';
+import { RoleList } from '../../components/role/role.list.component';
+import { yesNoController } from '../../components/dialogs/yesno.component';
+import { RoleDialog } from '../../components/role/role.dialog.component';
 
-const styles = (theme: Theme): StyleRules =>
-  createStyles({
-    root: {
-      paddingTop: theme.spacing(2),
-      paddingBottom: theme.spacing(10)
-    }
-  });
+const useStyles = makeStyles(theme => ({
+  root: {
+    paddingBottom: theme.spacing(10),
+    paddingTop: theme.spacing(1)
+  }
+}));
 
 interface OwnProps {}
 
 interface DispatchProps {
-  roleCreate: (role: Partial<Role>) => Promise<any>;
+  roleCreate: (questionTempalte: Role) => Promise<any>;
   roleUpdate: (role: Role) => Promise<any>;
   roleRemove: (roleId: string) => Promise<any>;
-  roleGetAll: () => void;
-  addError: (error: any) => void;
 }
 
 interface StateProps {
   rolesState: RolesState;
 }
 
-type Props = StateProps &
-  OwnProps &
-  DispatchProps &
-  WithSnackbarProps &
-  WithStyles<typeof styles>;
+type Props = StateProps & OwnProps & DispatchProps;
 
-interface ComponentState {
-  columns: Array<Column<Role>>;
-  roles: Role[];
+interface ModalProps {
+  open: boolean;
+  role: Role;
+  title?: string;
+  onAccept?: (role: Role) => void;
+  submitButtonText?: string;
 }
 
-// TODO Convert to rolesPage to funtionnal component
-class RolesPage extends React.Component<Props, ComponentState> {
-  /**
-   *
-   */
-  constructor(props: Props) {
-    super(props);
+const RolesPage: React.FunctionComponent<Props> = (props: Props) => {
+  const classes = useStyles();
 
-    this.state = {
-      columns: [
-        { title: 'Name', field: 'name' },
-        { title: 'Icon', field: 'icon' },
-        {
-          title: 'Permission Level',
-          field: 'permissionLevel',
-          type: 'numeric',
-          initialEditValue: 0
-        }
-      ],
-      roles: []
-    };
-  }
+  const [modalProps, setModalProps] = useState({
+    open: false,
+    role: Role.New({})
+  } as ModalProps);
 
-  reloadDatas() {
-    if (!this.props.rolesState.roles && !this.props.rolesState.loading) {
-      this.props.roleGetAll();
-    }
-  }
+  console.log(modalProps);
 
-  componentDidMount() {
-    this.reloadDatas();
-  }
+  const openModal = () => setModalProps({ ...modalProps, open: true });
 
-  componentDidUpdate() {
-    this.reloadDatas();
-  }
+  const closeModal = () => setModalProps({ ...modalProps, open: false });
 
-  static getDerivedStateFromProps(nextProps: Props, prevState: ComponentState) {
-    let nextRoles = nextProps.rolesState.roles;
-    if (nextRoles) {
-      let prevRoles = prevState.roles;
+  const handleUpdate = (updatedRole: Role) => {
+    closeModal();
 
-      if (!Role.CompareArrays(nextRoles, prevRoles)) {
-        return {
-          roles: lodash.cloneDeep(nextRoles)
-        };
-      }
-    }
+    props.roleUpdate(updatedRole);
+  };
 
-    return null;
-  }
+  const handleCreate = (createdRole: Role) => {
+    closeModal();
 
-  render() {
-    const classes = this.props.classes;
+    props.roleCreate(createdRole);
+  };
 
-    return (
-      <Container component="main" className={classes.root}>
-        {this.props.rolesState.roles
-          ? this.renderTable(this.state.roles)
-          : this.renderLoading()}
-      </Container>
-    );
-  }
+  const handleOnUpdate = (clickedRole: Role) => {
+    setModalProps({
+      open: true,
+      onAccept: handleUpdate,
+      role: clickedRole,
+      title: 'Edit type',
+      submitButtonText: 'Confirm update'
+    });
+  };
 
-  renderTable(roles: Role[]) {
-    return (
-      <MaterialTable
-        title="Role Table"
-        columns={this.state.columns}
-        data={roles}
-        editable={{
-          onRowAdd: newData =>
-            new Promise(async (resolve, reject) => {
-              let newRole = Role.New(newData);
-              let created = await this.props.roleCreate(newRole);
-              if (created) resolve();
-              else reject();
-            }),
-          onRowUpdate: (newData, oldData) =>
-            new Promise(async (resolve, reject) => {
-              if ((newData as any).permissionLevel.length > 0)
-                newData.permissionLevel = parseInt(
-                  (newData as any).permissionLevel
-                );
-              let updatedRole = Role.New(newData);
-              let updated = await this.props.roleUpdate(updatedRole);
-              if (updated) resolve();
-              else reject();
-            }),
-          onRowDelete: oldData =>
-            new Promise(async (resolve, reject) => {
-              let deleted = await this.props.roleRemove(oldData.id);
-              if (deleted) resolve();
-              else reject();
-            })
+  const handleOnCreate = () => {
+    setModalProps({
+      open: true,
+      onAccept: handleCreate,
+      role: Role.New({}),
+      title: 'Create a new type',
+      submitButtonText: 'Create'
+    });
+  };
+
+  const handleOnDelete = (roleId: string) => {
+    yesNoController()!
+      .present({
+        title: 'Are you sure you want to delete this type\u00a0?',
+        acceptText: 'Yes',
+        denyText: 'No'
+      })
+      .then(() => {
+        props.roleRemove(roleId);
+      })
+      .catch(error => {
+        //this.props.addError(error);
+      });
+  };
+
+  return (
+    <>
+      <Box component="div" className={classes.root}>
+        <Typography component="h2" variant="h5" align="center">
+          Roles
+        </Typography>
+        {props.rolesState.roles ? (
+          <RoleList
+            roles={props.rolesState.roles}
+            onUpdate={handleOnUpdate}
+            onDelete={handleOnDelete}
+          />
+        ) : (
+          <Loading />
+        )}
+      </Box>
+      <Fab
+        className="floating-action-button"
+        onClick={handleOnCreate}
+        style={{ zIndex: 10 }}
+      >
+        <AddIcon />
+      </Fab>
+
+      <RoleDialog
+        dialogProps={{
+          open: modalProps.open,
+          onClose: closeModal
         }}
-        options={{ pageSize: 10, pageSizeOptions: [10] }}
+        role={modalProps.role}
+        editable
+        title={modalProps.title}
+        acceptButtonText={modalProps.submitButtonText}
+        onAccept={modalProps.onAccept}
       />
-    );
-  }
-
-  renderLoading() {
-    return <Loading />;
-  }
-}
+    </>
+  );
+};
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
@@ -170,7 +154,7 @@ const mapDispatchToProps = (
   ownProps: OwnProps
 ): DispatchProps => {
   return {
-    roleCreate: async (role: Partial<Role>) => {
+    roleCreate: async (role: Role) => {
       return await dispatch(RolesActions.roleCreate(role));
     },
     roleUpdate: async (role: Role) => {
@@ -178,12 +162,6 @@ const mapDispatchToProps = (
     },
     roleRemove: async (roleId: string) => {
       return await dispatch(RolesActions.roleRemove(roleId));
-    },
-    roleGetAll: async () => {
-      await dispatch(RolesActions.roleGetAll());
-    },
-    addError: async (error: any) => {
-      await dispatch(addError(error));
     }
   };
 };
@@ -191,4 +169,4 @@ const mapDispatchToProps = (
 export const Roles = connect<StateProps, DispatchProps, OwnProps, RootState>(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(withSnackbar(RolesPage)));
+)(RolesPage);

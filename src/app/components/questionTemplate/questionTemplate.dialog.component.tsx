@@ -27,7 +27,7 @@ import {
   DangerIconButton
 } from '../utils/dangerButton.component';
 import { Helper } from '../../../helper';
-import { QuestionType } from '../../../api/classes/questionType.class';
+import { QuestionTemplate } from '../../../api/classes/questionTemplate.class';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -45,48 +45,50 @@ const useStyles = makeStyles(theme => ({
 
 interface OwnProps {
   dialogProps?: DialogProps;
-  questionType: QuestionType;
+  questionTemplate: QuestionTemplate;
   editable: boolean;
   disabled?: boolean;
   acceptButtonText?: string;
   deleteButtonText?: string;
-  onAccept?: (questionType: QuestionType) => void;
-  onDelete?: (questionTypeId: string) => void;
+  onAccept?: (questionTemplate: QuestionTemplate) => void;
+  onDelete?: (questionTemplateId: string) => void;
   title?: string;
 }
 
 type Props = OwnProps;
 
-const QuestionTypeDialogComponent: React.FunctionComponent<Props> = props => {
+const QuestionTemplateDialogComponent: React.FunctionComponent<Props> = props => {
   const classes = useStyles();
 
-  const [name, setName] = useState(props.questionType.name);
-  const [description, setDescription] = useState(
-    props.questionType.description
+  const [name, setName] = useState(props.questionTemplate.name);
+  const [clientPath, setClientPath] = useState(
+    props.questionTemplate.clientPath
   );
 
   React.useEffect(() => {
-    setName(props.questionType.name || '');
-    setDescription(props.questionType.description || '');
-  }, [props.questionType]);
+    setName(props.questionTemplate.name || '');
+    setClientPath(props.questionTemplate.clientPath || '');
+  }, [props.questionTemplate]);
 
   const isDenied = (): boolean => {
-    return name.length === 0 || description.length === 0;
+    return name.length === 0 || clientPath.length === 0;
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     props.editable && setName(e.target.value);
 
-  const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    props.editable && setDescription(e.target.value);
+  const handleClientPatchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    props.editable && setClientPath(e.target.value);
 
   const beforeDelete = () => {
-    if (props.onDelete) props.onDelete(props.questionType.id);
+    if (props.onDelete) props.onDelete(props.questionTemplate.id);
   };
 
   const beforeAccept = () => {
     if (!isDenied() && props.onAccept) {
-      props.onAccept(Helper.clone(props.questionType, { name, description }));
+      props.onAccept(
+        Helper.clone(props.questionTemplate, { name, clientPath })
+      );
     }
   };
 
@@ -106,7 +108,7 @@ const QuestionTypeDialogComponent: React.FunctionComponent<Props> = props => {
         onChange={handleNameChange}
       />
       <TextField
-        name="description"
+        name="clientPath"
         margin="normal"
         variant="outlined"
         type="text"
@@ -114,12 +116,12 @@ const QuestionTypeDialogComponent: React.FunctionComponent<Props> = props => {
         disabled={props.disabled}
         fullWidth
         multiline
-        rows={4}
-        rowsMax={6}
-        id="description"
-        label="Description"
-        value={description}
-        onChange={handleDescriptionChange}
+        rows={2}
+        rowsMax={2}
+        id="clientPath"
+        label="Client Path"
+        value={clientPath}
+        onChange={handleClientPatchChange}
       />
     </Box>
   );
@@ -207,4 +209,4 @@ const QuestionTypeDialogComponent: React.FunctionComponent<Props> = props => {
   return props.dialogProps ? renderDialog() : renderCard();
 };
 
-export const QuestionTypeDialog = QuestionTypeDialogComponent;
+export const QuestionTemplateDialog = QuestionTemplateDialogComponent;

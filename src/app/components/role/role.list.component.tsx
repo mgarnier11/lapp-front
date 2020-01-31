@@ -1,51 +1,48 @@
 import React from 'react';
 import { useTheme, makeStyles } from '@material-ui/core/styles';
-import { QuestionType } from '../../../api/classes/questionType.class';
+import { Role } from '../../../api/classes/role.class';
 import { Grid, useMediaQuery, Box } from '@material-ui/core';
 
-import { QuestionTypeItem } from './questionType.item.component';
+import { RoleItem } from './role.item.component';
 import { Helper } from '../../../helper';
 
 const useStyles = makeStyles(theme => ({
-  questionTypesGrid: {
+  rolesGrid: {
     paddingTop: theme.spacing(1)
   },
-  questionTypeCol: {
+  roleCol: {
     paddingLeft: theme.spacing(0.5),
     paddingRight: theme.spacing(0.5),
     height: 'fit-content'
   },
-  questionTypeItem: {
+  roleItem: {
     padding: theme.spacing(1)
   }
 }));
 
 interface OwnProps {
-  questionTypes: QuestionType[];
-  onDelete?: (questionTypeId: string) => void;
-  onUpdate?: (questionType: QuestionType) => void;
+  roles: Role[];
+  onDelete?: (roleId: string) => void;
+  onUpdate?: (role: Role) => void;
 }
 
 type Props = OwnProps;
 
-const QuestionTypeListComponent: React.FunctionComponent<Props> = props => {
+const RoleListComponent: React.FunctionComponent<Props> = props => {
   const classes = useStyles();
   const theme = useTheme();
   //const isXs = useMediaQuery(theme.breakpoints.up('xs'));
   const isSm = useMediaQuery(theme.breakpoints.up('sm'));
   const isLg = useMediaQuery(theme.breakpoints.up('lg'));
 
-  const { questionTypes } = props;
+  const { roles } = props;
 
-  const questionTypeCols = Helper.explodeArray(
-    questionTypes,
-    isLg ? 3 : isSm ? 2 : 1
-  );
+  const roleCols = Helper.explodeArray(roles, isLg ? 3 : isSm ? 2 : 1);
 
   return (
     <Box>
-      <Grid className={classes.questionTypesGrid} container>
-        {questionTypeCols.map((questionTypeList, index) => (
+      <Grid className={classes.rolesGrid} container>
+        {roleCols.map((roleList, index) => (
           <Grid
             key={index}
             item
@@ -53,17 +50,12 @@ const QuestionTypeListComponent: React.FunctionComponent<Props> = props => {
             xs={12}
             sm={6}
             lg={4}
-            className={classes.questionTypeCol}
+            className={classes.roleCol}
           >
-            {questionTypeList.map(questionType => (
-              <Grid
-                key={questionType.id}
-                item
-                xs={12}
-                className={classes.questionTypeItem}
-              >
-                <QuestionTypeItem
-                  questionType={questionType}
+            {roleList.map(role => (
+              <Grid key={role.id} item xs={12} className={classes.roleItem}>
+                <RoleItem
+                  role={role}
                   onDelete={props.onDelete}
                   onUpdate={props.onUpdate}
                 />
@@ -76,4 +68,4 @@ const QuestionTypeListComponent: React.FunctionComponent<Props> = props => {
   );
 };
 
-export const QuestionTypeList = QuestionTypeListComponent;
+export const RoleList = RoleListComponent;

@@ -149,7 +149,7 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
 
         <Typography
           component="h1"
-          variant="h6"
+          variant="h5"
           align="center"
           className={classes.appName}
         >

@@ -22,10 +22,12 @@ const useStyles = makeStyles(theme => ({
   dangerIconButton: {
     color: theme.palette.error.main,
     '&:hover': {
-      color: theme.palette.error.dark
+      color: theme.palette.error.dark,
+      backgroundColor: 'rgba(211, 47, 47, 0.1)'
     },
     '@media (hover: none)': {
-      color: theme.palette.error.main
+      color: `${theme.palette.error.main} !important`,
+      backgroundColor: 'transparent !important'
     }
   }
 }));

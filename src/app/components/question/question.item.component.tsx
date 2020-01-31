@@ -19,7 +19,7 @@ import { UserState } from '../../../store/user/types';
 import { RootState } from '../../../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
-import { QuestionForm } from './question.form.component';
+import { QuestionDialog } from './question.dialog.component';
 
 const useStyles = makeStyles(theme => ({
   deleteButton: {
@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
     transform: 'rotate(180deg)'
   },
   cardContent: {
-    paddingTop: '0 !important'
+    padding: '0 !important'
   },
   alignSelf: {
     alignSelf: 'baseline'
@@ -98,48 +98,19 @@ const QuestionItemComponent: React.FunctionComponent<Props> = props => {
         />
         <Collapse in={expanded} unmountOnExit>
           <CardContent className={classes.cardContent}>
-            <QuestionForm
+            <QuestionDialog
               question={question}
               editable={user.id === question.creator.id}
               displayType={false}
               displayText={user.id === question.creator.id}
               acceptButtonText="Update"
-              onSubmit={props.onUpdate}
+              onAccept={props.onUpdate}
               deleteButtonText="Delete"
               onDelete={props.onDelete}
+              hideCardShadow={true}
             />
           </CardContent>
         </Collapse>
-        {/*
-      <CardActions disableSpacing>
-        {props.onDetails && (
-          <Tooltip title="Details">
-            <IconButton onClick={() => props.onDetails!(question)}>
-              <ZoomOutMapIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-
-        {props.onUpdate && user.id === question.creator.id && (
-          <Tooltip title="Edit">
-            <IconButton onClick={() => props.onUpdate!(question)}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-
-        {props.onDelete && user.id === question.creator.id && (
-          <Tooltip title="Delete">
-            <IconButton
-              onClick={() => props.onDelete!(question.id)}
-              className={classes.deleteButton}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-      </CardActions>
-        */}
       </Card>
     </ClickAwayListener>
   );

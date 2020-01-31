@@ -8,9 +8,7 @@ import { Helper } from '../../../helper';
 
 const useStyles = makeStyles(theme => ({
   questionTemplatesGrid: {
-    [theme.breakpoints.down('xs')]: {
-      paddingTop: 48
-    }
+    paddingTop: theme.spacing(1)
   },
   questionTemplateCol: {
     paddingLeft: theme.spacing(0.5),

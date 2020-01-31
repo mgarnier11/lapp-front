@@ -27,7 +27,7 @@ import {
   DangerIconButton
 } from '../utils/dangerButton.component';
 import { Helper } from '../../../helper';
-import { QuestionType } from '../../../api/classes/questionType.class';
+import { Role } from '../../../api/classes/role.class';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -45,48 +45,53 @@ const useStyles = makeStyles(theme => ({
 
 interface OwnProps {
   dialogProps?: DialogProps;
-  questionType: QuestionType;
+  role: Role;
   editable: boolean;
   disabled?: boolean;
   acceptButtonText?: string;
   deleteButtonText?: string;
-  onAccept?: (questionType: QuestionType) => void;
-  onDelete?: (questionTypeId: string) => void;
+  onAccept?: (role: Role) => void;
+  onDelete?: (roleId: string) => void;
   title?: string;
 }
 
 type Props = OwnProps;
 
-const QuestionTypeDialogComponent: React.FunctionComponent<Props> = props => {
+const RoleDialogComponent: React.FunctionComponent<Props> = props => {
   const classes = useStyles();
 
-  const [name, setName] = useState(props.questionType.name);
-  const [description, setDescription] = useState(
-    props.questionType.description
+  const [name, setName] = useState(props.role.name);
+  const [icon, setIcon] = useState(props.role.icon);
+  const [permissionLevel, setPermissionLevel] = useState(
+    props.role.permissionLevel
   );
 
   React.useEffect(() => {
-    setName(props.questionType.name || '');
-    setDescription(props.questionType.description || '');
-  }, [props.questionType]);
+    setName(props.role.name || '');
+    setIcon(props.role.icon || '');
+    setPermissionLevel(props.role.permissionLevel || 0);
+  }, [props.role]);
 
   const isDenied = (): boolean => {
-    return name.length === 0 || description.length === 0;
+    return name.length === 0 || icon.length === 0 || permissionLevel < 0;
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     props.editable && setName(e.target.value);
 
-  const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    props.editable && setDescription(e.target.value);
+  const handleIconChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    props.editable && setIcon(e.target.value);
+
+  const handlePermissionChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    props.editable && setPermissionLevel(parseInt(e.target.value));
 
   const beforeDelete = () => {
-    if (props.onDelete) props.onDelete(props.questionType.id);
+    if (props.onDelete) props.onDelete(props.role.id);
   };
 
   const beforeAccept = () => {
     if (!isDenied() && props.onAccept) {
-      props.onAccept(Helper.clone(props.questionType, { name, description }));
+      props.onAccept(Helper.clone(props.role, { name, icon, permissionLevel }));
     }
   };
 
@@ -106,20 +111,31 @@ const QuestionTypeDialogComponent: React.FunctionComponent<Props> = props => {
         onChange={handleNameChange}
       />
       <TextField
-        name="description"
+        name="icon"
         margin="normal"
         variant="outlined"
         type="text"
         required
         disabled={props.disabled}
         fullWidth
-        multiline
-        rows={4}
-        rowsMax={6}
-        id="description"
-        label="Description"
-        value={description}
-        onChange={handleDescriptionChange}
+        id="icon"
+        label="Icon"
+        value={icon}
+        onChange={handleIconChange}
+      />
+
+      <TextField
+        name="permissionLevel"
+        margin="normal"
+        variant="outlined"
+        type="number"
+        required
+        disabled={props.disabled}
+        fullWidth
+        id="permissionLevel"
+        label="PermissionLevel"
+        value={permissionLevel}
+        onChange={handlePermissionChange}
       />
     </Box>
   );
@@ -207,4 +223,4 @@ const QuestionTypeDialogComponent: React.FunctionComponent<Props> = props => {
   return props.dialogProps ? renderDialog() : renderCard();
 };
 
-export const QuestionTypeDialog = QuestionTypeDialogComponent;
+export const RoleDialog = RoleDialogComponent;

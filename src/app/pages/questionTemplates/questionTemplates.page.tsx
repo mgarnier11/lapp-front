@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { Box, Modal, Fab } from '@material-ui/core';
+import { Box, Fab, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 
@@ -12,26 +12,12 @@ import { QuestionTemplate } from '../../../api/classes/questionTemplate.class';
 import { Loading } from '../../components/utils/loading.component';
 import { QuestionTemplateList } from '../../components/questionTemplate/questionTemplate.list.component';
 import { yesNoController } from '../../components/dialogs/yesno.component';
-import { QuestionTemplateModal } from '../../components/questionTemplate/questionTemplate.modal.component';
+import { QuestionTemplateDialog } from '../../components/questionTemplate/questionTemplate.dialog.component';
 
 const useStyles = makeStyles(theme => ({
   root: {
+    paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(10)
-  },
-  modalRootContent: {
-    position: 'absolute',
-    left: '50%',
-    top: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 'fit-content',
-    outline: 'none'
-  },
-  modalCardTitle: {
-    textAlign: 'center',
-    paddingBottom: 0
-  },
-  modalCardContent: {
-    paddingTop: 0
   }
 }));
 
@@ -53,7 +39,7 @@ interface ModalProps {
   open: boolean;
   questionTemplate: QuestionTemplate;
   title?: string;
-  onSubmit?: (questionTemplate: QuestionTemplate) => void;
+  onAccept?: (questionTemplate: QuestionTemplate) => void;
   submitButtonText?: string;
 }
 
@@ -86,7 +72,7 @@ const QuestionTemplatesPage: React.FunctionComponent<Props> = (
   const handleOnUpdate = (clickedQuestionTemplate: QuestionTemplate) => {
     setModalProps({
       open: true,
-      onSubmit: handleUpdate,
+      onAccept: handleUpdate,
       questionTemplate: clickedQuestionTemplate,
       title: 'Edit template',
       submitButtonText: 'Confirm update'
@@ -96,7 +82,7 @@ const QuestionTemplatesPage: React.FunctionComponent<Props> = (
   const handleOnCreate = () => {
     setModalProps({
       open: true,
-      onSubmit: handleCreate,
+      onAccept: handleCreate,
       questionTemplate: QuestionTemplate.New({}),
       title: 'Create a new template',
       submitButtonText: 'Create'
@@ -121,6 +107,9 @@ const QuestionTemplatesPage: React.FunctionComponent<Props> = (
   return (
     <>
       <Box component="div" className={classes.root}>
+        <Typography component="h2" variant="h5" align="center">
+          Question templates
+        </Typography>
         {props.questionTemplatesState.questionTemplates ? (
           <QuestionTemplateList
             questionTemplates={props.questionTemplatesState.questionTemplates}
@@ -138,15 +127,15 @@ const QuestionTemplatesPage: React.FunctionComponent<Props> = (
       >
         <AddIcon />
       </Fab>
-      <Modal open={modalProps.open} onClose={closeModal}>
-        <QuestionTemplateModal
-          questionTemplate={modalProps.questionTemplate}
-          editable
-          title={modalProps.title}
-          acceptButtonText={modalProps.submitButtonText}
-          onSubmit={modalProps.onSubmit}
-        />
-      </Modal>
+
+      <QuestionTemplateDialog
+        dialogProps={{ open: modalProps.open, onClose: closeModal }}
+        questionTemplate={modalProps.questionTemplate}
+        editable
+        title={modalProps.title}
+        acceptButtonText={modalProps.submitButtonText}
+        onAccept={modalProps.onAccept}
+      />
     </>
   );
 };
