@@ -99,7 +99,6 @@ const QuestionTemplateDialogComponent: React.FunctionComponent<Props> = props =>
         margin="normal"
         variant="outlined"
         type="text"
-        required
         disabled={props.disabled}
         fullWidth
         id="name"
@@ -112,7 +111,6 @@ const QuestionTemplateDialogComponent: React.FunctionComponent<Props> = props =>
         margin="normal"
         variant="outlined"
         type="text"
-        required
         disabled={props.disabled}
         fullWidth
         multiline

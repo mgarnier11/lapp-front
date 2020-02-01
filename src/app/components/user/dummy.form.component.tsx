@@ -56,7 +56,6 @@ const DummyUserFormComponent: React.FunctionComponent<Props> = props => {
         margin="normal"
         variant="outlined"
         type="text"
-        required
         disabled={props.disabled}
         fullWidth
         id="name"
@@ -69,7 +68,6 @@ const DummyUserFormComponent: React.FunctionComponent<Props> = props => {
         margin="normal"
         variant="outlined"
         select
-        required
         disabled={props.disabled}
         fullWidth
         id="genderSelect"

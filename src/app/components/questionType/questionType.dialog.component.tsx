@@ -2,20 +2,19 @@ import React, { useState } from 'react';
 import {
   Button,
   TextField,
-  Grid,
   DialogProps,
   DialogContent,
   DialogTitle,
   DialogActions,
   IconButton,
-  Container,
   Dialog,
   Box,
   Card,
   CardHeader,
   CardContent,
   CardActions,
-  Typography
+  Typography,
+  MenuItem
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -28,6 +27,11 @@ import {
 } from '../utils/dangerButton.component';
 import { Helper } from '../../../helper';
 import { QuestionType } from '../../../api/classes/questionType.class';
+import { QuestionTemplate } from '../../../api/classes/questionTemplate.class';
+import { QuestionTemplatesState } from '../../../store/questionTemplates/types';
+import { RootState } from '../../../store';
+import { ThunkDispatch } from 'redux-thunk';
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -55,23 +59,38 @@ interface OwnProps {
   title?: string;
 }
 
-type Props = OwnProps;
+interface DispatchProps {}
+
+interface StateProps {
+  questionTemplatesState: QuestionTemplatesState;
+}
+
+type Props = StateProps & OwnProps & DispatchProps;
 
 const QuestionTypeDialogComponent: React.FunctionComponent<Props> = props => {
   const classes = useStyles();
+  const { questionTemplates } = props.questionTemplatesState;
 
   const [name, setName] = useState(props.questionType.name);
   const [description, setDescription] = useState(
     props.questionType.description
   );
+  const [template, setTemplate] = useState(props.questionType.template);
 
   React.useEffect(() => {
     setName(props.questionType.name || '');
     setDescription(props.questionType.description || '');
+    setTemplate(props.questionType.template || questionTemplates![0]);
   }, [props.questionType]);
 
   const isDenied = (): boolean => {
-    return name.length === 0 || description.length === 0;
+    return (
+      !questionTemplates!.find(t =>
+        QuestionTemplate.CompareObjects(t, template)
+      ) ||
+      name.length === 0 ||
+      description.length === 0
+    );
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -80,13 +99,21 @@ const QuestionTypeDialogComponent: React.FunctionComponent<Props> = props => {
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     props.editable && setDescription(e.target.value);
 
+  const handleTemplateChange = (e: React.ChangeEvent<{ value: unknown }>) =>
+    props.editable &&
+    setTemplate(
+      questionTemplates!.find(t => t.id === (e.target.value as string))!
+    );
+
   const beforeDelete = () => {
     if (props.onDelete) props.onDelete(props.questionType.id);
   };
 
   const beforeAccept = () => {
     if (!isDenied() && props.onAccept) {
-      props.onAccept(Helper.clone(props.questionType, { name, description }));
+      props.onAccept(
+        Helper.clone(props.questionType, { name, description, template })
+      );
     }
   };
 
@@ -97,7 +124,6 @@ const QuestionTypeDialogComponent: React.FunctionComponent<Props> = props => {
         margin="normal"
         variant="outlined"
         type="text"
-        required
         disabled={props.disabled}
         fullWidth
         id="name"
@@ -106,11 +132,33 @@ const QuestionTypeDialogComponent: React.FunctionComponent<Props> = props => {
         onChange={handleNameChange}
       />
       <TextField
+        name="templateSelect"
+        margin="normal"
+        variant="outlined"
+        select={props.editable}
+        disabled={props.disabled}
+        fullWidth
+        id="templateSelect"
+        label="Type Template"
+        value={props.editable ? template.id : template.name}
+        onChange={handleTemplateChange}
+      >
+        {questionTemplates ? (
+          questionTemplates.map(t => (
+            <MenuItem value={t.id} key={t.id}>
+              {t.name}
+            </MenuItem>
+          ))
+        ) : (
+          <MenuItem disabled>Loading...</MenuItem>
+        )}
+      </TextField>
+
+      <TextField
         name="description"
         margin="normal"
         variant="outlined"
         type="text"
-        required
         disabled={props.disabled}
         fullWidth
         multiline
@@ -207,4 +255,22 @@ const QuestionTypeDialogComponent: React.FunctionComponent<Props> = props => {
   return props.dialogProps ? renderDialog() : renderCard();
 };
 
-export const QuestionTypeDialog = QuestionTypeDialogComponent;
+const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
+  return { questionTemplatesState: states.questionTemplatesState };
+};
+
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<{}, {}, any>,
+  ownProps: OwnProps
+): DispatchProps => {
+  return {};
+};
+
+export const QuestionTypeDialog = connect<
+  StateProps,
+  DispatchProps,
+  OwnProps,
+  RootState
+>(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(
+  QuestionTypeDialogComponent
+);

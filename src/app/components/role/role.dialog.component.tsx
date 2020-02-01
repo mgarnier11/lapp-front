@@ -102,7 +102,6 @@ const RoleDialogComponent: React.FunctionComponent<Props> = props => {
         margin="normal"
         variant="outlined"
         type="text"
-        required
         disabled={props.disabled}
         fullWidth
         id="name"
@@ -115,7 +114,6 @@ const RoleDialogComponent: React.FunctionComponent<Props> = props => {
         margin="normal"
         variant="outlined"
         type="text"
-        required
         disabled={props.disabled}
         fullWidth
         id="icon"
@@ -129,7 +127,6 @@ const RoleDialogComponent: React.FunctionComponent<Props> = props => {
         margin="normal"
         variant="outlined"
         type="number"
-        required
         disabled={props.disabled}
         fullWidth
         id="permissionLevel"

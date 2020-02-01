@@ -154,7 +154,6 @@ const QuestionDialogComponent: React.FunctionComponent<Props> = props => {
           margin="normal"
           variant="outlined"
           select={props.editable}
-          required={!props.editable}
           disabled={props.disabled}
           fullWidth
           id="typeSelect"
@@ -179,7 +178,6 @@ const QuestionDialogComponent: React.FunctionComponent<Props> = props => {
           margin="normal"
           variant="outlined"
           type="text"
-          required
           disabled={props.disabled}
           fullWidth
           multiline
