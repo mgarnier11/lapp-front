@@ -15,7 +15,8 @@ import {
   CardHeader,
   CardContent,
   CardActions,
-  Typography
+  Typography,
+  MenuItem
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -28,6 +29,9 @@ import {
 } from '../utils/dangerButton.component';
 import { Helper } from '../../../helper';
 import { QuestionTemplate } from '../../../api/classes/questionTemplate.class';
+import QuestionTemplateLoader, {
+  templateList
+} from '../../templates/questions';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -48,6 +52,7 @@ interface OwnProps {
   questionTemplate: QuestionTemplate;
   editable: boolean;
   disabled?: boolean;
+  showPreview?: boolean;
   acceptButtonText?: string;
   deleteButtonText?: string;
   onAccept?: (questionTemplate: QuestionTemplate) => void;
@@ -77,8 +82,8 @@ const QuestionTemplateDialogComponent: React.FunctionComponent<Props> = props =>
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     props.editable && setName(e.target.value);
 
-  const handleClientPatchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    props.editable && setClientPath(e.target.value);
+  const handleClientPathChange = (e: React.ChangeEvent<{ value: unknown }>) =>
+    props.editable && setClientPath(e.target.value as string);
 
   const beforeDelete = () => {
     if (props.onDelete) props.onDelete(props.questionTemplate.id);
@@ -106,21 +111,31 @@ const QuestionTemplateDialogComponent: React.FunctionComponent<Props> = props =>
         value={name}
         onChange={handleNameChange}
       />
-      <TextField
-        name="clientPath"
-        margin="normal"
-        variant="outlined"
-        type="text"
-        disabled={props.disabled}
-        fullWidth
-        multiline
-        rows={2}
-        rowsMax={2}
-        id="clientPath"
-        label="Client Path"
-        value={clientPath}
-        onChange={handleClientPatchChange}
-      />
+      {props.showPreview && (
+        <TextField
+          name="clientPathSelect"
+          margin="normal"
+          variant="outlined"
+          select={props.editable}
+          disabled={props.disabled}
+          fullWidth
+          id="clientPathSelect"
+          label="Template client Path"
+          value={clientPath}
+          onChange={handleClientPathChange}
+        >
+          {templateList ? (
+            templateList.map(t => (
+              <MenuItem value={t} key={t}>
+                {t}
+              </MenuItem>
+            ))
+          ) : (
+            <MenuItem disabled>Loading...</MenuItem>
+          )}
+        </TextField>
+      )}
+      <QuestionTemplateLoader templatePath={clientPath} templateProps={{}} />
     </Box>
   );
 
@@ -205,6 +220,10 @@ const QuestionTemplateDialogComponent: React.FunctionComponent<Props> = props =>
   );
 
   return props.dialogProps ? renderDialog() : renderCard();
+};
+
+QuestionTemplateDialogComponent.defaultProps = {
+  showPreview: true
 };
 
 export const QuestionTemplateDialog = QuestionTemplateDialogComponent;
