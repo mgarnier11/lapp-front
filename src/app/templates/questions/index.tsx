@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Question } from '../../../api/classes/question.class';
 
 interface OwnProps {
   templatePath: string;
-  templateProps: any;
+  templateProps: TemplateProps;
 }
 
 type Props = OwnProps;
@@ -31,5 +32,11 @@ const TemplateLoader: React.FunctionComponent<Props> = (props: Props) => {
 };
 
 export default TemplateLoader;
+
+export type TemplateProps = {
+  question: Question;
+  onAccept?: (question: Question) => void;
+  onDeny?: (question: Question) => void;
+};
 
 export const templateList: string[] = ['simple', 'test'];

@@ -32,6 +32,7 @@ import { QuestionTemplate } from '../../../api/classes/questionTemplate.class';
 import QuestionTemplateLoader, {
   templateList
 } from '../../templates/questions';
+import { Question } from '../../../api/classes/question.class';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -135,7 +136,20 @@ const QuestionTemplateDialogComponent: React.FunctionComponent<Props> = props =>
           )}
         </TextField>
       )}
-      <QuestionTemplateLoader templatePath={clientPath} templateProps={{}} />
+      <Box p={1}>
+        <QuestionTemplateLoader
+          templatePath={clientPath}
+          templateProps={{
+            question: Question.New({
+              difficulty: 5,
+              hotLevel: 5,
+              text: 'Patate'
+            }),
+            onAccept: (q: Question) => {},
+            onDeny: (q: Question) => {}
+          }}
+        />
+      </Box>
     </Box>
   );
 

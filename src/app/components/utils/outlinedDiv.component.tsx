@@ -20,6 +20,9 @@ const useStyles = makeStyles(theme => ({
   root: {
     '& .MuiOutlinedInput-root': {
       padding: 0
+    },
+    '& .MuiInputBase-root': {
+      cursor: 'default'
     }
   }
 }));

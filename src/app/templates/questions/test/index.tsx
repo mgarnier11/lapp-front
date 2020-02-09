@@ -4,12 +4,9 @@ import { connect } from 'react-redux';
 import { Question } from '../../../../api/classes/question.class';
 import { UserState } from '../../../../store/user/types';
 import { RootState } from '../../../../store';
+import { TemplateProps } from '..';
 
-interface OwnProps {
-  question: Question;
-  onAccept?: (question: Question) => void;
-  onDeny?: (question: Question) => void;
-}
+interface OwnProps {}
 
 interface DispatchProps {}
 
@@ -17,7 +14,7 @@ interface StateProps {
   userState: UserState;
 }
 
-type Props = StateProps & OwnProps & DispatchProps;
+type Props = StateProps & OwnProps & DispatchProps & TemplateProps;
 
 const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
   props: Props

@@ -81,6 +81,17 @@ const overrides: MyOverrides = {
   },
   MuiExpansionPanelSummary: {
     ...MyMuiExpansionPanelSummary
+  },
+  MuiChip: {
+    colorPrimary: {
+      backgroundColor: palette.primary.light,
+      '&:hover': {
+        backgroundColor: palette.primary.main
+      },
+      '@media (hover: none)': {
+        backgroundColor: `${palette.primary.light} !important`
+      }
+    }
   }
 };
 

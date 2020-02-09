@@ -230,7 +230,7 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
         value={nbTurns}
         onChange={handleNbTurnsChange}
       />
-      <OutlinedDiv label="Question Types">
+      <OutlinedDiv label="Question Types" fullWidth>
         {allQuestionsTypes.map(t => (
           <Chip
             label={t.name}
