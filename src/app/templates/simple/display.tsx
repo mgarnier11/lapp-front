@@ -1,10 +1,10 @@
 import React from 'react';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
-import { Question } from '../../../../api/classes/question.class';
-import { UserState } from '../../../../store/user/types';
-import { RootState } from '../../../../store';
-import { TemplateProps } from '..';
+import { Question } from '../../../api/classes/question.class';
+import { UserState } from '../../../store/user/types';
+import { RootState } from '../../../store';
+import { TemplateDisplayProps } from '../templateDisplay';
 
 interface OwnProps {}
 
@@ -14,7 +14,7 @@ interface StateProps {
   userState: UserState;
 }
 
-type Props = StateProps & OwnProps & DispatchProps & TemplateProps;
+type Props = StateProps & OwnProps & DispatchProps & TemplateDisplayProps;
 
 const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
   props: Props

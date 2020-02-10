@@ -133,7 +133,7 @@ const LoginPage: React.FunctionComponent<LoginPageProps> = props => {
           {loading && <CircularProgress size={24} color="inherit" />}
           {!loading && 'Sign In'}
         </Button>
-        <IdVice />
+        {/* <IdVice /> */}
         <Typography align="center" className={classes.register}>
           <u>
             <Link to="/register">Register</Link>

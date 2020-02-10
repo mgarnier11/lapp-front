@@ -219,6 +219,8 @@ const QuestionTypeDialogComponent: React.FunctionComponent<Props> = props => {
     <Dialog
       {...(props.dialogProps || { open: false })}
       className={classes.root}
+      fullWidth
+      maxWidth="sm"
     >
       {props.title && (
         <DialogTitle disableTypography className={classes.title}>

@@ -29,10 +29,9 @@ import {
 } from '../utils/dangerButton.component';
 import { Helper } from '../../../helper';
 import { QuestionTemplate } from '../../../api/classes/questionTemplate.class';
-import QuestionTemplateLoader, {
-  templateList
-} from '../../templates/questions';
 import { Question } from '../../../api/classes/question.class';
+import { templateList } from '../../templates';
+import { TemplateDisplayLoader } from '../../templates/templateDisplay';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -137,9 +136,9 @@ const QuestionTemplateDialogComponent: React.FunctionComponent<Props> = props =>
         </TextField>
       )}
       <Box p={1}>
-        <QuestionTemplateLoader
+        <TemplateDisplayLoader
           templatePath={clientPath}
-          templateProps={{
+          displayProps={{
             question: Question.New({
               difficulty: 5,
               hotLevel: 5,
@@ -200,6 +199,8 @@ const QuestionTemplateDialogComponent: React.FunctionComponent<Props> = props =>
     <Dialog
       {...(props.dialogProps || { open: false })}
       className={classes.root}
+      fullWidth
+      maxWidth="sm"
     >
       {props.title && (
         <DialogTitle disableTypography className={classes.title}>
