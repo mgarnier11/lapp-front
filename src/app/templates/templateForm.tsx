@@ -1,18 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { Question } from '../../api/classes/question.class';
+import { QuestionType } from '../../api/classes/questionType.class';
 
 export type TemplateFormProps = {
   question: Question;
-  acceptButtonText?: string;
-  denyButtonText?: string;
-  onAccept?: (question: Question) => void;
-  onDeny?: (question: Question) => void;
+  editable: boolean;
+  disabled?: boolean;
+  displayExtraInfos?: boolean;
+  displayText?: boolean;
+  dateOptions?: Intl.DateTimeFormatOptions;
+  formProps: QuestionFormProps;
   otherProps?: any;
+};
+
+export type QuestionFormProps = {
+  text: string;
+  setText: (value: string) => void;
+  difficulty: number;
+  setDifficulty: (value: number) => void;
+  hotLevel: number;
+  setHotLevel: (value: number) => void;
 };
 
 type Props = {
   templatePath: string;
   formProps: TemplateFormProps;
+  errorMessage: string;
 };
 
 const TemplateFormLoaderComponent: React.FunctionComponent<Props> = (
@@ -29,7 +42,9 @@ const TemplateFormLoaderComponent: React.FunctionComponent<Props> = (
       })
       .catch(e => {
         setComponent(null);
-        setMessage(e.message);
+        console.log(e);
+
+        setMessage(props.errorMessage);
       });
   }, [props.templatePath]);
 

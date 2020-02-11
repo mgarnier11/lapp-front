@@ -2,6 +2,7 @@ import { QuestionType, QuestionTypeBackModel } from './questionType.class';
 import { User, UserBackModel } from './user.class';
 import { GameType, GameTypeBackModel } from './gameType.class';
 import { DummyUser } from './dummyUser.class';
+import { Helper } from '../../helper';
 
 export interface GameBackModel {
   _id: string;
@@ -63,6 +64,17 @@ export class Game {
   public canStart(): boolean {
     if (this.allUsers.length <= 1) return false;
     return true;
+  }
+
+  public getActualplayer(): User | DummyUser {
+    let userIndex = Helper.getPlayer(
+      this.actualTurn,
+      this.nbTurns,
+      this.allUsers.length,
+      this.displayId
+    );
+
+    return this.allUsers[userIndex];
   }
 
   public static New(datas: Partial<Game>): Game {

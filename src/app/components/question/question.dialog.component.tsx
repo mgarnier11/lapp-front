@@ -38,6 +38,7 @@ import { UserItem } from '../user/user.item.component';
 import { RootState } from '../../../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
+import { TemplateFormLoader } from '../../templates/templateForm';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -106,15 +107,6 @@ const QuestionDialogComponent: React.FunctionComponent<Props> = props => {
     );
   };
 
-  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    props.editable && setText(e.target.value);
-
-  const handleDifficultyChange = (e: any, value: number) =>
-    props.editable && setDifficulty(value);
-
-  const handleHotLevelChange = (e: any, value: number) =>
-    props.editable && setHotLevel(value);
-
   const handleTypeChange = (e: React.ChangeEvent<{ value: unknown }>) =>
     props.editable &&
     setType(questionTypes!.find(t => t.id === (e.target.value as string))!);
@@ -172,85 +164,25 @@ const QuestionDialogComponent: React.FunctionComponent<Props> = props => {
           )}
         </TextField>
       )}
-      {props.displayText && (
-        <TextField
-          name="text"
-          margin="normal"
-          variant="outlined"
-          type="text"
-          disabled={props.disabled}
-          fullWidth
-          multiline
-          rows={4}
-          rowsMax={6}
-          id="text"
-          label="Text"
-          value={text}
-          onChange={handleTextChange}
-        />
-      )}
-
-      <Grid container className={classes.ratingsGrid}>
-        <Grid item xs={6}>
-          <Typography
-            component="legend"
-            color={props.disabled ? 'textSecondary' : 'initial'}
-          >
-            Difficulty
-          </Typography>
-          <Rating
-            disabled={props.disabled}
-            readOnly={!props.editable}
-            name="difficulty"
-            value={difficulty}
-            onChange={handleDifficultyChange}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography
-            component="legend"
-            color={props.disabled ? 'textSecondary' : 'initial'}
-          >
-            Hot Level
-          </Typography>
-          <Rating
-            disabled={props.disabled}
-            readOnly={!props.editable}
-            name="hotLevel"
-            className={classes.hotLevelRating}
-            value={hotLevel}
-            onChange={handleHotLevelChange}
-            icon={<FavoriteIcon fontSize="inherit" />}
-          />
-        </Grid>
-      </Grid>
-      {props.displayExtraInfos && props.question && (
-        <>
-          <OutlinedDiv label="Creator" disabled={props.disabled} fullWidth>
-            <UserItem user={props.question.creator} />
-          </OutlinedDiv>
-          <OutlinedDiv
-            label="Creation Date"
-            disabled={props.disabled}
-            fullWidth
-          >
-            <Box m={1}>
-              {props.question.creationDate.toLocaleDateString(
-                'fr-FR',
-                dateOptions
-              )}
-            </Box>
-          </OutlinedDiv>
-          <OutlinedDiv label="Update Date" disabled={props.disabled} fullWidth>
-            <Box m={1}>
-              {props.question.updateDate.toLocaleDateString(
-                'fr-FR',
-                dateOptions
-              )}
-            </Box>
-          </OutlinedDiv>
-        </>
-      )}
+      <TemplateFormLoader
+        formProps={{
+          editable: props.editable,
+          question: props.question,
+          formProps: {
+            text,
+            setText,
+            difficulty,
+            setDifficulty,
+            hotLevel,
+            setHotLevel
+          },
+          dateOptions,
+          disabled: props.disabled,
+          displayText: props.displayText
+        }}
+        templatePath={type.template.clientPath}
+        errorMessage={'Please select a type'}
+      />
     </Box>
   );
 
@@ -297,6 +229,7 @@ const QuestionDialogComponent: React.FunctionComponent<Props> = props => {
       );
     }
   };
+
   const renderDialog = () => (
     <Dialog
       {...(props.dialogProps || { open: false })}

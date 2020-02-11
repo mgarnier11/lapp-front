@@ -1,1 +1,1 @@
-export const templateList: string[] = ['simple'];
+export const templateList: string[] = ['simple', 'test'];

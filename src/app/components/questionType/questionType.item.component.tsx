@@ -38,7 +38,10 @@ const QuestionTypeItemComponent: React.FunctionComponent<Props> = props => {
 
   return (
     <Card>
-      <CardHeader title={questionType.name} />
+      <CardHeader
+        title={questionType.name}
+        subheader={questionType.template.name}
+      />
       <CardContent className={classes.cardContent}>
         {questionType.description}
       </CardContent>

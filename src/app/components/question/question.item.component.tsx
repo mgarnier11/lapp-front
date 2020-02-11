@@ -96,7 +96,7 @@ const QuestionItemComponent: React.FunctionComponent<Props> = props => {
           classes={{ avatar: classes.alignSelf }}
           onClick={() => setExpanded(!expanded)}
         />
-        <Collapse in={expanded} unmountOnExit>
+        <Collapse in={expanded}>
           <CardContent className={classes.cardContent}>
             <QuestionDialog
               question={question}
