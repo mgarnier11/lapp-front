@@ -37,25 +37,22 @@ type Props = OwnProps & TemplateDisplayProps;
 const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
   props: Props
 ) => {
-  //const classes = useStyles();
-
-  console.log(props);
+  const classes = useStyles();
 
   const playingGame = props.playingGame;
-  return <>test</>;
-  // return (
-  //   <Box component="div" className={classes.root}>
-  //     <Box component="div" className={classes.panel}>
-  //       <MyAvatar src="/dummyimg.jpg" percentSize={65} />
-  //       {/* <Typography>{playingGame.getActualplayer().name}</Typography> */}
-  //     </Box>
-  //     <Box component="div" className={classes.panel}>
-  //       <Box>
-  //         <Typography></Typography>
-  //       </Box>
-  //     </Box>
-  //   </Box>
-  // );
+  return (
+    <Box component="div" className={classes.root}>
+      <Box component="div" className={classes.panel}>
+        <MyAvatar src="/dummyimg.jpg" percentSize={65} />
+        <Typography>{playingGame.getActualplayer().name}</Typography>
+      </Box>
+      <Box component="div" className={classes.panel}>
+        <Box>
+          <Typography></Typography>
+        </Box>
+      </Box>
+    </Box>
+  );
 };
 
 export default SimpleQuestionTemplate;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Question } from '../../api/classes/question.class';
 import { Game } from '../../api/classes/game.class';
 
@@ -20,28 +20,23 @@ type Props = {
 const TemplateDisplayLoaderComponent: React.FunctionComponent<Props> = (
   props: Props
 ) => {
-  const [LoadedComponent, setComponent] = useState();
   const [message, setMessage] = useState('Loading...');
 
-  useEffect(() => {
-    setMessage('Loading...');
-    import(`./${props.templatePath}/display`)
-      .then(v => {
-        setComponent(v.default);
-      })
-      .catch(e => {
-        setComponent(null);
-        setMessage(e.message);
-      });
-  }, [props.templatePath]);
+  const LazyComponent = React.lazy(() =>
+    import(`./${props.templatePath}/display`).catch(e => {
+      setMessage(e.message);
+    })
+  );
 
-  return LoadedComponent ? (
-    <LoadedComponent
-      {...props.displayProps}
-      {...props.displayProps.otherProps}
-    />
-  ) : (
-    <>{message}</>
+  console.log(LazyComponent as any);
+
+  return (
+    <Suspense fallback={<div>{message}</div>}>
+      <LazyComponent
+        {...props.displayProps}
+        {...props.displayProps.otherProps}
+      />
+    </Suspense>
   );
 };
 
