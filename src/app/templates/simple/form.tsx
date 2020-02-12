@@ -31,13 +31,7 @@ const useStyles = makeStyles(theme => ({
 
 interface OtherProps {}
 
-interface DispatchProps {}
-
-interface StateProps {
-  userState: UserState;
-}
-
-type Props = StateProps & OtherProps & DispatchProps & TemplateFormProps;
+type Props = OtherProps & TemplateFormProps;
 
 const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
   props: Props
@@ -138,22 +132,4 @@ const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
   );
 };
 
-const mapStateToProps = (states: RootState): StateProps => {
-  return {
-    userState: states.userState
-  };
-};
-
-const mapDispatchToProps = (
-  dispatch: ThunkDispatch<{}, {}, any>,
-  ownProps: OtherProps
-): DispatchProps => {
-  return {};
-};
-
-export default connect<StateProps, DispatchProps, OtherProps, RootState>(
-  mapStateToProps,
-  mapDispatchToProps,
-  null,
-  { forwardRef: true }
-)(SimpleQuestionTemplate);
+export default SimpleQuestionTemplate;

@@ -32,6 +32,7 @@ import { QuestionTemplate } from '../../../api/classes/questionTemplate.class';
 import { Question } from '../../../api/classes/question.class';
 import { templateList } from '../../templates';
 import { TemplateDisplayLoader } from '../../templates/templateDisplay';
+import { Game } from '../../../api/classes/game.class';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -139,6 +140,7 @@ const QuestionTemplateDialogComponent: React.FunctionComponent<Props> = props =>
         <TemplateDisplayLoader
           templatePath={clientPath}
           displayProps={{
+            playingGame: Game.New({}),
             question: Question.New({
               difficulty: 5,
               hotLevel: 5,

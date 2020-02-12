@@ -11,6 +11,7 @@ import { GameStatus } from '../../../api/classes/game.class';
 import { UserState } from '../../../store/user/types';
 import { GameNotFound } from '../../pages/games/game.notFound.page';
 import { GameCreated } from '../../pages/games/game.created.page';
+import { GameStarted } from '../../pages/games/game.started.page';
 
 interface RouteParams {
   displayId: string;
@@ -62,7 +63,7 @@ class GameMiddlewareComponent extends React.Component<Props, ComponentState> {
           case GameStatus.created:
             return <GameCreated displayId={displayId} />;
           case GameStatus.started:
-            return <>started</>;
+            return <GameStarted displayId={displayId} />;
           case GameStatus.finished:
             return <>finished</>;
         }

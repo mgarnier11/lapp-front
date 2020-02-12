@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Question } from '../../api/classes/question.class';
+import { Game } from '../../api/classes/game.class';
 
 export type TemplateDisplayProps = {
+  playingGame: Game;
   question: Question;
   acceptButtonText?: string;
   denyButtonText?: string;

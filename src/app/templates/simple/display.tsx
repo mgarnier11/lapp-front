@@ -1,6 +1,6 @@
 import React from 'react';
 import { ThunkDispatch } from 'redux-thunk';
-import { Box, Grid, Avatar, makeStyles } from '@material-ui/core';
+import { Box, Grid, Avatar, makeStyles, Typography } from '@material-ui/core';
 import { connect } from 'react-redux';
 
 import { Question } from '../../../api/classes/question.class';
@@ -8,10 +8,20 @@ import { UserState } from '../../../store/user/types';
 import { RootState } from '../../../store';
 import { TemplateDisplayProps } from '../templateDisplay';
 import { GameState } from '../../../store/game/types';
+import { MyAvatar } from '../../components/utils/myAvatar.component';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    textAlign: 'center'
+    textAlign: 'center',
+    height: 'calc(100vh - 64px)',
+    display: 'flex',
+    [`@media (orientation: portrait)`]: {
+      flexDirection: 'column'
+    }
+  },
+  panel: {
+    display: 'flex',
+    flex: 1
   },
   userImg: {
     width: '50%',
@@ -22,45 +32,30 @@ const useStyles = makeStyles(theme => ({
 
 interface OwnProps {}
 
-interface DispatchProps {}
-
-interface StateProps {
-  userState: UserState;
-  gameState: GameState;
-}
-
-type Props = StateProps & OwnProps & DispatchProps & TemplateDisplayProps;
+type Props = OwnProps & TemplateDisplayProps;
 
 const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
   props: Props
 ) => {
-  const classes = useStyles();
+  //const classes = useStyles();
 
-  return (
-    <Box className={classes.root}>
-      <Grid container>
-        <Grid item xs={12} sm={6}>
-          <Avatar src={'/dummyImg.jpg'} className={classes.userImg} />
-        </Grid>
-      </Grid>
-    </Box>
-  );
+  console.log(props);
+
+  const playingGame = props.playingGame;
+  return <>test</>;
+  // return (
+  //   <Box component="div" className={classes.root}>
+  //     <Box component="div" className={classes.panel}>
+  //       <MyAvatar src="/dummyimg.jpg" percentSize={65} />
+  //       {/* <Typography>{playingGame.getActualplayer().name}</Typography> */}
+  //     </Box>
+  //     <Box component="div" className={classes.panel}>
+  //       <Box>
+  //         <Typography></Typography>
+  //       </Box>
+  //     </Box>
+  //   </Box>
+  // );
 };
 
-const mapStateToProps = (states: RootState): StateProps => {
-  return { userState: states.userState, gameState: states.gameState };
-};
-
-const mapDispatchToProps = (
-  dispatch: ThunkDispatch<{}, {}, any>,
-  ownProps: OwnProps
-): DispatchProps => {
-  return {};
-};
-
-export default connect<StateProps, DispatchProps, OwnProps, RootState>(
-  mapStateToProps,
-  mapDispatchToProps,
-  null,
-  { forwardRef: true }
-)(SimpleQuestionTemplate);
+export default SimpleQuestionTemplate;
