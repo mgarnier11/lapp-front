@@ -85,14 +85,19 @@ const AppStartingComponent: React.FunctionComponent<Props> = (props: Props) => {
   return (
     <>
       {loading ? (
-        <>
-          <Box style={{ height: '100%', paddingTop: '250px' }}>
-            <Typography component="h1" variant="h4" align="center">
-              Party Drink
-            </Typography>
-            <Loading />
-          </Box>
-        </>
+        <Box
+          style={{
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center'
+          }}
+        >
+          <Typography component="h1" variant="h4" align="center">
+            Party Drink
+          </Typography>
+          <Loading />
+        </Box>
       ) : props.userState.user ? (
         props.children
       ) : (

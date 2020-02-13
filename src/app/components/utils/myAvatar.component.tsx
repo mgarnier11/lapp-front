@@ -10,7 +10,8 @@ const useStyles = makeStyles(theme => ({
     backgroundPosition: 'center center',
     borderRadius: '50%',
     height: 0,
-    margin: 'auto'
+    marginLeft: 'auto',
+    marginRight: 'auto'
   }
 }));
 

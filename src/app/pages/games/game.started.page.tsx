@@ -36,7 +36,8 @@ const GameStartedPage: React.FunctionComponent<Props> = (props: Props) => {
           question: Question.New({
             difficulty: 5,
             hotLevel: 5,
-            text: 'Patate'
+            text:
+              "Ceci est le texte de la question, il est un peu long car je veux voir comment le texte met automatiquement sa taille ou s'il ne le fait pas automatiquement et je dois le faire programatiquement"
           }),
           onAccept: (q: Question) => {
             console.log(q);

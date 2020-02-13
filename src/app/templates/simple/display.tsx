@@ -20,13 +20,26 @@ const useStyles = makeStyles(theme => ({
     }
   },
   panel: {
+    justifyContent: 'center',
     display: 'flex',
+    flexDirection: 'column',
     flex: 1
   },
   userImg: {
     width: '50%',
     height: 0,
     paddingBottom: '50%'
+  },
+  questionText: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    flex: 1
+  },
+  questionActions: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1
   }
 }));
 
@@ -40,16 +53,28 @@ const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
   const classes = useStyles();
 
   const playingGame = props.playingGame;
+  const actualQuestion = props.question;
+  const actualPlayer = playingGame.getActualplayer();
+
   return (
     <Box component="div" className={classes.root}>
       <Box component="div" className={classes.panel}>
-        <MyAvatar src="/dummyimg.jpg" percentSize={65} />
-        <Typography>{playingGame.getActualplayer().name}</Typography>
+        {actualPlayer && (
+          <>
+            <MyAvatar src="/dummyimg.jpg" percentSize={65} />
+            <Typography variant="h6" component="h3">
+              {actualPlayer.name}
+            </Typography>
+          </>
+        )}
       </Box>
       <Box component="div" className={classes.panel}>
-        <Box>
-          <Typography></Typography>
+        <Box className={classes.questionText} px={3}>
+          <Typography align="center" variant="body1">
+            {actualQuestion.text}
+          </Typography>
         </Box>
+        <Box className={classes.questionActions}></Box>
       </Box>
     </Box>
   );
