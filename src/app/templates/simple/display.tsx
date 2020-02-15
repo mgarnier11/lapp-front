@@ -1,6 +1,15 @@
 import React from 'react';
 import { ThunkDispatch } from 'redux-thunk';
-import { Box, Grid, Avatar, makeStyles, Typography } from '@material-ui/core';
+import {
+  Box,
+  Grid,
+  Avatar,
+  makeStyles,
+  Typography,
+  IconButton
+} from '@material-ui/core';
+import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
+import CheckCircleOutlinedIcon from '@material-ui/icons/CheckCircleOutlined';
 import { connect } from 'react-redux';
 
 import { Question } from '../../../api/classes/question.class';
@@ -8,7 +17,10 @@ import { UserState } from '../../../store/user/types';
 import { RootState } from '../../../store';
 import { TemplateDisplayProps } from '../templateDisplay';
 import { GameState } from '../../../store/game/types';
-import { MyAvatar } from '../../components/utils/myAvatar.component';
+import {
+  TypeAvatar,
+  BaseAvatar
+} from '../../components/utils/avatars.component';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -38,8 +50,21 @@ const useStyles = makeStyles(theme => ({
   },
   questionActions: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
     flex: 1
+  },
+  questionActionButton: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    '& .MuiSvgIcon-root': {
+      width: '2em',
+      height: '2em'
+    }
+  },
+  typeDisplay: {
+    flex: 2
   }
 }));
 
@@ -61,7 +86,7 @@ const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
       <Box component="div" className={classes.panel}>
         {actualPlayer && (
           <>
-            <MyAvatar src="/dummyimg.jpg" percentSize={65} />
+            <BaseAvatar src="/dummyimg.jpg" percentSize={65} />
             <Typography variant="h6" component="h3">
               {actualPlayer.name}
             </Typography>
@@ -74,7 +99,20 @@ const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
             {actualQuestion.text}
           </Typography>
         </Box>
-        <Box className={classes.questionActions}></Box>
+        <Box className={classes.questionActions}>
+          <Box className={classes.questionActionButton}>
+            <IconButton style={{ color: '#CF2A28' }}>
+              <CancelOutlinedIcon />
+            </IconButton>
+          </Box>
+          <Box className={classes.typeDisplay}>{/* <TypeAvatar  /> */}</Box>
+
+          <Box className={classes.questionActionButton}>
+            <IconButton style={{ color: '#6BA84F' }}>
+              <CheckCircleOutlinedIcon />
+            </IconButton>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

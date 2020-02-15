@@ -15,6 +15,7 @@ export type TemplateDisplayProps = {
 type Props = {
   templatePath: string;
   displayProps: TemplateDisplayProps;
+  errorMessage?: string;
 };
 
 const TemplateDisplayLoaderComponent: React.FunctionComponent<Props> = (
@@ -24,11 +25,9 @@ const TemplateDisplayLoaderComponent: React.FunctionComponent<Props> = (
 
   const LazyComponent = React.lazy(() =>
     import(`./${props.templatePath}/display`).catch(e => {
-      setMessage(e.message);
+      setMessage(props.errorMessage || e.message);
     })
   );
-
-  console.log(LazyComponent as any);
 
   return (
     <Suspense fallback={<div>{message}</div>}>

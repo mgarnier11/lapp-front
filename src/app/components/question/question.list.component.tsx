@@ -49,7 +49,10 @@ const useStyles = makeStyles(theme => ({
   filtersDrawerRoot: {},
   filtersDrawerPaper: {
     marginTop: 112,
-    padding: theme.spacing(1)
+    paddingLeft: 5,
+    paddingRight: 13,
+    paddingTop: 5,
+    paddingBottom: 8
   },
   filtersSlider: {
     display: 'flex',

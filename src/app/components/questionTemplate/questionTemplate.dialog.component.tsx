@@ -149,6 +149,7 @@ const QuestionTemplateDialogComponent: React.FunctionComponent<Props> = props =>
             onAccept: (q: Question) => {},
             onDeny: (q: Question) => {}
           }}
+          errorMessage={'Cannot load template'}
         />
       </Box>
     </Box>

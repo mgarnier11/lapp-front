@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Question } from '../../api/classes/question.class';
 import { QuestionType } from '../../api/classes/questionType.class';
 
@@ -25,33 +25,24 @@ export type QuestionFormProps = {
 type Props = {
   templatePath: string;
   formProps: TemplateFormProps;
-  errorMessage: string;
+  errorMessage?: string;
 };
 
 const TemplateFormLoaderComponent: React.FunctionComponent<Props> = (
   props: Props
 ) => {
-  const [LoadedComponent, setComponent] = useState();
   const [message, setMessage] = useState('Loading...');
 
-  useEffect(() => {
-    setMessage('Loading...');
-    import(`./${props.templatePath}/form`)
-      .then(v => {
-        setComponent(v.default);
-      })
-      .catch(e => {
-        setComponent(null);
-        console.log(e);
+  const LazyComponent = React.lazy(() =>
+    import(`./${props.templatePath}/form`).catch(e => {
+      setMessage(props.errorMessage || e.message);
+    })
+  );
 
-        setMessage(props.errorMessage);
-      });
-  }, [props.templatePath]);
-
-  return LoadedComponent ? (
-    <LoadedComponent {...props.formProps} {...props.formProps.otherProps} />
-  ) : (
-    <>{message}</>
+  return (
+    <Suspense fallback={<div>{message}</div>}>
+      <LazyComponent {...props.formProps} {...props.formProps.otherProps} />
+    </Suspense>
   );
 };
 
