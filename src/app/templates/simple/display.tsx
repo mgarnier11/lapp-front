@@ -64,7 +64,9 @@ const useStyles = makeStyles(theme => ({
     }
   },
   typeDisplay: {
-    flex: 2
+    flex: 2,
+    display: 'flex',
+    alignSelf: 'center'
   }
 }));
 
@@ -86,7 +88,7 @@ const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
       <Box component="div" className={classes.panel}>
         {actualPlayer && (
           <>
-            <BaseAvatar src="/dummyimg.jpg" percentSize={65} />
+            <BaseAvatar src="/assets/dummyimg.jpg" percentSize={65} />
             <Typography variant="h6" component="h3">
               {actualPlayer.name}
             </Typography>
@@ -105,7 +107,13 @@ const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
               <CancelOutlinedIcon />
             </IconButton>
           </Box>
-          <Box className={classes.typeDisplay}>{/* <TypeAvatar  /> */}</Box>
+          <Box className={classes.typeDisplay}>
+            <TypeAvatar
+              type={actualQuestion.type}
+              src="/assets/dummyimg.jpg"
+              percentSize={65}
+            />
+          </Box>
 
           <Box className={classes.questionActionButton}>
             <IconButton style={{ color: '#6BA84F' }}>
