@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { GameState } from '../../../store/game/types';
 import { Game } from '../../../api/classes/game.class';
 import { RootState } from '../../../store';
@@ -8,6 +8,7 @@ import { GamesActions } from '../../../store/games/actions';
 import { TemplateDisplayLoader } from '../../templates/templateDisplay';
 import { Question } from '../../../api/classes/question.class';
 import { Loading } from '../../components/utils/loading.component';
+import { QuestionsState } from '../../../store/questions/types';
 
 interface OwnProps {
   displayId?: string;
@@ -20,6 +21,7 @@ interface DispatchProps {
 
 interface StateProps {
   gameState: GameState;
+  questionState: QuestionsState;
 }
 
 type Props = StateProps & OwnProps & DispatchProps;
@@ -27,23 +29,28 @@ type Props = StateProps & OwnProps & DispatchProps;
 const GameStartedPage: React.FunctionComponent<Props> = (props: Props) => {
   const playingGame = props.gameState.game!;
 
-  if (playingGame) {
+  useEffect(() => {
+    console.log(playingGame);
+
+    if (!playingGame.actualQuestion) {
+      console.log(playingGame.pickQuestion(props.questionState.questions!));
+      props.gameUpdate(playingGame);
+    }
+  }, []);
+  console.log(playingGame);
+
+  if (playingGame && playingGame.actualQuestion) {
     return (
       <TemplateDisplayLoader
         templatePath={'simple'}
         displayProps={{
           playingGame,
-          question: Question.New({
-            difficulty: 5,
-            hotLevel: 5,
-            text:
-              "Ceci est le texte de la question, il est un peu long car je veux voir comment le texte met automatiquement sa taille ou s'il ne le fait pas automatiquement et je dois le faire programatiquement"
-          }),
+          question: playingGame.actualQuestion,
           onAccept: (q: Question) => {
-            console.log(q);
+            console.log('Accept', q);
           },
           onDeny: (q: Question) => {
-            console.log(q);
+            console.log('DEny', q);
           }
         }}
       />
@@ -55,7 +62,8 @@ const GameStartedPage: React.FunctionComponent<Props> = (props: Props) => {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    gameState: states.gameState
+    gameState: states.gameState,
+    questionState: states.questionsState
   };
 };
 

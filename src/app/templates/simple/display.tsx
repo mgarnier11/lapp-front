@@ -103,7 +103,10 @@ const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
         </Box>
         <Box className={classes.questionActions}>
           <Box className={classes.questionActionButton}>
-            <IconButton style={{ color: '#CF2A28' }}>
+            <IconButton
+              style={{ color: '#CF2A28' }}
+              onClick={() => props.onDeny!(actualQuestion)!}
+            >
               <CancelOutlinedIcon />
             </IconButton>
           </Box>
@@ -115,8 +118,14 @@ const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
             />
           </Box>
 
-          <Box className={classes.questionActionButton}>
-            <IconButton style={{ color: '#6BA84F' }}>
+          <Box
+            className={classes.questionActionButton}
+            onClick={() => props.onAccept}
+          >
+            <IconButton
+              style={{ color: '#6BA84F' }}
+              onClick={() => props.onAccept!(actualQuestion)}
+            >
               <CheckCircleOutlinedIcon />
             </IconButton>
           </Box>

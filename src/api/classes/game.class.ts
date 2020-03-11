@@ -3,6 +3,7 @@ import { User, UserBackModel } from './user.class';
 import { GameType, GameTypeBackModel } from './gameType.class';
 import { DummyUser } from './dummyUser.class';
 import { Helper } from '../../helper';
+import { Question, QuestionBackModel } from './question.class';
 
 export interface GameBackModel {
   _id: string;
@@ -16,6 +17,8 @@ export interface GameBackModel {
   _maxHotLevel: number;
   _creator: UserBackModel;
   _type: GameTypeBackModel;
+  _scores: number[];
+  _actualQuestion: QuestionBackModel;
 }
 
 export enum GameStatus {
@@ -57,6 +60,10 @@ export class Game {
 
   public status: GameStatus = GameStatus.created;
 
+  public scores: number[] = [];
+
+  public actualQuestion: Question = new Question();
+
   public get allUsers() {
     return [...this.users, ...this.dummyUsers];
   }
@@ -64,6 +71,15 @@ export class Game {
   public canStart(): boolean {
     if (this.allUsers.length <= 1) return false;
     return true;
+  }
+
+  public getActualPlayerIndex(): number {
+    return Helper.getPlayer(
+      this.actualTurn,
+      this.nbTurns,
+      this.allUsers.length,
+      this.displayId
+    );
   }
 
   public getActualplayer(): User | DummyUser {
@@ -75,6 +91,25 @@ export class Game {
     );
 
     return this.allUsers[userIndex];
+  }
+
+  public pickQuestion(selectedQuestions: Question[]): boolean {
+    let selectedSortedQuestions = selectedQuestions.filter(
+      q =>
+        this.questionTypes.find(t => QuestionType.CompareObjects(t, q.type)) !==
+        undefined
+    );
+
+    try {
+      this.actualQuestion =
+        selectedSortedQuestions[
+          Math.floor(Math.random() * selectedSortedQuestions.length)
+        ];
+      if (this.actualQuestion) return true;
+      else throw 'no question';
+    } catch (error) {
+      return false;
+    }
   }
 
   public static New(datas: Partial<Game>): Game {
@@ -104,6 +139,8 @@ export class Game {
     newObj.creator = User.fromBack(datas._creator);
     newObj.type = GameType.fromBack(datas._type);
     newObj.status = datas._status;
+    newObj.scores = datas._scores;
+    newObj.actualQuestion = datas._question;
 
     return newObj;
   }
@@ -130,7 +167,9 @@ export class Game {
       obj1.maxHotLevel === obj2.maxHotLevel &&
       User.CompareObjects(obj1.creator, obj2.creator) &&
       GameType.CompareObjects(obj1.type, obj2.type) &&
-      obj1.status === obj2.status
+      obj1.status === obj2.status &&
+      obj1.scores === obj2.scores &&
+      Question.CompareObjects(obj1.actualQuestion, obj2.actualQuestion)
     );
   }
 }
