@@ -20,6 +20,18 @@ export const game = (
         loading: false
       };
     }
+    case GameActionTypes.START_LOADING: {
+      return {
+        ...gameState,
+        loading: true
+      };
+    }
+    case GameActionTypes.FINISH_LOADING: {
+      return {
+        ...gameState,
+        loading: false
+      };
+    }
 
     case GameActionTypes.GET: {
       return {

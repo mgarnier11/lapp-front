@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { GameState } from '../../../store/game/types';
-import { Game } from '../../../api/classes/game.class';
+import { Game, GameStatus } from '../../../api/classes/game.class';
 import { RootState } from '../../../store';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
@@ -9,13 +9,18 @@ import { TemplateDisplayLoader } from '../../templates/templateDisplay';
 import { Question } from '../../../api/classes/question.class';
 import { Loading } from '../../components/utils/loading.component';
 import { QuestionsState } from '../../../store/questions/types';
+import { GameActions } from '../../../store/game/actions';
 
 interface OwnProps {
   displayId?: string;
 }
 
 interface DispatchProps {
-  gameUpdate: (game: Game) => Promise<any>;
+  gameUpdate: (
+    game: Game,
+    hideSuccess?: boolean,
+    shouldLoadGame?: boolean
+  ) => Promise<any>;
   gameRemove: (gameId: string) => Promise<any>;
 }
 
@@ -30,28 +35,42 @@ const GameStartedPage: React.FunctionComponent<Props> = (props: Props) => {
   const playingGame = props.gameState.game!;
 
   useEffect(() => {
-    console.log(playingGame);
-
-    if (!playingGame.actualQuestion) {
-      console.log(playingGame.pickQuestion(props.questionState.questions!));
-      props.gameUpdate(playingGame);
+    if (!playingGame.actualQuestion.id) {
+      if (playingGame.pickQuestion(props.questionState.questions!)) {
+        props.gameUpdate(playingGame, true, true);
+      }
     }
   }, []);
-  console.log(playingGame);
 
-  if (playingGame && playingGame.actualQuestion) {
+  const onAcceptQuestion = (q: Question) => {
+    nextQuestion();
+  };
+
+  const onDenyQuestion = (q: Question) => {};
+
+  const nextQuestion = () => {
+    playingGame.actualTurn++;
+
+    playingGame.pickQuestion(props.questionState.questions!);
+
+    if (playingGame.actualTurn >= playingGame.nbTurns) {
+      playingGame.status = GameStatus.finished;
+    }
+
+    props.gameUpdate(playingGame, false, true);
+  };
+
+  if (props.gameState.loading) {
+    return <Loading />;
+  } else if (playingGame && playingGame.actualQuestion) {
     return (
       <TemplateDisplayLoader
         templatePath={'simple'}
         displayProps={{
           playingGame,
           question: playingGame.actualQuestion,
-          onAccept: (q: Question) => {
-            console.log('Accept', q);
-          },
-          onDeny: (q: Question) => {
-            console.log('DEny', q);
-          }
+          onAccept: onAcceptQuestion,
+          onDeny: onDenyQuestion
         }}
       />
     );
@@ -72,8 +91,14 @@ const mapDispatchToProps = (
   ownProps: OwnProps
 ): DispatchProps => {
   return {
-    gameUpdate: async (game: Game) => {
-      return await dispatch(GamesActions.gameUpdate(game));
+    gameUpdate: async (
+      game: Game,
+      hideSuccess?: boolean,
+      shouldLoadGame?: boolean
+    ) => {
+      return await dispatch(
+        GamesActions.gameUpdate(game, hideSuccess, shouldLoadGame)
+      );
     },
     gameRemove: async (gameId: string) => {
       return await dispatch(GamesActions.gameRemove(gameId));

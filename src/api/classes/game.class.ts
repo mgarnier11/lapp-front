@@ -140,7 +140,7 @@ export class Game {
     newObj.type = GameType.fromBack(datas._type);
     newObj.status = datas._status;
     newObj.scores = datas._scores;
-    newObj.actualQuestion = datas._question;
+    newObj.actualQuestion = Question.fromBack(datas._actualQuestion);
 
     return newObj;
   }

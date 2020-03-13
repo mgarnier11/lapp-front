@@ -9,6 +9,7 @@ import { addError } from '../errors/actions';
 import { Game, GameBackModel } from '../../api/classes/game.class';
 import { ServiceEvents } from '../../api/services/baseService';
 import { GameActionTypes } from '../game/types';
+import { GameActions } from '../game/actions';
 
 // Action Definition
 export interface ActionStarted {
@@ -163,23 +164,34 @@ export class GamesActions {
   };
 
   public static gameUpdate = (
-    game: Game
+    game: Game,
+    hideSuccess?: boolean,
+    shouldLoadGame?: boolean
   ): ThunkAction<Promise<boolean>, {}, {}, AnyAction> => {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
       return new Promise<boolean>(resolve => {
         dispatch(GamesActions.gameActionStartedCreator());
+
+        if (shouldLoadGame) dispatch(GameActions.gameStartLoading());
+
         apiHandler.gameService.featherService
           .patch(game.id, game)
           .then(game => {
-            apiHandler.gameService.ownEvents.emit(ServiceEvents.updated, game);
+            if (!hideSuccess)
+              apiHandler.gameService.ownEvents.emit(
+                ServiceEvents.updated,
+                game
+              );
 
+            if (shouldLoadGame) dispatch(GameActions.gameFinishLoading());
             resolve(true);
           })
           .catch(error => {
             dispatch(GamesActions.gameActionFailureCreator());
             dispatch(addError(error));
+            if (shouldLoadGame) dispatch(GameActions.gameFinishLoading());
             resolve(false);
           });
       });
