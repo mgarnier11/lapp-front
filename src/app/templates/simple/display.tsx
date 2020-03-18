@@ -88,7 +88,10 @@ const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
       <Box component="div" className={classes.panel}>
         {actualPlayer && (
           <>
-            <BaseAvatar src="/assets/dummyimg.jpg" percentSize={65} />
+            <BaseAvatar
+              src="https://via.placeholder.com/450?text=Player%20image"
+              percentSize={65}
+            />
             <Typography variant="h6" component="h3">
               {actualPlayer.name}
             </Typography>
@@ -113,7 +116,7 @@ const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
           <Box className={classes.typeDisplay}>
             <TypeAvatar
               type={actualQuestion.type}
-              src="/assets/dummyimg.jpg"
+              src="https://via.placeholder.com/450?text=Type%20image"
               percentSize={65}
             />
           </Box>

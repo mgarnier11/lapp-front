@@ -46,7 +46,9 @@ const GameStartedPage: React.FunctionComponent<Props> = (props: Props) => {
     nextQuestion();
   };
 
-  const onDenyQuestion = (q: Question) => {};
+  const onDenyQuestion = (q: Question) => {
+    nextQuestion();
+  };
 
   const nextQuestion = () => {
     playingGame.actualTurn++;
@@ -57,7 +59,7 @@ const GameStartedPage: React.FunctionComponent<Props> = (props: Props) => {
       playingGame.status = GameStatus.finished;
     }
 
-    props.gameUpdate(playingGame, false, true);
+    props.gameUpdate(playingGame, true, true);
   };
 
   if (props.gameState.loading) {
@@ -65,7 +67,7 @@ const GameStartedPage: React.FunctionComponent<Props> = (props: Props) => {
   } else if (playingGame && playingGame.actualQuestion) {
     return (
       <TemplateDisplayLoader
-        templatePath={'simple'}
+        templatePath={playingGame.actualQuestion.type.template.clientPath}
         displayProps={{
           playingGame,
           question: playingGame.actualQuestion,
