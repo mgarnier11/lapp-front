@@ -14,6 +14,10 @@ export class GameIo {
     });
   }
 
+  public startGame(gameId: string) {
+    this._io.emit('startGame', { gameId }, (resParams: any) => {});
+  }
+
   public leaveGame(gameId: string) {
     this._io.emit('leaveGame', { gameId }, (resParams: any) => {
       console.log(resParams);

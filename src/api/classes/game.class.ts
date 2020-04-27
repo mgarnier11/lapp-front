@@ -4,6 +4,7 @@ import { GameType, GameTypeBackModel } from './gameType.class';
 import { DummyUser } from './dummyUser.class';
 import { Helper } from '../../helper';
 import { Question, QuestionBackModel } from './question.class';
+import { Score } from './score.class';
 
 export interface GameBackModel {
   _id: string;
@@ -17,20 +18,20 @@ export interface GameBackModel {
   _maxHotLevel: number;
   _creator: UserBackModel;
   _type: GameTypeBackModel;
-  _scores: number[];
+  _scores: Score[];
   _actualQuestion: QuestionBackModel;
 }
 
 export enum GameStatus {
   created = 'Created',
   started = 'Started',
-  finished = 'Finished'
+  finished = 'Finished',
 }
 
 export enum GameStatusColors {
   Created = 'default',
   Started = 'primary',
-  Finished = 'secondary'
+  Finished = 'secondary',
 }
 
 export class Game {
@@ -60,7 +61,7 @@ export class Game {
 
   public status: GameStatus = GameStatus.created;
 
-  public scores: number[] = [];
+  public scores: Score[] = [];
 
   public actualQuestion: Question = new Question();
 
@@ -95,9 +96,10 @@ export class Game {
 
   public pickQuestion(selectedQuestions: Question[]): boolean {
     let selectedSortedQuestions = selectedQuestions.filter(
-      q =>
-        this.questionTypes.find(t => QuestionType.CompareObjects(t, q.type)) !==
-        undefined
+      (q) =>
+        this.questionTypes.find((t) =>
+          QuestionType.CompareObjects(t, q.type)
+        ) !== undefined
     );
 
     try {
@@ -139,7 +141,9 @@ export class Game {
     newObj.creator = User.fromBack(datas._creator);
     newObj.type = GameType.fromBack(datas._type);
     newObj.status = datas._status;
-    newObj.scores = datas._scores;
+    for (const scoreModel of datas._scores) {
+      newObj.scores.push(Score.fromBack(scoreModel));
+    }
     newObj.actualQuestion = Question.fromBack(datas._actualQuestion);
 
     return newObj;
@@ -168,7 +172,7 @@ export class Game {
       User.CompareObjects(obj1.creator, obj2.creator) &&
       GameType.CompareObjects(obj1.type, obj2.type) &&
       obj1.status === obj2.status &&
-      obj1.scores === obj2.scores &&
+      Score.CompareArrays(obj1.scores, obj2.scores) &&
       Question.CompareObjects(obj1.actualQuestion, obj2.actualQuestion)
     );
   }

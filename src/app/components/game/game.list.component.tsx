@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme, makeStyles, withStyles } from '@material-ui/core/styles';
 import { Game, GameStatus } from '../../../api/classes/game.class';
 import {
@@ -18,7 +18,7 @@ import {
   TableCell,
   TableBody,
   Tooltip,
-  IconButton
+  IconButton,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import BarChartIcon from '@material-ui/icons/BarChart';
@@ -39,24 +39,33 @@ interface FilterGameStatus {
   value: GameStatus;
 }
 
-const allGameStatus: FilterGameStatus[] = Object.entries(GameStatus).map(g => {
-  return { key: g[0], value: g[1] };
-});
+const allGameStatus: FilterGameStatus[] = Object.entries(GameStatus).map(
+  (g) => {
+    return { key: g[0], value: g[1] };
+  }
+);
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   filterButtons: {
     marginLeft: 'auto',
     marginRight: 'auto',
-    marginBottom: 6
+    marginBottom: 6,
   },
   myButton: {
     paddingRight: 11,
-    paddingLeft: 11
-  }
+    paddingLeft: 11,
+  },
+  deletingGameOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    height: '100%',
+    width: '100%',
+  },
 }));
 
 interface DispatchProps {}
@@ -75,22 +84,37 @@ interface StateProps {
 
 type Props = DispatchProps & OwnProps & StateProps;
 
-const GameListComponent: React.FunctionComponent<Props> = props => {
+const GameListComponent: React.FunctionComponent<Props> = (props) => {
   const classes = useStyles();
   const theme = useTheme();
   //const isXs = useMediaQuery(theme.breakpoints.up('xs'));
   const isSm = useMediaQuery(theme.breakpoints.up('sm'));
   const isLg = useMediaQuery(theme.breakpoints.up('lg'));
-
+  const { games } = props;
+  const [deleting, setDeleting] = useState(
+    games.map((g) => {
+      return { id: g.id, value: false };
+    })
+  );
   const [filteredGameStatus, setfilteredGameStatus] = useState(allGameStatus);
+
+  useEffect(() => {
+    setDeleting(
+      games.map((g) => {
+        return { id: g.id, value: false };
+      })
+    );
+  }, [games.length]);
 
   const handleToggleGameStatus = (name: string) => {
     const newFilteredGameStatus = [...filteredGameStatus];
 
-    let gameStatusIndex = newFilteredGameStatus.findIndex(g => g.key === name);
+    let gameStatusIndex = newFilteredGameStatus.findIndex(
+      (g) => g.key === name
+    );
 
     if (gameStatusIndex === -1) {
-      newFilteredGameStatus.push(allGameStatus.find(g => g.key === name)!);
+      newFilteredGameStatus.push(allGameStatus.find((g) => g.key === name)!);
     } else {
       newFilteredGameStatus.splice(gameStatusIndex, 1);
     }
@@ -98,14 +122,17 @@ const GameListComponent: React.FunctionComponent<Props> = props => {
   };
 
   const beforeDelete = (gameId: string) => {
+    setDeleting(
+      games.map((g) => {
+        return { id: g.id, value: g.id === gameId };
+      })
+    );
     if (props.onDelete) props.onDelete(gameId);
   };
 
   const beforePlay = (game: Game) => {
     if (props.onPlay) props.onPlay(game);
   };
-
-  const { games } = props;
 
   const getTooltipTitle = (status: GameStatus) => {
     switch (status) {
@@ -129,10 +156,11 @@ const GameListComponent: React.FunctionComponent<Props> = props => {
     }
   };
 
-  const renderStatusButton = (game: Game) => {
+  const renderStatusButton = (game: Game, isDisabled?: boolean) => {
     return (
       <Tooltip title={getTooltipTitle(game.status)}>
         <IconButton
+          disabled={isDisabled}
           // className={this.props.classes.myButton}
           onClick={() => beforePlay(game)}
         >
@@ -142,10 +170,11 @@ const GameListComponent: React.FunctionComponent<Props> = props => {
     );
   };
 
-  const renderDeleteButton = (game: Game) => {
+  const renderDeleteButton = (game: Game, isDisabled?: boolean) => {
     return (
       <Tooltip title="Delete">
         <IconButton
+          disabled={isDisabled}
           // className={this.props.classes.myButton}
           onClick={() => beforeDelete(game.id)}
         >
@@ -158,7 +187,7 @@ const GameListComponent: React.FunctionComponent<Props> = props => {
   return (
     <Box className={classes.root}>
       <ToggleButtonGroup className={classes.filterButtons} size="small">
-        {allGameStatus.map(gameStatus => (
+        {allGameStatus.map((gameStatus) => (
           <ToggleButton
             key={gameStatus.key}
             selected={filteredGameStatus.includes(gameStatus)}
@@ -186,8 +215,10 @@ const GameListComponent: React.FunctionComponent<Props> = props => {
           </TableHead>
           <TableBody>
             {games
-              .filter(g => filteredGameStatus.find(gs => gs.value === g.status))
-              .map(game => {
+              .filter((g) =>
+                filteredGameStatus.find((gs) => gs.value === g.status)
+              )
+              .map((game, index) => {
                 return (
                   <TableRow key={game.id}>
                     <TableCell>{game.displayId}</TableCell>
@@ -196,8 +227,9 @@ const GameListComponent: React.FunctionComponent<Props> = props => {
                       <TableCell>{game.allUsers.length}</TableCell>
                     </Hidden>
                     <TableCell align="center" padding="none">
-                      {renderStatusButton(game)}
-                      {props.isAdmin && renderDeleteButton(game)}
+                      {renderStatusButton(game, deleting[index]?.value)}
+                      {props.isAdmin &&
+                        renderDeleteButton(game, deleting[index]?.value)}
                     </TableCell>
                   </TableRow>
                 );
@@ -210,7 +242,7 @@ const GameListComponent: React.FunctionComponent<Props> = props => {
 };
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    userState: states.userState
+    userState: states.userState,
   };
 };
 

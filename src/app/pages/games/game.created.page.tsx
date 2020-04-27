@@ -54,6 +54,7 @@ import { GamesState } from '../../../store/games/types';
 import { GameForm } from '../../components/game/game.form.component';
 import { DummyUserNew } from '../../components/user/dummy.new.component';
 import { LoadingOverlay } from '../../components/utils/loadingOverlay.component';
+import { Score } from '../../../api/classes/score.class';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -125,10 +126,17 @@ const GameCreatedPage: React.FunctionComponent<Props> = (props: Props) => {
     handleStepChange(activeStep + 1);
   };
 
-  const startGame = () => {
-    const startedGame = Helper.clone(game, { status: GameStatus.started });
+  const startGame = async () => {
+    const startedGame = Helper.clone(game, {
+      status: GameStatus.started,
+      scores: game.allUsers.map((u) => {
+        return Score.New({ score: 0, userId: u.id });
+      }),
+    });
 
-    props.gameUpdate(startedGame);
+    await props.gameUpdate(startedGame);
+
+    apiHandler.gameIo.startGame(startedGame.id);
   };
 
   const openDummyModal = () => setDummyModalOpen(true);
@@ -282,7 +290,11 @@ const GameCreatedPage: React.FunctionComponent<Props> = (props: Props) => {
       <Container maxWidth="md" className={classes.root}>
         <SwipeableViews index={activeStep} disabled>
           {steps.map((step, index) => {
-            return <div className={classes.viewContainer}>{step}</div>;
+            return (
+              <div className={classes.viewContainer} key={index}>
+                {step}
+              </div>
+            );
           })}
         </SwipeableViews>
       </Container>

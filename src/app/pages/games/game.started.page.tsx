@@ -36,12 +36,6 @@ const GameStartedPage: React.FunctionComponent<Props> = (props: Props) => {
   const playingGame = props.gameState.game!;
 
   useEffect(() => {
-    if (!playingGame.actualQuestion.id) {
-      if (playingGame.pickQuestion(props.questionState.questions!)) {
-        props.gameUpdate(playingGame, true, true);
-      }
-    }
-
     apiHandler.gameIo.joinGame(playingGame.id);
 
     return () => {
