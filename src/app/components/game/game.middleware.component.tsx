@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
@@ -32,54 +32,43 @@ type Props = StateProps & OwnProps & DispatchProps & RouteComponentProps;
 
 interface ComponentState {}
 
-class GameMiddlewareComponent extends React.Component<Props, ComponentState> {
-  /**
-   *
-   */
-  constructor(props: Props) {
-    super(props);
+const GameMiddlewareComponent: React.FunctionComponent<Props> = (
+  props: Props
+) => {
+  const { displayId } = props.match.params as any;
 
-    this.state = {};
+  const { game, loading: gameLoading } = props.gameState;
+  const { user, loading: userLoading } = props.userState;
 
-    const { displayId } = this.props.match.params as any;
-    const { game, loading } = this.props.gameState;
+  useEffect(() => {
+    if (displayId) props.gameGetByDisplayId(displayId);
+  }, []);
 
-    if (!game && !loading && displayId) {
-      this.props.gameGetByDisplayId(displayId);
-    }
-  }
-
-  render() {
-    const { displayId } = this.props.match.params as any;
-    const { game, loading: gameLoading } = this.props.gameState;
-    const { user, loading: userLoading } = this.props.userState;
-
-    if (game && user) {
-      if (
-        game.creator.id === user.id ||
-        game.users.map(u => u.id).includes(user.id)
-      ) {
-        switch (game.status) {
-          case GameStatus.created:
-            return <GameCreated displayId={displayId} />;
-          case GameStatus.started:
-            return <GameStarted displayId={displayId} />;
-          case GameStatus.finished:
-            return <>finished</>;
-        }
-      } else {
-        return <GameNotFound displayId={displayId} />;
+  if (game && user) {
+    if (
+      game.creator.id === user.id ||
+      game.users.map((u) => u.id).includes(user.id)
+    ) {
+      switch (game.status) {
+        case GameStatus.created:
+          return <GameCreated displayId={displayId} />;
+        case GameStatus.started:
+          return <GameStarted displayId={displayId} />;
+        case GameStatus.finished:
+          return <>finished</>;
       }
-    } else if (gameLoading || userLoading) return <Loading />;
-    else if (!game) return <GameNotFound displayId={displayId} />;
-    return <>An error occured</>;
-  }
-}
+    } else {
+      return <GameNotFound displayId={displayId} />;
+    }
+  } else if (gameLoading || userLoading) return <Loading />;
+  else if (!game) return <GameNotFound displayId={displayId} />;
+  return <>An error occured</>;
+};
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
     gameState: states.gameState,
-    userState: states.userState
+    userState: states.userState,
   };
 };
 
@@ -90,7 +79,7 @@ const mapDispatchToProps = (
   return {
     gameGetByDisplayId: async (displayId: string) => {
       dispatch(GameActions.gameGetByDisplayId(displayId));
-    }
+    },
   };
 };
 
