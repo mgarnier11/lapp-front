@@ -7,7 +7,7 @@ import {
   Button,
   TextField,
   Grid,
-  Chip
+  Chip,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Rating from '@material-ui/lab/Rating';
@@ -25,24 +25,27 @@ import { Helper } from '../../../helper';
 import { DangerButton } from '../utils/dangerButton.component';
 import { OutlinedDiv } from '../utils/outlinedDiv.component';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   hotLevelRating: {
-    color: '#FD6C9E'
+    color: '#FD6C9E',
   },
   questionTypeContainer: {
-    padding: 2
+    padding: 2,
   },
   questionTypeChip: {
     width: 'calc(50% - 4px)',
     margin: 2,
     marginBottom: 3,
     '&:nth-child(-n+2)': {
-      marginTop: 7
+      marginTop: 7,
     },
     '&:nth-last-child(-n+2)': {
-      marginBottom: 5
-    }
-  }
+      marginBottom: 5,
+    },
+  },
+  unselectable: {
+    userSelect: 'none',
+  },
 }));
 
 interface OwnProps {
@@ -88,7 +91,7 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
 
     return (
       gameLoading ||
-      !allGameTypes!.find(t => GameType.CompareObjects(t, type)) ||
+      !allGameTypes!.find((t) => GameType.CompareObjects(t, type)) ||
       maxDifficulty === 0 ||
       maxHotLevel === 0 ||
       name.length === 0 ||
@@ -104,14 +107,18 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
   const handleTypeChange = (e: React.ChangeEvent<{ value: unknown }>) =>
     props.editable &&
     setType(
-      allGameTypes!.find(g => g.id === parseInt(e.target.value as string))!
+      allGameTypes!.find((g) => g.id === parseInt(e.target.value as string))!
     );
 
-  const handleMaxDifficultyChange = (e: any, value: number) =>
-    props.editable && setMaxDifficulty(value);
+  const handleMaxDifficultyChange = (
+    e: React.ChangeEvent<any>,
+    value: number | null
+  ) => props.editable && value != null && setMaxDifficulty(value);
 
-  const handleMaxHotLevelChange = (e: any, value: number) =>
-    props.editable && setMaxHotLevel(value);
+  const handleMaxHotLevelChange = (
+    e: React.ChangeEvent<any>,
+    value: number | null
+  ) => props.editable && value != null && setMaxHotLevel(value);
 
   const handleNbTurnsChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     props.editable && setNbTurns(parseInt(e.target.value));
@@ -130,7 +137,7 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
           maxDifficulty,
           maxHotLevel,
           nbTurns,
-          questionTypes
+          questionTypes,
         })
       );
     }
@@ -141,16 +148,16 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
   };
 
   const switchQuestionType = (questionTypeId: string) => {
-    const typeIndex = questionTypes.findIndex(qt => qt.id === questionTypeId);
+    const typeIndex = questionTypes.findIndex((qt) => qt.id === questionTypeId);
 
     if (typeIndex !== -1) {
       handleQuestionTypesChange(
-        questionTypes.filter(qt => qt.id !== questionTypeId)
+        questionTypes.filter((qt) => qt.id !== questionTypeId)
       );
     } else {
       handleQuestionTypesChange([
         ...questionTypes,
-        allQuestionsTypes.find(qt => qt.id === questionTypeId)!
+        allQuestionsTypes.find((qt) => qt.id === questionTypeId)!,
       ]);
     }
   };
@@ -172,7 +179,7 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
         onChange={handleTypeChange}
       >
         {allGameTypes ? (
-          allGameTypes.map(t => (
+          allGameTypes.map((t) => (
             <MenuItem value={t.id} key={t.id}>
               {t.name}
             </MenuItem>
@@ -196,7 +203,9 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
       />
       <Grid container spacing={3} style={{ textAlign: 'center' }}>
         <Grid item xs={6}>
-          <Typography component="legend">Maximum&nbsp;Difficulty</Typography>
+          <Typography component="legend" className={classes.unselectable}>
+            Maximum&nbsp;Difficulty
+          </Typography>
           <Rating
             name="maxDifficulty"
             value={maxDifficulty}
@@ -204,7 +213,7 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography component="legend">
+          <Typography component="legend" className={classes.unselectable}>
             Maximum&nbsp;Hot&nbsp;Level
           </Typography>
           <Rating
@@ -231,12 +240,12 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
         onChange={handleNbTurnsChange}
       />
       <OutlinedDiv label="Question Types" fullWidth>
-        {allQuestionsTypes.map(t => (
+        {allQuestionsTypes.map((t) => (
           <Chip
             label={t.name}
             key={t.id}
             color={
-              questionTypes.find(type => QuestionType.CompareObjects(t, type))
+              questionTypes.find((type) => QuestionType.CompareObjects(t, type))
                 ? 'primary'
                 : 'default'
             }
@@ -281,14 +290,14 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
 
 GameFormComponent.defaultProps = {
   deleteButtonText: 'Delete Button',
-  acceptButtonText: 'Accept Button'
+  acceptButtonText: 'Accept Button',
 };
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
     gameTypesState: states.gameTypesState,
     gamesState: states.gamesState,
-    questionTypesState: states.questionTypesState
+    questionTypesState: states.questionTypesState,
   };
 };
 
@@ -299,7 +308,7 @@ const mapDispatchToProps = (
   return {
     addError: async (error: any) => {
       await dispatch(addError(error));
-    }
+    },
   };
 };
 

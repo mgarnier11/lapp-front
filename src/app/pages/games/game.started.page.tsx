@@ -10,6 +10,7 @@ import { Question } from '../../../api/classes/question.class';
 import { Loading } from '../../components/utils/loading.component';
 import { QuestionsState } from '../../../store/questions/types';
 import { GameActions } from '../../../store/game/actions';
+import apiHandler from '../../../api/apiHandler';
 
 interface OwnProps {
   displayId?: string;
@@ -40,6 +41,12 @@ const GameStartedPage: React.FunctionComponent<Props> = (props: Props) => {
         props.gameUpdate(playingGame, true, true);
       }
     }
+
+    apiHandler.gameIo.joinGame(playingGame.id);
+
+    return () => {
+      apiHandler.gameIo.leaveGame(playingGame.id);
+    };
   }, []);
 
   const onAcceptQuestion = (q: Question) => {
@@ -72,7 +79,7 @@ const GameStartedPage: React.FunctionComponent<Props> = (props: Props) => {
           playingGame,
           question: playingGame.actualQuestion,
           onAccept: onAcceptQuestion,
-          onDeny: onDenyQuestion
+          onDeny: onDenyQuestion,
         }}
       />
     );
@@ -84,7 +91,7 @@ const GameStartedPage: React.FunctionComponent<Props> = (props: Props) => {
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
     gameState: states.gameState,
-    questionState: states.questionsState
+    questionState: states.questionsState,
   };
 };
 
@@ -104,7 +111,7 @@ const mapDispatchToProps = (
     },
     gameRemove: async (gameId: string) => {
       return await dispatch(GamesActions.gameRemove(gameId));
-    }
+    },
   };
 };
 

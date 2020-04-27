@@ -1,17 +1,17 @@
 import { AppBarClassKey } from '@material-ui/core';
-import { CSSProperties } from '@material-ui/core/styles/withStyles';
+import { CreateCSSProperties } from '@material-ui/core/styles/withStyles';
 import { palette } from '../palette';
 
 export const MyMuiAppBar: Partial<Record<
   AppBarClassKey,
-  CSSProperties | (() => CSSProperties)
+  CreateCSSProperties | (() => CreateCSSProperties)
 >> = {
   colorPrimary: {
-    backgroundColor: palette.primary.light
+    backgroundColor: palette.primary.light,
   },
   root: {
     '&& button': {
-      color: 'white'
-    }
-  }
+      color: 'white',
+    },
+  },
 };

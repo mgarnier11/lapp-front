@@ -13,6 +13,7 @@ import { User, LoginCredentials } from './classes/user.class';
 import { ServiceNames } from './services/baseService';
 import { GameTypeService } from './services/gameType.service';
 import { QuestionTemplateService } from './services/questionTemplate.service';
+import { GameIo } from './socket.io/game.io';
 
 class ApiHandler {
   //api initialization
@@ -20,7 +21,7 @@ class ApiHandler {
   // @ts-ignore
   private _socket = io.connect(apiUrl, {
     transports: ['websocket'],
-    forceNew: true
+    forceNew: true,
   }); //init socket io
   private _feathersAuthClient = require('@feathersjs/authentication-client')
     .default;
@@ -31,7 +32,7 @@ class ApiHandler {
       .configure(
         this._feathersAuthClient({
           // add authentication plugin
-          storage: window.localStorage
+          storage: window.localStorage,
         })
       );
 
@@ -51,7 +52,11 @@ class ApiHandler {
     this.questionTemplateService = new QuestionTemplateService(
       this._feathers.service('question-templates')
     );
+
+    this.gameIo = new GameIo(this._feathers.io);
   }
+
+  public gameIo: GameIo;
 
   public roleService: RoleService;
   public userservice: UserService;
@@ -96,7 +101,7 @@ class ApiHandler {
   public async login(credentials?: LoginCredentials) {
     let options = {
       ...{ strategy: 'local' },
-      ...credentials
+      ...credentials,
     };
     let response = await this._feathers.authenticate(options);
 

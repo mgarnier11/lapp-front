@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Switch, Redirect, RouterProps, withRouter } from 'react-router';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, CssBaseline, Tabs, Tab } from '@material-ui/core';
+import { Container, CssBaseline, Tabs, Tab, Fab } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 
 import { UserState } from '../../../store/user/types';
 import { GamesState } from '../../../store/games/types';
@@ -14,12 +15,15 @@ import { ThunkDispatch } from 'redux-thunk';
 import { GamesActions } from '../../../store/games/actions';
 import { connect } from 'react-redux';
 import { GameActions } from '../../../store/game/actions';
+import { LoadingOverlay } from '../../components/utils/loadingOverlay.component';
 
-const useStyles = makeStyles(theme => ({}));
+const useStyles = makeStyles((theme) => ({}));
 
 interface OwnProps {}
 
 interface DispatchProps {
+  gameCreate: (game: Game) => Promise<any>;
+  gameGetById: (gameId: string) => Promise<any>;
   gameGetAllLinked: (userId: string) => Promise<any>;
   gameGetByDisplayId: (displayId: string) => Promise<any>;
   gameDelete: (gameId: string) => Promise<any>;
@@ -37,6 +41,7 @@ const HomePage: React.FunctionComponent<Props> = (props: Props) => {
   const { user: me } = props.userState;
 
   const [selectedTab, setSelectedTab] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) =>
     setSelectedTab(newValue);
@@ -50,13 +55,28 @@ const HomePage: React.FunctionComponent<Props> = (props: Props) => {
     props.gameDelete(gameId);
   };
 
+  const onCreate = async () => {
+    setLoading(true);
+
+    const gameCreated = await props.gameCreate(Game.New({}));
+
+    props.history.push(`/games/${gameCreated.displayId}`);
+  };
+
   const renderUserGames = (user: User) => {
     const { games } = props.gamesState;
 
     let userGames: Game[] = [];
-    if (games) userGames = games.filter(g => g.creator.id === user.id);
+    if (games) userGames = games.filter((g) => g.creator.id === user.id);
 
-    return <GameList games={userGames} isAdmin={true} onPlay={onPlay} />;
+    return (
+      <GameList
+        games={userGames}
+        isAdmin={true}
+        onPlay={onPlay}
+        onDelete={onDelete}
+      />
+    );
   };
 
   const renderGamesUserIsIn = (user: User) => {
@@ -65,21 +85,15 @@ const HomePage: React.FunctionComponent<Props> = (props: Props) => {
     let gamesUserIsIn: Game[] = [];
     if (games)
       gamesUserIsIn = games.filter(
-        g => g.users.find(u => u.id === user.id) !== undefined
+        (g) => g.users.find((u) => u.id === user.id) !== undefined
       );
 
-    return (
-      <GameList
-        games={gamesUserIsIn}
-        isAdmin={false}
-        onPlay={onPlay}
-        onDelete={onDelete}
-      />
-    );
+    return <GameList games={gamesUserIsIn} isAdmin={false} onPlay={onPlay} />;
   };
 
   return (
     <>
+      <LoadingOverlay loading={loading} />
       <Tabs value={selectedTab} onChange={handleTabChange} variant="fullWidth">
         <Tab label="Games you created" wrapped />
         <Tab label="Games you're in" wrapped />
@@ -90,6 +104,14 @@ const HomePage: React.FunctionComponent<Props> = (props: Props) => {
       <TabPanel index={1} actualIndex={selectedTab}>
         {renderGamesUserIsIn(me!)}
       </TabPanel>
+
+      <Fab
+        className="floating-action-button"
+        onClick={onCreate}
+        style={{ zIndex: 10 }}
+      >
+        <AddIcon />
+      </Fab>
     </>
   );
 };
@@ -97,7 +119,7 @@ const HomePage: React.FunctionComponent<Props> = (props: Props) => {
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
     gamesState: states.gamesState,
-    userState: states.userState
+    userState: states.userState,
   };
 };
 
@@ -106,6 +128,12 @@ const mapDispatchToProps = (
   ownProps: OwnProps
 ): DispatchProps => {
   return {
+    gameCreate: async (game: Game) => {
+      return await dispatch(GamesActions.gameCreate(game));
+    },
+    gameGetById: async (gameId: string) => {
+      return await dispatch(GameActions.gameGetById(gameId));
+    },
     gameGetAllLinked: async (userId: string) => {
       return await dispatch(GamesActions.gameGetAllLinked(userId));
     },
@@ -114,7 +142,7 @@ const mapDispatchToProps = (
     },
     gameDelete: async (gameId: string) => {
       return await dispatch(GamesActions.gameRemove(gameId));
-    }
+    },
   };
 };
 

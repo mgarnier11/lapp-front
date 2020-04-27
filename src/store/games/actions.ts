@@ -87,7 +87,7 @@ export class GamesActions {
   private gameCreated(gameModel: GameBackModel) {
     store.dispatch({
       type: GamesActionTypes.CREATE,
-      game: Game.fromBack(gameModel)
+      game: Game.fromBack(gameModel),
     });
   }
 
@@ -98,12 +98,12 @@ export class GamesActions {
     if (playingGame && playingGame.id === game.id) {
       store.dispatch({
         type: GameActionTypes.UPDATE,
-        game
+        game,
       });
     }
     store.dispatch({
       type: GamesActionTypes.UPDATE,
-      game
+      game,
     });
   }
 
@@ -114,50 +114,50 @@ export class GamesActions {
     if (playingGame && playingGame.id === game.id) {
       store.dispatch({
         type: GameActionTypes.REMOVE,
-        game
+        game,
       });
     }
     store.dispatch({
       type: GamesActionTypes.REMOVE,
-      game
+      game,
     });
   }
 
   private static gameActionStartedCreator = (): ActionStarted => {
     return {
-      type: GamesActionTypes.ACTION_STARTED
+      type: GamesActionTypes.ACTION_STARTED,
     };
   };
 
   private static gameActionFailureCreator = (): ActionFailure => {
     return {
-      type: GamesActionTypes.ACTION_FAILURE
+      type: GamesActionTypes.ACTION_FAILURE,
     };
   };
 
   public static gameCreate = (
     game: Partial<Game>,
     hideSuccess?: boolean
-  ): ThunkAction<Promise<boolean>, {}, {}, AnyAction> => {
+  ): ThunkAction<Promise<Game>, {}, {}, AnyAction> => {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
-    ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+    ): Promise<Game> => {
+      return new Promise<Game>((resolve) => {
         dispatch(GamesActions.gameActionStartedCreator());
         apiHandler.gameService.featherService
           .create(game)
-          .then(game => {
+          .then((game) => {
             if (!hideSuccess)
               apiHandler.gameService.ownEvents.emit(
                 ServiceEvents.created,
                 game
               );
-            resolve(true);
+            resolve(game);
           })
-          .catch(error => {
+          .catch((error) => {
             dispatch(GamesActions.gameActionFailureCreator());
             dispatch(addError(error));
-            resolve(false);
+            resolve(undefined);
           });
       });
     };
@@ -171,14 +171,14 @@ export class GamesActions {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+      return new Promise<boolean>((resolve) => {
         dispatch(GamesActions.gameActionStartedCreator());
 
         if (shouldLoadGame) dispatch(GameActions.gameStartLoading());
 
         apiHandler.gameService.featherService
           .patch(game.id, game)
-          .then(game => {
+          .then((game) => {
             if (!hideSuccess)
               apiHandler.gameService.ownEvents.emit(
                 ServiceEvents.updated,
@@ -188,7 +188,7 @@ export class GamesActions {
             if (shouldLoadGame) dispatch(GameActions.gameFinishLoading());
             resolve(true);
           })
-          .catch(error => {
+          .catch((error) => {
             dispatch(GamesActions.gameActionFailureCreator());
             dispatch(addError(error));
             if (shouldLoadGame) dispatch(GameActions.gameFinishLoading());
@@ -204,16 +204,16 @@ export class GamesActions {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+      return new Promise<boolean>((resolve) => {
         dispatch(GamesActions.gameActionStartedCreator());
         apiHandler.gameService.featherService
           .remove(gameId)
-          .then(game => {
+          .then((game) => {
             apiHandler.gameService.ownEvents.emit(ServiceEvents.removed, game);
 
             resolve(true);
           })
-          .catch(error => {
+          .catch((error) => {
             dispatch(GamesActions.gameActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
@@ -231,18 +231,18 @@ export class GamesActions {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+      return new Promise<boolean>((resolve) => {
         dispatch(GamesActions.gameActionStartedCreator());
         apiHandler.gameService.featherService
           .find()
-          .then(games => {
+          .then((games) => {
             dispatch({
               type: GamesActionTypes.GETALL,
-              games: games
+              games: games,
             });
             resolve(true);
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error);
 
             dispatch(GamesActions.gameActionFailureCreator());
@@ -259,24 +259,24 @@ export class GamesActions {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+      return new Promise<boolean>((resolve) => {
         dispatch(GamesActions.gameActionStartedCreator());
         Promise.all([
           apiHandler.gameService.findCreatedGamesPerUser(userId),
-          apiHandler.gameService.findGamesPerUser(userId)
+          apiHandler.gameService.findGamesPerUser(userId),
         ])
-          .then(gamesArrays => {
+          .then((gamesArrays) => {
             let games: Game[] = gamesArrays.flat();
             dispatch({
               type: GamesActionTypes.GETALL,
               games: games.filter(
                 (elem, index) =>
-                  index === games.findIndex(g => g.id === elem.id)
-              )
+                  index === games.findIndex((g) => g.id === elem.id)
+              ),
             });
             resolve(true);
           })
-          .catch(error => {
+          .catch((error) => {
             dispatch(GamesActions.gameActionFailureCreator());
             dispatch(addError(error));
             resolve(false);

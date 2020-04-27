@@ -6,7 +6,7 @@ import {
   Grid,
   Typography,
   Box,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 
 import Rating from '@material-ui/lab/Rating';
@@ -18,15 +18,15 @@ import { TemplateFormProps } from '../templateForm';
 import { OutlinedDiv } from '../../components/utils/outlinedDiv.component';
 import { UserItem } from '../../components/user/user.item.component';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   ratingsGrid: {
     width: 'calc(100% + 16px)',
     marginLeft: -8,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   hotLevelRating: {
-    color: '#FD6C9E'
-  }
+    color: '#FD6C9E',
+  },
 }));
 
 interface OtherProps {}
@@ -41,11 +41,15 @@ const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     props.editable && props.formProps.setText(e.target.value);
 
-  const handleDifficultyChange = (e: any, value: number) =>
-    props.editable && props.formProps.setDifficulty(value);
+  const handleDifficultyChange = (
+    e: React.ChangeEvent<any>,
+    value: number | null
+  ) => props.editable && value != null && props.formProps.setDifficulty(value);
 
-  const handleHotLevelChange = (e: any, value: number) =>
-    props.editable && props.formProps.setHotLevel(value);
+  const handleHotLevelChange = (
+    e: React.ChangeEvent<any>,
+    value: number | null
+  ) => props.editable && value != null && props.formProps.setHotLevel(value);
 
   return (
     <>
