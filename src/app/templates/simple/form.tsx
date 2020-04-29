@@ -1,6 +1,7 @@
 import React from 'react';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
+import { v4 as uuidV4 } from 'uuid';
 import {
   TextField,
   Grid,
@@ -55,7 +56,7 @@ const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
     <>
       {props.displayText && (
         <TextField
-          name="text"
+          name={`${uuidV4()}_text`}
           margin="normal"
           variant="outlined"
           type="text"
@@ -82,7 +83,7 @@ const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
           <Rating
             disabled={props.disabled}
             readOnly={!props.editable}
-            name="difficulty"
+            name={`${uuidV4()}_difficulty`}
             value={props.formProps.difficulty}
             onChange={handleDifficultyChange}
           />
@@ -97,7 +98,7 @@ const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
           <Rating
             disabled={props.disabled}
             readOnly={!props.editable}
-            name="hotLevel"
+            name={`${uuidV4()}_hotLevel`}
             className={classes.hotLevelRating}
             value={props.formProps.hotLevel}
             onChange={handleHotLevelChange}

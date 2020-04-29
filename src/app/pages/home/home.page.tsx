@@ -88,6 +88,10 @@ const HomePage: React.FunctionComponent<Props> = (props: Props) => {
     props.history.push(`/games/${game.displayId}`);
   };
 
+  const handleOnClose = () => {
+    setModalProps({ ...modalProps, open: false });
+  };
+
   const handleOnDelete = (gameId: string) => {
     props.gameDelete(gameId);
   };
@@ -163,7 +167,12 @@ const HomePage: React.FunctionComponent<Props> = (props: Props) => {
         <AddIcon />
       </Fab>
 
-      <Dialog open={modalProps.open} fullWidth maxWidth="sm">
+      <Dialog
+        open={modalProps.open}
+        onClose={handleOnClose}
+        fullWidth
+        maxWidth="sm"
+      >
         <DialogTitle disableTypography className={classes.modalTitle}>
           <Typography component="h3" variant="h5" align="center">
             Create a new Game

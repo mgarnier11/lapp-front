@@ -18,6 +18,12 @@ export function afterAllHook(options = {}): Hook {
   };
 }
 
+export function beforeUpsertHook(options = {}): Hook {
+  return (context: HookContext) => {
+    console.log(context);
+  };
+}
+
 function convertToClass(data: any): Question {
   if (data instanceof Question) return data;
   else return Question.fromBack(data);

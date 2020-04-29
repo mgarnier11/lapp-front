@@ -31,17 +31,30 @@ type Props = {
 const TemplateFormLoaderComponent: React.FunctionComponent<Props> = (
   props: Props
 ) => {
-  const [message, setMessage] = useState('Loading...');
-
-  const LazyComponent = React.lazy(() =>
-    import(`./${props.templatePath}/form`).catch(e => {
+  const getLazy = React.lazy(() =>
+    import(`./${props.templatePath}/form`).catch((e) => {
       setMessage(props.errorMessage || e.message);
     })
   );
 
+  const [message, setMessage] = useState('Loading...');
+  const [LazyComponent, setLazyComponent] = useState<any>(undefined);
+
+  useEffect(() => {
+    setLazyComponent(
+      React.lazy(() =>
+        import(`./${props.templatePath}/form`).catch((e) => {
+          setMessage(props.errorMessage || e.message);
+        })
+      )
+    );
+  }, [props.templatePath]);
+
   return (
     <Suspense fallback={<div>{message}</div>}>
-      <LazyComponent {...props.formProps} {...props.formProps.otherProps} />
+      {LazyComponent && (
+        <LazyComponent {...props.formProps} {...props.formProps.otherProps} />
+      )}
     </Suspense>
   );
 };

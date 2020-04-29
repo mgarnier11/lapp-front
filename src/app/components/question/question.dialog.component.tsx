@@ -16,7 +16,7 @@ import {
   CardContent,
   CardActions,
   Typography,
-  MenuItem
+  MenuItem,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -26,7 +26,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import {
   DangerButton,
-  DangerIconButton
+  DangerIconButton,
 } from '../utils/dangerButton.component';
 import { Helper } from '../../../helper';
 import { Question } from '../../../api/classes/question.class';
@@ -40,29 +40,29 @@ import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
 import { TemplateFormLoader } from '../../templates/templateForm';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {},
   title: {
     padding: '8px 16px',
-    paddingTop: 12
+    paddingTop: 12,
   },
   content: {
-    padding: '0px 16px'
+    padding: '0px 16px',
   },
   actions: {
     padding: '8px 16px',
     '& :first-child': {
-      marginLeft: 'auto'
-    }
+      marginLeft: 'auto',
+    },
   },
   ratingsGrid: {
     width: 'calc(100% + 16px)',
     marginLeft: -8,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   hotLevelRating: {
-    color: '#FD6C9E'
-  }
+    color: '#FD6C9E',
+  },
 }));
 
 interface OwnProps {
@@ -89,7 +89,7 @@ interface StateProps {
 
 type Props = StateProps & OwnProps & DispatchProps;
 
-const QuestionDialogComponent: React.FunctionComponent<Props> = props => {
+const QuestionDialogComponent: React.FunctionComponent<Props> = (props) => {
   const classes = useStyles();
   const { questionTypes } = props.questionTypesState;
 
@@ -100,7 +100,7 @@ const QuestionDialogComponent: React.FunctionComponent<Props> = props => {
 
   const isDenied = (): boolean => {
     return (
-      !questionTypes!.find(t => QuestionType.CompareObjects(t, type)) ||
+      !questionTypes!.find((t) => QuestionType.CompareObjects(t, type)) ||
       difficulty === 0 ||
       hotLevel === 0 ||
       text.length === 0
@@ -109,7 +109,7 @@ const QuestionDialogComponent: React.FunctionComponent<Props> = props => {
 
   const handleTypeChange = (e: React.ChangeEvent<{ value: unknown }>) =>
     props.editable &&
-    setType(questionTypes!.find(t => t.id === (e.target.value as string))!);
+    setType(questionTypes!.find((t) => t.id === (e.target.value as string))!);
 
   React.useEffect(() => {
     setText(props.question.text || '');
@@ -135,7 +135,7 @@ const QuestionDialogComponent: React.FunctionComponent<Props> = props => {
     month: 'numeric',
     day: 'numeric',
     hour: 'numeric',
-    minute: 'numeric'
+    minute: 'numeric',
   };
 
   const renderForm = () => (
@@ -154,7 +154,7 @@ const QuestionDialogComponent: React.FunctionComponent<Props> = props => {
           onChange={handleTypeChange}
         >
           {questionTypes ? (
-            questionTypes.map(t => (
+            questionTypes.map((t) => (
               <MenuItem value={t.id} key={t.id}>
                 {t.name}
               </MenuItem>
@@ -174,11 +174,11 @@ const QuestionDialogComponent: React.FunctionComponent<Props> = props => {
             difficulty,
             setDifficulty,
             hotLevel,
-            setHotLevel
+            setHotLevel,
           },
           dateOptions,
           disabled: props.disabled,
-          displayText: props.displayText
+          displayText: props.displayText,
         }}
         templatePath={type.template.clientPath}
         errorMessage={'Please select a type'}
@@ -278,7 +278,7 @@ const QuestionDialogComponent: React.FunctionComponent<Props> = props => {
 
 QuestionDialogComponent.defaultProps = {
   displayText: true,
-  displayType: true
+  displayType: true,
 };
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
