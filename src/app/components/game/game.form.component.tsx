@@ -33,8 +33,8 @@ const useStyles = makeStyles((theme) => ({
     padding: 2,
   },
   questionTypeChip: {
-    width: 'calc(50% - 4px)',
-    margin: 2,
+    width: 'calc(50% - 10px)',
+    margin: 5,
     marginBottom: 3,
     '&:nth-child(-n+2)': {
       marginTop: 7,
@@ -240,20 +240,24 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
         onChange={handleNbTurnsChange}
       />
       <OutlinedDiv label="Question Types" fullWidth>
-        {allQuestionsTypes.map((t) => (
-          <Chip
-            label={t.name}
-            key={t.id}
-            color={
-              questionTypes.find((type) => QuestionType.CompareObjects(t, type))
-                ? 'primary'
-                : 'default'
-            }
-            disabled={props.disabled}
-            className={classes.questionTypeChip}
-            onClick={() => switchQuestionType(t.id)}
-          />
-        ))}
+        {allQuestionsTypes
+          .filter((t) => t.hasQuestions)
+          .map((t) => (
+            <Chip
+              label={t.name}
+              key={t.id}
+              color={
+                questionTypes.find((type) =>
+                  QuestionType.CompareObjects(t, type)
+                )
+                  ? 'primary'
+                  : 'default'
+              }
+              disabled={props.disabled}
+              className={classes.questionTypeChip}
+              onClick={() => switchQuestionType(t.id)}
+            />
+          ))}
       </OutlinedDiv>
       {(props.onDelete || props.onSubmit) && (
         <Grid container spacing={2}>

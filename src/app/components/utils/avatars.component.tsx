@@ -3,9 +3,9 @@ import { makeStyles } from '@material-ui/core';
 import { User } from '../../../api/classes/user.class';
 import { QuestionType } from '../../../api/classes/questionType.class';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    textAlign: 'center'
+    textAlign: 'center',
   },
   img: {
     backgroundSize: 'cover',
@@ -13,14 +13,15 @@ const useStyles = makeStyles(theme => ({
     borderRadius: '50%',
     height: 0,
     marginLeft: 'auto',
-    marginRight: 'auto'
-  }
+    marginRight: 'auto',
+  },
 }));
 
 type BaseAvatarProps = {
   src: string;
   percentSize?: number;
   pixelSize?: number;
+  style?: React.CSSProperties;
 };
 
 export const BaseAvatar: React.FunctionComponent<BaseAvatarProps> = (
@@ -37,9 +38,10 @@ export const BaseAvatar: React.FunctionComponent<BaseAvatarProps> = (
     <div
       className={classes.img}
       style={{
+        ...props.style,
         backgroundImage: `url("${props.src}")`,
         width: size,
-        paddingBottom: size
+        paddingBottom: size,
       }}
     />
   );
@@ -65,7 +67,7 @@ export const TypeAvatar: React.FunctionComponent<TypeAvatarProps> = (
       style={{
         backgroundImage: `url("${props.type.icon || props.src}")`,
         width: size,
-        paddingBottom: size
+        paddingBottom: size,
       }}
     />
   );

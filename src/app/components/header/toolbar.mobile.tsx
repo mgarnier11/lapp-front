@@ -9,7 +9,8 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
-  ListItem
+  ListItem,
+  Avatar,
 } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -33,34 +34,35 @@ import { Role } from '../../../api/classes/role.class';
 import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
 import { ThemeController } from '../../theme/themeManager';
 import { UserItem } from '../user/user.item.component';
+import { BaseAvatar } from '../utils/avatars.component';
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   appName: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   toolBar: {
-    height: headerHeight
+    height: headerHeight,
   },
   drawer: {
     width: drawerWidth,
-    flexShrink: 0
+    flexShrink: 0,
   },
   drawerPaper: {
     width: drawerWidth,
-    paddingTop: headerHeight
+    paddingTop: headerHeight,
   },
   drawerWrapper: {
     justifyContent: 'space-between',
     height: '100%',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   userName: {
     fontSize: '150%',
-    marginBottom: theme.spacing(1)
-  }
+    marginBottom: theme.spacing(1),
+  },
 }));
 
 interface OwnProps {
@@ -167,6 +169,10 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
         onOpen={() => toggleDrawer(true)}
         classes={{ paper: classes.drawerPaper }}
       >
+        <BaseAvatar
+          src="/assets/logo_party_drink.png"
+          style={{ marginTop: '4px' }}
+        ></BaseAvatar>
         <List style={{ height: '100%' }} className={classes.drawerWrapper}>
           {user ? (
             <>

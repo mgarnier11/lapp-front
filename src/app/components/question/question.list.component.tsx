@@ -10,7 +10,7 @@ import {
   Switch,
   Button,
   Drawer,
-  Slider
+  Slider,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
@@ -21,30 +21,30 @@ import { RootState } from '../../../store';
 import { UserState } from '../../../store/user/types';
 import { connect } from 'react-redux';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   questionsGrid: {
     [theme.breakpoints.down('xs')]: {
-      paddingTop: 48
-    }
+      paddingTop: 48,
+    },
   },
   questionCol: {
     paddingLeft: theme.spacing(0.5),
     paddingRight: theme.spacing(0.5),
-    height: 'fit-content'
+    height: 'fit-content',
   },
   questionItem: {
-    padding: theme.spacing(1)
+    padding: theme.spacing(1),
   },
   hotLevelRating: {
-    color: '#FD6C9E'
+    color: '#FD6C9E',
   },
   filtersLine: {
     [theme.breakpoints.up('sm')]: {
       paddingLeft: '16px !important',
-      paddingRight: '16px !important'
+      paddingRight: '16px !important',
     },
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   filtersDrawerRoot: {},
   filtersDrawerPaper: {
@@ -52,11 +52,11 @@ const useStyles = makeStyles(theme => ({
     paddingLeft: 5,
     paddingRight: 13,
     paddingTop: 5,
-    paddingBottom: 8
+    paddingBottom: 8,
   },
   filtersSlider: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   filtersButton: {
     display: 'flex',
@@ -64,21 +64,21 @@ const useStyles = makeStyles(theme => ({
     borderRadius: 0,
     zIndex: 1150,
     position: 'fixed',
-    height: 48
+    height: 48,
   },
   filtersButtonIcon: {
     marginLeft: 'auto',
     transform: 'rotate(0deg)',
     transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest
-    })
+      duration: theme.transitions.duration.shortest,
+    }),
   },
   filtersButtonIconExpanded: {
-    transform: 'rotate(180deg)'
+    transform: 'rotate(180deg)',
   },
   valueLabel: {
-    zIndex: 1500
-  }
+    zIndex: 1500,
+  },
 }));
 
 interface DispatchProps {}
@@ -100,18 +100,18 @@ const StarSlider = withStyles({
     marginLeft: 'auto',
     marginRight: '10px',
     width: '55%',
-    color: '#FFB400'
+    color: '#FFB400',
   },
   thumb: {
     '&::before': {
       content: '"★"',
-      fontSize: '250%'
-    }
+      fontSize: '250%',
+    },
   },
   valueLabel: {
     zIndex: 1300,
-    top: -40
-  }
+    top: -40,
+  },
 })(Slider);
 
 const HeartSlider = withStyles({
@@ -119,21 +119,21 @@ const HeartSlider = withStyles({
     marginLeft: 'auto',
     marginRight: '10px',
     width: '55%',
-    color: '#FD6C9E'
+    color: '#FD6C9E',
   },
   thumb: {
     '&::before': {
       content: '"❤"',
-      fontSize: '210%'
-    }
+      fontSize: '210%',
+    },
   },
   valueLabel: {
     zIndex: 1300,
-    top: -40
-  }
+    top: -40,
+  },
 })(Slider);
 
-const QuestionListComponent: React.FunctionComponent<Props> = props => {
+const QuestionListComponent: React.FunctionComponent<Props> = (props) => {
   const classes = useStyles();
   const theme = useTheme();
   //const isXs = useMediaQuery(theme.breakpoints.up('xs'));
@@ -146,7 +146,7 @@ const QuestionListComponent: React.FunctionComponent<Props> = props => {
   >([1, 5]);
   const [maxHotLevelFilters, setMaxHotLevelFilters] = React.useState<number[]>([
     1,
-    5
+    5,
   ]);
   const [userQuestionsOnly, setUserQuestionsOnly] = useState(false);
 
@@ -162,7 +162,7 @@ const QuestionListComponent: React.FunctionComponent<Props> = props => {
 
   const filteredQuestions = questions
     .filter(
-      q =>
+      (q) =>
         q.difficulty >= maxDifficultyFilters[0] &&
         q.difficulty <= maxDifficultyFilters[1] &&
         q.hotLevel >= maxHotLevelFilters[0] &&
@@ -261,7 +261,7 @@ const QuestionListComponent: React.FunctionComponent<Props> = props => {
             lg={4}
             className={classes.questionCol}
           >
-            {questionList.map(question => (
+            {questionList.map((question) => (
               <Grid
                 key={question.id}
                 item
@@ -283,7 +283,7 @@ const QuestionListComponent: React.FunctionComponent<Props> = props => {
 };
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    userState: states.userState
+    userState: states.userState,
   };
 };
 

@@ -10,7 +10,7 @@ import {
   Avatar,
   Collapse,
   Tooltip,
-  ClickAwayListener
+  ClickAwayListener,
 } from '@material-ui/core';
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -21,30 +21,30 @@ import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
 import { QuestionDialog } from './question.dialog.component';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   deleteButton: {
-    marginLeft: 'auto'
+    marginLeft: 'auto',
   },
   hotLevelRating: {
     color: '#FD6C9E',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   expand: {
     transform: 'rotate(0deg)',
     marginLeft: 'auto',
     transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest
-    })
+      duration: theme.transitions.duration.shortest,
+    }),
   },
   expanded: {
-    transform: 'rotate(180deg)'
+    transform: 'rotate(180deg)',
   },
   cardContent: {
-    padding: '0 !important'
+    padding: '0 !important',
   },
   alignSelf: {
-    alignSelf: 'baseline'
-  }
+    alignSelf: 'baseline',
+  },
 }));
 
 interface OwnProps {
@@ -61,7 +61,7 @@ interface StateProps {
 
 type Props = StateProps & OwnProps & DispatchProps;
 
-const QuestionItemComponent: React.FunctionComponent<Props> = props => {
+const QuestionItemComponent: React.FunctionComponent<Props> = (props) => {
   const classes = useStyles();
 
   const { question } = props;
@@ -118,7 +118,7 @@ const QuestionItemComponent: React.FunctionComponent<Props> = props => {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    userState: states.userState
+    userState: states.userState,
   };
 };
 

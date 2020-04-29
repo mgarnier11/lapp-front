@@ -23,6 +23,7 @@ import { Loading } from './components/utils/loading.component';
 import { Box, Typography } from '@material-ui/core';
 import { QuestionTemplatesState } from '../store/questionTemplates/types';
 import { QuestionTemplatesActions } from '../store/questionTemplates/actions';
+import { LoadingLogo } from './components/utils/loadingLogo.component';
 
 interface OwnProps {
   children?: ReactNode;
@@ -54,7 +55,7 @@ const AppStartingComponent: React.FunctionComponent<Props> = (props: Props) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    props.relog().then(isLogged => {
+    props.relog().then((isLogged) => {
       if (!isLogged) setLoading(false);
     });
   }, ['componentDidMount']);
@@ -69,9 +70,9 @@ const AppStartingComponent: React.FunctionComponent<Props> = (props: Props) => {
         props.questionTypeGetAll(),
         props.gameTypeGetAll(),
         props.questionGetAll(),
-        props.questionTemplateGetAll()
-      ]).then(values => {
-        if (values.every(v => v === true)) {
+        props.questionTemplateGetAll(),
+      ]).then((values) => {
+        if (values.every((v) => v === true)) {
           setLoading(false);
         } else {
           console.log('error in loading');
@@ -90,13 +91,10 @@ const AppStartingComponent: React.FunctionComponent<Props> = (props: Props) => {
             height: '100%',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center'
+            justifyContent: 'center',
           }}
         >
-          <Typography component="h1" variant="h4" align="center">
-            Party Drink
-          </Typography>
-          <Loading />
+          <LoadingLogo />
         </Box>
       ) : props.userState.user ? (
         props.children
@@ -126,7 +124,7 @@ const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
     questionTypesState: states.questionTypesState,
     questionsState: states.questionsState,
     rolesState: states.rolesState,
-    questionTemplatesState: states.questionTemplatesState
+    questionTemplatesState: states.questionTemplatesState,
   };
 };
 
@@ -155,7 +153,7 @@ const mapDispatchToProps = (
     },
     relog: async () => {
       return await dispatch(relog(false));
-    }
+    },
   };
 };
 

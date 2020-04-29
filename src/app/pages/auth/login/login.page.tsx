@@ -12,7 +12,7 @@ import {
   makeStyles,
   TextField,
   Button,
-  CircularProgress
+  CircularProgress,
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
@@ -21,23 +21,24 @@ import { UserState } from '../../../../store/user/types';
 import { RootState } from '../../../../store';
 import { logout, login } from '../../../../store/user/actions';
 import { IdVice } from '../../../components/user/idVice.component';
+import { BaseAvatar } from '../../../components/utils/avatars.component';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(4),
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
+    margin: theme.spacing(3, 0, 2),
   },
   noLogin: {
-    cursor: 'pointer'
+    cursor: 'pointer',
   },
   register: {
-    paddingTop: theme.spacing(1)
-  }
+    paddingTop: theme.spacing(1),
+  },
 }));
 
 interface OwnProps {}
@@ -53,7 +54,7 @@ interface StateProps {
 
 type LoginPageProps = OwnProps & DispatchProps & StateProps & RouterProps;
 
-const LoginPage: React.FunctionComponent<LoginPageProps> = props => {
+const LoginPage: React.FunctionComponent<LoginPageProps> = (props) => {
   useEffect(() => {
     props.logout(true, true);
   }, []);
@@ -71,9 +72,9 @@ const LoginPage: React.FunctionComponent<LoginPageProps> = props => {
     props
       .login({
         email,
-        password
+        password,
       })
-      .then(logged => {
+      .then((logged) => {
         console.log(logged);
 
         if (logged) props.history.push('/home');
@@ -88,9 +89,10 @@ const LoginPage: React.FunctionComponent<LoginPageProps> = props => {
 
   return (
     <Container component="div" maxWidth="xs" className={classes.paper}>
-      <Avatar>
-        <LockOutlinedIcon />
-      </Avatar>
+      <BaseAvatar
+        pixelSize={80}
+        src="/assets/logo_party_drink.png"
+      ></BaseAvatar>
       <Box margin={0.5}>
         <Typography variant="h4">Sign in</Typography>
       </Box>
@@ -146,7 +148,7 @@ const LoginPage: React.FunctionComponent<LoginPageProps> = props => {
 
 const mapStateToProps = (states: RootState): StateProps => {
   return {
-    userState: states.userState
+    userState: states.userState,
   };
 };
 
@@ -159,7 +161,7 @@ const mapDispatchToProps = (
     },
     logout: async (hideSuccess?: boolean, hideError?: boolean) => {
       await dispatch(logout(hideSuccess, hideError));
-    }
+    },
   };
 };
 
