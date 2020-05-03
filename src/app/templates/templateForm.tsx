@@ -31,12 +31,6 @@ type Props = {
 const TemplateFormLoaderComponent: React.FunctionComponent<Props> = (
   props: Props
 ) => {
-  const getLazy = React.lazy(() =>
-    import(`./${props.templatePath}/form`).catch((e) => {
-      setMessage(props.errorMessage || e.message);
-    })
-  );
-
   const [message, setMessage] = useState('Loading...');
   const [LazyComponent, setLazyComponent] = useState<any>(undefined);
 

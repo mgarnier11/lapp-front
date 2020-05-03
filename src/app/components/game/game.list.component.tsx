@@ -101,7 +101,8 @@ const GameListComponent: React.FunctionComponent<Props> = (props) => {
   useEffect(() => {
     setDeleting(
       games.map((g) => {
-        return { id: g.id, value: false };
+        let d = deleting.find((d) => d.id === g.id);
+        return { id: g.id, value: d !== undefined ? d.value : false };
       })
     );
   }, [games.length]);
@@ -123,8 +124,8 @@ const GameListComponent: React.FunctionComponent<Props> = (props) => {
 
   const beforeDelete = (gameId: string) => {
     setDeleting(
-      games.map((g) => {
-        return { id: g.id, value: g.id === gameId };
+      deleting.map((d) => {
+        return { ...d, value: d.id === gameId ? true : d.value };
       })
     );
     if (props.onDelete) props.onDelete(gameId);
@@ -204,13 +205,17 @@ const GameListComponent: React.FunctionComponent<Props> = (props) => {
         <Table size="small" stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell style={{ width: 1 }}>Id</TableCell>
+              <TableCell style={{ width: 90 }}>Id</TableCell>
               <TableCell>Name</TableCell>
               <Hidden xsDown>
-                <TableCell>Nb Players</TableCell>
+                <TableCell align="center" style={{ width: 130 }}>
+                  Nb Players
+                </TableCell>
               </Hidden>
 
-              <TableCell align="center">Actions</TableCell>
+              <TableCell align="center" style={{ width: 130 }}>
+                Actions
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -221,12 +226,20 @@ const GameListComponent: React.FunctionComponent<Props> = (props) => {
               .map((game, index) => {
                 return (
                   <TableRow key={game.id}>
-                    <TableCell>{game.displayId}</TableCell>
+                    <TableCell style={{ width: 90 }}>
+                      {game.displayId}
+                    </TableCell>
                     <TableCell>{game.name}</TableCell>
                     <Hidden xsDown>
-                      <TableCell>{game.allUsers.length}</TableCell>
+                      <TableCell style={{ width: 130 }} align="center">
+                        {game.allUsers.length}
+                      </TableCell>
                     </Hidden>
-                    <TableCell align="center" padding="none">
+                    <TableCell
+                      align="center"
+                      padding="none"
+                      style={{ width: 130 }}
+                    >
                       {renderStatusButton(game, deleting[index]?.value)}
                       {props.isAdmin &&
                         renderDeleteButton(game, deleting[index]?.value)}

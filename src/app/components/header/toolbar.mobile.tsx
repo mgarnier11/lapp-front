@@ -104,12 +104,12 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
         {ThemeController.isLight() ? (
           <>
             <ListItemIcon children={<Brightness3Icon />} />
-            <ListItemText primary="Toggle night" />
+            <ListItemText primary="Set dark mode" />
           </>
         ) : (
           <>
             <ListItemIcon children={<WbSunnyIcon />} />
-            <ListItemText primary="Toggle day" />
+            <ListItemText primary="Set clear mode" />
           </>
         )}
       </ListItem>
@@ -142,6 +142,10 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
     </ListItemLink>
   );
 
+  const logoToUse = ThemeController.isDark()
+    ? 'logo_party_drink_dark_mode.png'
+    : 'logo_party_drink.png';
+
   return (
     <>
       <Toolbar className={classes.toolBar}>
@@ -170,7 +174,7 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
         classes={{ paper: classes.drawerPaper }}
       >
         <BaseAvatar
-          src="/assets/logo_party_drink.png"
+          src={`assets/${logoToUse}`}
           style={{ marginTop: '4px' }}
         ></BaseAvatar>
         <List style={{ height: '100%' }} className={classes.drawerWrapper}>
@@ -181,7 +185,7 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
                 {!user.isIDVice() && baseUserItems()}
                 {user.role.permissionLevel >= Role.AdminPermissionLevel &&
                   adminItems()}
-                <Divider />
+                {/* <Divider /> */}
               </div>
               <div>
                 <Divider />

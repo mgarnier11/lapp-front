@@ -51,6 +51,7 @@ interface OwnProps {
   question: Question;
   onDelete?: (questionId: string) => void;
   onUpdate?: (question: Question) => void;
+  disabled?: boolean;
 }
 
 interface DispatchProps {}
@@ -100,6 +101,7 @@ const QuestionItemComponent: React.FunctionComponent<Props> = (props) => {
           <CardContent className={classes.cardContent}>
             <QuestionDialog
               question={question}
+              disabled={props.disabled}
               editable={user.id === question.creator.id}
               displayType={false}
               displayText={user.id === question.creator.id}

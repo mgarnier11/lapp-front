@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme, makeStyles, withStyles } from '@material-ui/core/styles';
 import { Question } from '../../../api/classes/question.class';
 import {
@@ -140,6 +140,8 @@ const QuestionListComponent: React.FunctionComponent<Props> = (props) => {
   const isSm = useMediaQuery(theme.breakpoints.up('sm'));
   const isLg = useMediaQuery(theme.breakpoints.up('lg'));
 
+  const { questions } = props;
+
   const [filterOpen, setFilterOpen] = useState(false);
   const [maxDifficultyFilters, setMaxDifficultyFilters] = React.useState<
     number[]
@@ -157,8 +159,6 @@ const QuestionListComponent: React.FunctionComponent<Props> = (props) => {
     setMaxDifficultyFilters(newValue as number[]);
   const handleMaxHotLevelChange = (event: any, newValue: number | number[]) =>
     setMaxHotLevelFilters(newValue as number[]);
-
-  const { questions } = props;
 
   const filteredQuestions = questions
     .filter(
@@ -261,7 +261,7 @@ const QuestionListComponent: React.FunctionComponent<Props> = (props) => {
             lg={4}
             className={classes.questionCol}
           >
-            {questionList.map((question) => (
+            {questionList.map((question, index) => (
               <Grid
                 key={question.id}
                 item

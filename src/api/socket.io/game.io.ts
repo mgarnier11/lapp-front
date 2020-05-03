@@ -1,26 +1,54 @@
+import { Application } from '@feathersjs/feathers';
+
 export class GameIo {
   private _io: SocketIOClient.Socket;
+  private _app: Application<any>;
 
   /**
    *
    */
-  constructor(io: SocketIOClient.Socket) {
-    this._io = io;
+  constructor(feathers: Application<any>) {
+    this._io = feathers.io;
+    this._app = feathers;
   }
 
-  public joinGame(gameId: string) {
-    this._io.emit('joinGame', { gameId }, (resParams: any) => {
-      console.log(resParams);
-    });
+  private async authedParams(params: any) {
+    return { ...params, jwt: await this._app.authentication.getAccessToken() };
   }
 
-  public startGame(gameId: string) {
-    this._io.emit('startGame', { gameId }, (resParams: any) => {});
+  public async joinGame(gameId: string) {
+    this._io.emit(
+      'game:join',
+      await this.authedParams({ gameId }),
+      (resParams: any) => {
+        console.log(resParams);
+      }
+    );
   }
 
-  public leaveGame(gameId: string) {
-    this._io.emit('leaveGame', { gameId }, (resParams: any) => {
-      console.log(resParams);
-    });
+  public async startGame(gameId: string) {
+    this._io.emit(
+      'game:start',
+      await this.authedParams({ gameId }),
+      (resParams: any) => {}
+    );
+  }
+
+  public async leaveGame(gameId: string) {
+    this._io.emit(
+      'game:leave',
+      await this.authedParams({ gameId }),
+      (resParams: any) => {
+        console.log(resParams);
+      }
+    );
+  }
+
+  public onceGameLoading(cb: (loading: boolean) => void) {
+    this._io.once('game:loading', cb);
+  }
+
+  public onGameLoading(cb: (loading: boolean) => void) {
+    this._io.on('game:loading', cb);
   }
 }

@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  Button
+  Button,
 } from '@material-ui/core';
 import { EventEmitter } from 'events';
 //import { makeStyles } from '@material-ui/core';
@@ -35,7 +35,7 @@ class YesNoComponent extends React.Component<Props, ComponentState> {
     title: 'Are you sure ?',
     text: '',
     acceptText: 'Accept',
-    denyText: 'Deny'
+    denyText: 'Deny',
   };
 
   /**
@@ -66,7 +66,7 @@ class YesNoComponent extends React.Component<Props, ComponentState> {
       title: newState.title!,
       text: newState.text!,
       acceptText: newState.acceptText!,
-      denyText: newState.denyText!
+      denyText: newState.denyText!,
     });
     return new Promise((res, rej) => {
       this.events.once('resolve', () => {
@@ -103,8 +103,19 @@ class YesNoComponent extends React.Component<Props, ComponentState> {
           </DialogContent>
         )}
         <DialogActions>
-          <Button onClick={this.handleAccept}>{this.state.acceptText}</Button>
-          <Button onClick={this.handleDeny} autoFocus>
+          <Button
+            onClick={this.handleAccept}
+            color="primary"
+            variant="contained"
+          >
+            {this.state.acceptText}
+          </Button>
+          <Button
+            onClick={this.handleDeny}
+            autoFocus
+            color="primary"
+            variant="contained"
+          >
             {this.state.denyText}
           </Button>
         </DialogActions>

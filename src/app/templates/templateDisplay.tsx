@@ -22,19 +22,26 @@ const TemplateDisplayLoaderComponent: React.FunctionComponent<Props> = (
   props: Props
 ) => {
   const [message, setMessage] = useState('Loading...');
+  const [LazyComponent, setLazyComponent] = useState<any>(undefined);
 
-  const LazyComponent = React.lazy(() =>
-    import(`./${props.templatePath}/display`).catch(e => {
-      setMessage(props.errorMessage || e.message);
-    })
-  );
+  useEffect(() => {
+    setLazyComponent(
+      React.lazy(() =>
+        import(`./${props.templatePath}/display`).catch((e) => {
+          setMessage(props.errorMessage || e.message);
+        })
+      )
+    );
+  }, [props.templatePath]);
 
   return (
     <Suspense fallback={<div>{message}</div>}>
-      <LazyComponent
-        {...props.displayProps}
-        {...props.displayProps.otherProps}
-      />
+      {LazyComponent && (
+        <LazyComponent
+          {...props.displayProps}
+          {...props.displayProps.otherProps}
+        />
+      )}
     </Suspense>
   );
 };

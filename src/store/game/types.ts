@@ -13,7 +13,7 @@ export enum GameActionTypes {
   UPDATE = '@@game/UPDATE',
   REMOVE = '@@game/REMOVE',
   START_LOADING = '@@game/START_LOADING',
-  FINISH_LOADING = '@@game/FINISH_LOADING'
+  FINISH_LOADING = '@@game/FINISH_LOADING',
 }
 
 // Declare state types with `readonly` modifier to get compile time immutability.

@@ -22,6 +22,8 @@ interface DispatchProps {
     hideSuccess?: boolean,
     shouldLoadGame?: boolean
   ) => Promise<any>;
+  gameStartLoading: () => void;
+  gameFinishLoading: () => void;
   gameRemove: (gameId: string) => Promise<any>;
 }
 
@@ -38,10 +40,22 @@ const GameStartedPage: React.FunctionComponent<Props> = (props: Props) => {
   useEffect(() => {
     apiHandler.gameIo.joinGame(playingGame.id);
 
+    apiHandler.gameIo.onGameLoading(gameLoading);
+
     return () => {
       apiHandler.gameIo.leaveGame(playingGame.id);
     };
   }, []);
+
+  const gameLoading = (isLoading: boolean) => {
+    console.log(isLoading);
+
+    if (isLoading) {
+      props.gameStartLoading();
+    } else {
+      props.gameFinishLoading();
+    }
+  };
 
   const onAcceptQuestion = (q: Question) => {
     nextQuestion();
@@ -102,6 +116,12 @@ const mapDispatchToProps = (
       return await dispatch(
         GamesActions.gameUpdate(game, hideSuccess, shouldLoadGame)
       );
+    },
+    gameStartLoading: () => {
+      dispatch(GameActions.gameStartLoading());
+    },
+    gameFinishLoading: () => {
+      dispatch(GameActions.gameFinishLoading());
     },
     gameRemove: async (gameId: string) => {
       return await dispatch(GamesActions.gameRemove(gameId));

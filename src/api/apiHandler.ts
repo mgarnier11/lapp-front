@@ -20,7 +20,7 @@ class ApiHandler {
   private _feathers = Feathers(); // init feathers
   // @ts-ignore
   private _socket = io.connect(apiUrl, {
-    transports: ['websocket'],
+    // transports: ['websocket'],
     forceNew: true,
   }); //init socket io
   private _feathersAuthClient = require('@feathersjs/authentication-client')
@@ -53,7 +53,7 @@ class ApiHandler {
       this._feathers.service('question-templates')
     );
 
-    this.gameIo = new GameIo(this._feathers.io);
+    this.gameIo = new GameIo(this._feathers);
   }
 
   public gameIo: GameIo;

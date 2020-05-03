@@ -75,8 +75,6 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
   const allGameTypes = props.gameTypesState.gameTypes!;
   const allQuestionsTypes = props.questionTypesState.questionTypes!;
 
-  console.log(props.game);
-
   const [name, setName] = useState(props.game.name);
   const [type, setType] = useState(
     props.game.type.name !== '' ? props.game.type : allGameTypes[0]
@@ -207,6 +205,7 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
             Maximum&nbsp;Difficulty
           </Typography>
           <Rating
+            disabled={props.disabled}
             name="maxDifficulty"
             value={maxDifficulty}
             onChange={handleMaxDifficultyChange}
