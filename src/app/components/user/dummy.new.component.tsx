@@ -1,14 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { Container, Card, CardContent, CardHeader } from '@material-ui/core';
+import {
+  Container,
+  Card,
+  CardContent,
+  CardHeader,
+  DialogTitle,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { RootState } from '../../../store';
 import { DummyUser } from '../../../api/classes/dummyUser.class';
 import { DummyUserForm } from './dummy.form.component';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     position: 'absolute',
     left: '50%',
@@ -16,18 +22,18 @@ const useStyles = makeStyles(theme => ({
     transform: 'translate(-50%, -50%)',
     width: 'fit-content',
     outline: 'none',
-    maxWidth: '400px'
+    maxWidth: '400px',
   },
   card: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
-    textAlign: 'center'
+    textAlign: 'center',
   },
   cardContent: {
     padding: '0',
     paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(1)
-  }
+    paddingRight: theme.spacing(1),
+  },
 }));
 
 interface OwnProps {
@@ -40,7 +46,7 @@ interface StateProps {}
 
 type Props = StateProps & OwnProps & DispatchProps;
 
-const DummyUserNewComponent: React.FunctionComponent<Props> = props => {
+const DummyUserNewComponent: React.FunctionComponent<Props> = (props) => {
   const classes = useStyles();
 
   const handleSubmit = (dummyUser: DummyUser) => {
@@ -64,22 +70,4 @@ const DummyUserNewComponent: React.FunctionComponent<Props> = props => {
   );
 };
 
-const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
-  return {};
-};
-
-const mapDispatchToProps = (
-  dispatch: ThunkDispatch<{}, {}, any>,
-  ownProps: OwnProps
-): DispatchProps => {
-  return {};
-};
-
-export const DummyUserNew = connect<
-  StateProps,
-  DispatchProps,
-  OwnProps,
-  RootState
->(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(
-  DummyUserNewComponent
-);
+export const DummyUserNew = DummyUserNewComponent;

@@ -19,6 +19,7 @@ import {
   StepLabel,
   Step,
   MobileStepper,
+  Dialog,
 } from '@material-ui/core';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
@@ -135,6 +136,10 @@ const GameCreatedPage: React.FunctionComponent<Props> = (props: Props) => {
     setGame(game);
 
     handleStepChange(activeStep + 1);
+  };
+
+  const handleBack = () => {
+    handleStepChange(activeStep - 1);
   };
 
   const startGame = async () => {
@@ -288,15 +293,29 @@ const GameCreatedPage: React.FunctionComponent<Props> = (props: Props) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Button
-        fullWidth
-        color="primary"
-        variant="contained"
-        disabled={cantStartGame}
-        onClick={startGame}
-      >
-        Start game
-      </Button>
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <Button
+            fullWidth
+            color="primary"
+            variant="contained"
+            onClick={handleBack}
+          >
+            Back
+          </Button>
+        </Grid>
+        <Grid item xs={6}>
+          <Button
+            fullWidth
+            color="primary"
+            variant="contained"
+            disabled={cantStartGame}
+            onClick={startGame}
+          >
+            Start game
+          </Button>
+        </Grid>
+      </Grid>
     </div>,
   ];
 
@@ -360,6 +379,7 @@ export const GameCreated = connect<
   DispatchProps,
   OwnProps,
   RootState
->(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(
-  GameCreatedPage
-);
+>(
+  mapStateToProps,
+  mapDispatchToProps
+)(GameCreatedPage);

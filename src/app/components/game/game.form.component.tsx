@@ -119,7 +119,10 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
   ) => props.editable && value != null && setMaxHotLevel(value);
 
   const handleNbTurnsChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    props.editable && setNbTurns(parseInt(e.target.value));
+    props.editable &&
+    parseInt(e.target.value) >= 0 &&
+    parseInt(e.target.value) < 1000000 &&
+    setNbTurns(parseInt(e.target.value));
 
   const handleQuestionTypesChange = (value: QuestionType[]) =>
     props.editable && setQuestionTypes(value);
@@ -233,6 +236,7 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
         required
         disabled={props.disabled}
         fullWidth
+        InputProps={{ inputProps: { min: 0, max: 999999 } }}
         id="nbTurns"
         label="Nb Turns"
         value={nbTurns}

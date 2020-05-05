@@ -20,7 +20,7 @@ interface StateProps {}
 
 type Props = StateProps & OwnProps & DispatchProps;
 
-const DummyUserFormComponent: React.FunctionComponent<Props> = props => {
+const DummyUserFormComponent: React.FunctionComponent<Props> = (props) => {
   const [name, setName] = useState('');
   const [gender, setGender] = useState(0);
 
@@ -100,25 +100,7 @@ const DummyUserFormComponent: React.FunctionComponent<Props> = props => {
 };
 
 DummyUserFormComponent.defaultProps = {
-  acceptButtonText: 'Accept'
+  acceptButtonText: 'Accept',
 };
 
-const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
-  return {};
-};
-
-const mapDispatchToProps = (
-  dispatch: ThunkDispatch<{}, {}, any>,
-  ownProps: OwnProps
-): DispatchProps => {
-  return {};
-};
-
-export const DummyUserForm = connect<
-  StateProps,
-  DispatchProps,
-  OwnProps,
-  RootState
->(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(
-  DummyUserFormComponent
-);
+export const DummyUserForm = DummyUserFormComponent;

@@ -6,7 +6,7 @@ import {
   Avatar,
   makeStyles,
   Typography,
-  IconButton
+  IconButton,
 } from '@material-ui/core';
 import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
 import CheckCircleOutlinedIcon from '@material-ui/icons/CheckCircleOutlined';
@@ -19,39 +19,39 @@ import { TemplateDisplayProps } from '../templateDisplay';
 import { GameState } from '../../../store/game/types';
 import {
   TypeAvatar,
-  BaseAvatar
+  BaseAvatar,
 } from '../../components/utils/avatars.component';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     textAlign: 'center',
     height: 'calc(100vh - 64px)',
     display: 'flex',
     [`@media (orientation: portrait)`]: {
-      flexDirection: 'column'
-    }
+      flexDirection: 'column',
+    },
   },
   panel: {
     justifyContent: 'center',
     display: 'flex',
     flexDirection: 'column',
-    flex: 1
+    flex: 1,
   },
   userImg: {
     width: '50%',
     height: 0,
-    paddingBottom: '50%'
+    paddingBottom: '50%',
   },
   questionText: {
     display: 'flex',
     justifyContent: 'center',
     flexDirection: 'column',
-    flex: 1
+    flex: 1,
   },
   questionActions: {
     display: 'flex',
     flexDirection: 'row',
-    flex: 1
+    flex: 1,
   },
   questionActionButton: {
     display: 'flex',
@@ -60,14 +60,14 @@ const useStyles = makeStyles(theme => ({
     flex: 1,
     '& .MuiSvgIcon-root': {
       width: '2em',
-      height: '2em'
-    }
+      height: '2em',
+    },
   },
   typeDisplay: {
     flex: 2,
     display: 'flex',
-    alignSelf: 'center'
-  }
+    alignSelf: 'center',
+  },
 }));
 
 interface OwnProps {}
@@ -89,7 +89,8 @@ const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
         {actualPlayer && (
           <>
             <BaseAvatar
-              src="https://via.placeholder.com/450?text=Player%20image"
+              src="/assets/dummyImg.jpg"
+              // src="https://via.placeholder.com/450?text=Player%20image"
               percentSize={65}
             />
             <Typography variant="h6" component="h3">

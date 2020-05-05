@@ -174,7 +174,7 @@ const ToolbarMobileComponent: React.FunctionComponent<Props> = (
         classes={{ paper: classes.drawerPaper }}
       >
         <BaseAvatar
-          src={`assets/${logoToUse}`}
+          src={`/assets/${logoToUse}`}
           style={{ marginTop: '20px' }}
         ></BaseAvatar>
         <List style={{ height: '100%' }} className={classes.drawerWrapper}>

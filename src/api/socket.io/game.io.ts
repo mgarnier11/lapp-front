@@ -34,6 +34,19 @@ export class GameIo {
     );
   }
 
+  public async answerQuestion(
+    gameId: string,
+    questionId: string,
+    userId: string,
+    answer: boolean
+  ) {
+    this._io.emit(
+      'game:answerQuestion',
+      await this.authedParams({ gameId, questionId, userId, answer }),
+      (resParams: any) => {}
+    );
+  }
+
   public async leaveGame(gameId: string) {
     this._io.emit(
       'game:leave',

@@ -32,7 +32,7 @@ export const LoadingLogo: React.FunctionComponent<Props> = (props: Props) => {
       className={classes.root}
       style={{ height: props.fullHeight ? '100%' : 'auto' }}
     >
-      <BaseAvatar src={`assets/${logoToUse}`} pixelSize={210} />
+      <BaseAvatar src={`/assets/${logoToUse}`} pixelSize={210} />
       <CircularProgress size={220} thickness={1} />
     </div>
   );
