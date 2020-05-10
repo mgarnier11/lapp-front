@@ -76,6 +76,7 @@ const RegisterPage: React.FunctionComponent<RegisterPageProps> = (props) => {
         user={User.New({})}
         editable
         displayConfirms
+        warningText="By clicking on the register button, I agree that the form datas will be stored by PartyDrink Studio"
         acceptButtonText="register"
         onSubmit={handleFormSubmit}
       />

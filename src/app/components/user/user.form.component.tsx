@@ -4,7 +4,13 @@ import { ThunkDispatch } from 'redux-thunk';
 import { User } from '../../../api/classes/user.class';
 import { UserState } from '../../../store/user/types';
 import { RootState } from '../../../store';
-import { TextField, Grid, Button, MenuItem } from '@material-ui/core';
+import {
+  TextField,
+  Grid,
+  Button,
+  MenuItem,
+  Typography,
+} from '@material-ui/core';
 import { DangerButton } from '../utils/dangerButton.component';
 import { Helper } from '../../../helper';
 import { addError } from '../../../store/errors/actions';
@@ -13,6 +19,7 @@ interface OwnProps {
   user: User;
   editable: boolean;
   disabled?: boolean;
+  warningText?: string;
   acceptButtonText?: string;
   deleteButtonText?: string;
   displayRole?: boolean;
@@ -32,7 +39,7 @@ interface StateProps {
 
 type UserFormProps = OwnProps & DispatchProps & StateProps;
 
-const UserFormComponent: FunctionComponent<UserFormProps> = props => {
+const UserFormComponent: FunctionComponent<UserFormProps> = (props) => {
   const [name, setName] = useState(props.user.name);
   const [email, setEmail] = useState(props.user.email);
   const [confirmEmail, setConfirmEmail] = useState('');
@@ -93,7 +100,7 @@ const UserFormComponent: FunctionComponent<UserFormProps> = props => {
           name,
           email,
           password,
-          gender
+          gender,
         })
       );
     } else if (isDenied()) {
@@ -214,6 +221,7 @@ const UserFormComponent: FunctionComponent<UserFormProps> = props => {
         />
       )}
       {props.displaySettings && <></>}
+      {props.warningText && <Typography>{props.warningText}</Typography>}
       {(props.onDelete || props.onSubmit) && (
         <Grid container spacing={2}>
           {props.onDelete && (
@@ -249,12 +257,12 @@ const UserFormComponent: FunctionComponent<UserFormProps> = props => {
 
 UserFormComponent.defaultProps = {
   acceptButtonText: 'Confirm Button',
-  deleteButtonText: 'Delete Button'
+  deleteButtonText: 'Delete Button',
 };
 
 const mapStateToProps = (states: RootState): StateProps => {
   return {
-    userState: states.userState
+    userState: states.userState,
   };
 };
 
@@ -264,7 +272,7 @@ const mapDispatchToProps = (
   return {
     addError: async (error: any) => {
       await dispatch(addError(error));
-    }
+    },
   };
 };
 
