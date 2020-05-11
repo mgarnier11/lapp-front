@@ -120,8 +120,8 @@ const GameFormComponent: React.FunctionComponent<Props> = (props: Props) => {
 
   const handleNbTurnsChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     props.editable &&
-    parseInt(e.target.value) >= 0 &&
-    parseInt(e.target.value) < 1000000 &&
+    // parseInt(e.target.value) >= 0 &&
+    // parseInt(e.target.value) < 1000000 &&
     setNbTurns(parseInt(e.target.value));
 
   const handleQuestionTypesChange = (value: QuestionType[]) =>
