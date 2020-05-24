@@ -36,13 +36,13 @@ export class GameIo {
 
   public async answerQuestion(
     gameId: string,
-    questionId: string,
-    userId: string,
+    // questionId: string,
+    // userId: string,
     answer: boolean
   ) {
     this._io.emit(
       'game:answerQuestion',
-      await this.authedParams({ gameId, questionId, userId, answer }),
+      await this.authedParams({ gameId, answer }),
       (resParams: any) => {}
     );
   }

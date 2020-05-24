@@ -66,15 +66,17 @@ const GameStartedPage: React.FunctionComponent<Props> = (props: Props) => {
   };
 
   const nextQuestion = () => {
-    playingGame.actualTurn++;
+    // playingGame.actualTurn++;
 
-    playingGame.pickQuestion(props.questionState.questions!);
+    // playingGame.pickQuestion(props.questionState.questions!);
 
-    if (playingGame.actualTurn >= playingGame.nbTurns) {
-      playingGame.status = GameStatus.finished;
-    }
+    // if (playingGame.actualTurn >= playingGame.nbTurns) {
+    //   playingGame.status = GameStatus.finished;
+    // }
 
-    props.gameUpdate(playingGame, true, true);
+    // props.gameUpdate(playingGame, true, true);
+
+    apiHandler.gameIo.answerQuestion(playingGame.id, true);
   };
 
   if (props.gameState.loading) {
