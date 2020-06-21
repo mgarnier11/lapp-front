@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   TextField,
@@ -14,7 +14,7 @@ import {
   CardContent,
   CardActions,
   Typography,
-  MenuItem
+  MenuItem,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -23,7 +23,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import {
   DangerButton,
-  DangerIconButton
+  DangerIconButton,
 } from '../utils/dangerButton.component';
 import { Helper } from '../../../helper';
 import { QuestionType } from '../../../api/classes/questionType.class';
@@ -33,18 +33,18 @@ import { RootState } from '../../../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {},
   title: {
     padding: '8px 16px',
-    paddingTop: 12
+    paddingTop: 12,
   },
   content: {
-    padding: '0px 16px'
+    padding: '0px 16px',
   },
   actions: {
-    padding: '8px 16px'
-  }
+    padding: '8px 16px',
+  },
 }));
 
 interface OwnProps {
@@ -67,7 +67,7 @@ interface StateProps {
 
 type Props = StateProps & OwnProps & DispatchProps;
 
-const QuestionTypeDialogComponent: React.FunctionComponent<Props> = props => {
+const QuestionTypeDialogComponent: React.FunctionComponent<Props> = (props) => {
   const classes = useStyles();
   const { questionTemplates } = props.questionTemplatesState;
 
@@ -77,15 +77,15 @@ const QuestionTypeDialogComponent: React.FunctionComponent<Props> = props => {
   );
   const [template, setTemplate] = useState(props.questionType.template);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setName(props.questionType.name || '');
     setDescription(props.questionType.description || '');
     setTemplate(props.questionType.template || questionTemplates![0]);
-  }, [props.questionType]);
+  }, [props.questionType]); // eslint-disable-line
 
   const isDenied = (): boolean => {
     return (
-      !questionTemplates!.find(t =>
+      !questionTemplates!.find((t) =>
         QuestionTemplate.CompareObjects(t, template)
       ) ||
       name.length === 0 ||
@@ -102,7 +102,7 @@ const QuestionTypeDialogComponent: React.FunctionComponent<Props> = props => {
   const handleTemplateChange = (e: React.ChangeEvent<{ value: unknown }>) =>
     props.editable &&
     setTemplate(
-      questionTemplates!.find(t => t.id === (e.target.value as string))!
+      questionTemplates!.find((t) => t.id === (e.target.value as string))!
     );
 
   const beforeDelete = () => {
@@ -144,7 +144,7 @@ const QuestionTypeDialogComponent: React.FunctionComponent<Props> = props => {
         onChange={handleTemplateChange}
       >
         {questionTemplates ? (
-          questionTemplates.map(t => (
+          questionTemplates.map((t) => (
             <MenuItem value={t.id} key={t.id}>
               {t.name}
             </MenuItem>

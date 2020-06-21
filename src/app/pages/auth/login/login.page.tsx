@@ -6,7 +6,6 @@ import { ThunkDispatch } from 'redux-thunk';
 import { Link } from 'react-router-dom';
 import {
   Container,
-  Avatar,
   Box,
   Typography,
   makeStyles,
@@ -14,13 +13,11 @@ import {
   Button,
   CircularProgress,
 } from '@material-ui/core';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import { LoginCredentials } from '../../../../api/classes/user.class';
 import { UserState } from '../../../../store/user/types';
 import { RootState } from '../../../../store';
 import { logout, login } from '../../../../store/user/actions';
-import { IdVice } from '../../../components/user/idVice.component';
 import { BaseAvatar } from '../../../components/utils/avatars.component';
 
 const useStyles = makeStyles((theme) => ({
@@ -57,7 +54,7 @@ type LoginPageProps = OwnProps & DispatchProps & StateProps & RouterProps;
 const LoginPage: React.FunctionComponent<LoginPageProps> = (props) => {
   useEffect(() => {
     props.logout(true, true);
-  }, []);
+  }, []); // eslint-disable-line
 
   const classes = useStyles();
 

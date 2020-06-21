@@ -14,11 +14,11 @@ import { QuestionTemplateList } from '../../components/questionTemplate/question
 import { yesNoController } from '../../components/dialogs/yesno.component';
 import { QuestionTemplateDialog } from '../../components/questionTemplate/questionTemplate.dialog.component';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(10)
-  }
+    paddingBottom: theme.spacing(10),
+  },
 }));
 
 interface OwnProps {}
@@ -50,10 +50,10 @@ const QuestionTemplatesPage: React.FunctionComponent<Props> = (
 
   const [modalProps, setModalProps] = useState({
     open: false,
-    questionTemplate: QuestionTemplate.New({})
+    questionTemplate: QuestionTemplate.New({}),
   } as ModalProps);
 
-  const openModal = () => setModalProps({ ...modalProps, open: true });
+  const openModal = () => setModalProps({ ...modalProps, open: true }); // eslint-disable-line
 
   const closeModal = () => setModalProps({ ...modalProps, open: false });
 
@@ -75,7 +75,7 @@ const QuestionTemplatesPage: React.FunctionComponent<Props> = (
       onAccept: handleUpdate,
       questionTemplate: clickedQuestionTemplate,
       title: 'Edit template',
-      submitButtonText: 'Confirm update'
+      submitButtonText: 'Confirm update',
     });
   };
 
@@ -85,7 +85,7 @@ const QuestionTemplatesPage: React.FunctionComponent<Props> = (
       onAccept: handleCreate,
       questionTemplate: QuestionTemplate.New({}),
       title: 'Create a new template',
-      submitButtonText: 'Create'
+      submitButtonText: 'Create',
     });
   };
 
@@ -94,12 +94,12 @@ const QuestionTemplatesPage: React.FunctionComponent<Props> = (
       .present({
         title: 'Are you sure you want to delete this template\u00a0?',
         acceptText: 'Yes',
-        denyText: 'No'
+        denyText: 'No',
       })
       .then(() => {
         props.questionTemplateRemove(questionTemplateId);
       })
-      .catch(error => {
+      .catch((error) => {
         //this.props.addError(error);
       });
   };
@@ -142,7 +142,7 @@ const QuestionTemplatesPage: React.FunctionComponent<Props> = (
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    questionTemplatesState: states.questionTemplatesState
+    questionTemplatesState: states.questionTemplatesState,
   };
 };
 
@@ -165,7 +165,7 @@ const mapDispatchToProps = (
       return await dispatch(
         QuestionTemplatesActions.questionTemplateRemove(questionTemplateId)
       );
-    }
+    },
   };
 };
 

@@ -42,7 +42,7 @@ const GameMiddlewareComponent: React.FunctionComponent<Props> = (
 
   useEffect(() => {
     if (displayId) props.gameGetByDisplayId(displayId);
-  }, []);
+  }, []); // eslint-disable-line
 
   if (game && user) {
     if (

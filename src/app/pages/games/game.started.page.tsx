@@ -45,7 +45,7 @@ const GameStartedPage: React.FunctionComponent<Props> = (props: Props) => {
     return () => {
       apiHandler.gameIo.leaveGame(playingGame.id);
     };
-  }, []);
+  }, []); // eslint-disable-line
 
   const gameLoading = (isLoading: boolean) => {
     console.log(isLoading);

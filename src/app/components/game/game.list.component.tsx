@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useTheme, makeStyles } from '@material-ui/core/styles';
 import { Game, GameStatus } from '../../../api/classes/game.class';
 import {
-  useMediaQuery,
   Box,
   Hidden,
   TableContainer,
@@ -78,10 +77,10 @@ type Props = DispatchProps & OwnProps & StateProps;
 
 const GameListComponent: React.FunctionComponent<Props> = (props) => {
   const classes = useStyles();
-  const theme = useTheme();
-  //const isXs = useMediaQuery(theme.breakpoints.up('xs'));
-  const isSm = useMediaQuery(theme.breakpoints.up('sm'));
-  const isLg = useMediaQuery(theme.breakpoints.up('lg'));
+  const theme = useTheme(); // eslint-disable-line
+  // const isXs = useMediaQuery(theme.breakpoints.up('xs'));
+  // const isSm = useMediaQuery(theme.breakpoints.up('sm'));
+  // const isLg = useMediaQuery(theme.breakpoints.up('lg'));
   const { games } = props;
   const [deleting, setDeleting] = useState(
     games.map((g) => {
@@ -97,7 +96,7 @@ const GameListComponent: React.FunctionComponent<Props> = (props) => {
         return { id: g.id, value: d !== undefined ? d.value : false };
       })
     );
-  }, [games.length]);
+  }, [games.length]); // eslint-disable-line
 
   const handleToggleGameStatus = (name: string) => {
     const newFilteredGameStatus = [...filteredGameStatus];

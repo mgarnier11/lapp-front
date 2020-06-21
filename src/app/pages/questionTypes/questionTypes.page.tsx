@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { Box, Modal, Fab, Typography } from '@material-ui/core';
+import { Box, Fab, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 
@@ -14,11 +14,11 @@ import { QuestionTypeList } from '../../components/questionType/questionType.lis
 import { yesNoController } from '../../components/dialogs/yesno.component';
 import { QuestionTypeDialog } from '../../components/questionType/questionType.dialog.component';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     paddingBottom: theme.spacing(10),
-    paddingTop: theme.spacing(1)
-  }
+    paddingTop: theme.spacing(1),
+  },
 }));
 
 interface OwnProps {}
@@ -48,12 +48,12 @@ const QuestionTypesPage: React.FunctionComponent<Props> = (props: Props) => {
 
   const [modalProps, setModalProps] = useState({
     open: false,
-    questionType: QuestionType.New({})
+    questionType: QuestionType.New({}),
   } as ModalProps);
 
   console.log(modalProps);
 
-  const openModal = () => setModalProps({ ...modalProps, open: true });
+  const openModal = () => setModalProps({ ...modalProps, open: true }); // eslint-disable-line
 
   const closeModal = () => setModalProps({ ...modalProps, open: false });
 
@@ -75,7 +75,7 @@ const QuestionTypesPage: React.FunctionComponent<Props> = (props: Props) => {
       onAccept: handleUpdate,
       questionType: clickedQuestionType,
       title: 'Edit type',
-      submitButtonText: 'Confirm update'
+      submitButtonText: 'Confirm update',
     });
   };
 
@@ -85,7 +85,7 @@ const QuestionTypesPage: React.FunctionComponent<Props> = (props: Props) => {
       onAccept: handleCreate,
       questionType: QuestionType.New({}),
       title: 'Create a new type',
-      submitButtonText: 'Create'
+      submitButtonText: 'Create',
     });
   };
 
@@ -94,12 +94,12 @@ const QuestionTypesPage: React.FunctionComponent<Props> = (props: Props) => {
       .present({
         title: 'Are you sure you want to delete this type\u00a0?',
         acceptText: 'Yes',
-        denyText: 'No'
+        denyText: 'No',
       })
       .then(() => {
         props.questionTypeRemove(questionTypeId);
       })
-      .catch(error => {
+      .catch((error) => {
         //this.props.addError(error);
       });
   };
@@ -131,7 +131,7 @@ const QuestionTypesPage: React.FunctionComponent<Props> = (props: Props) => {
       <QuestionTypeDialog
         dialogProps={{
           open: modalProps.open,
-          onClose: closeModal
+          onClose: closeModal,
         }}
         questionType={modalProps.questionType}
         editable
@@ -145,7 +145,7 @@ const QuestionTypesPage: React.FunctionComponent<Props> = (props: Props) => {
 
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
-    questionTypesState: states.questionTypesState
+    questionTypesState: states.questionTypesState,
   };
 };
 
@@ -168,7 +168,7 @@ const mapDispatchToProps = (
       return await dispatch(
         QuestionTypesActions.questionTypeRemove(questionTypeId)
       );
-    }
+    },
   };
 };
 

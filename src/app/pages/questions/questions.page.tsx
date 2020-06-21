@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { Box, Modal, Fab } from '@material-ui/core';
+import { Box, Fab } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 
@@ -15,10 +15,10 @@ import { QuestionList } from '../../components/question/question.list.component'
 import { yesNoController } from '../../components/dialogs/yesno.component';
 import { QuestionDialog } from '../../components/question/question.dialog.component';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    paddingBottom: theme.spacing(10)
-  }
+    paddingBottom: theme.spacing(10),
+  },
 }));
 
 interface OwnProps {}
@@ -48,10 +48,10 @@ const QuestionsPage: React.FunctionComponent<Props> = (props: Props) => {
 
   const [modalProps, setModalProps] = useState({
     open: false,
-    question: Question.New({})
+    question: Question.New({}),
   } as ModalProps);
 
-  const openModal = () => setModalProps({ ...modalProps, open: true });
+  const openModal = () => setModalProps({ ...modalProps, open: true }); // eslint-disable-line
 
   const closeModal = () => setModalProps({ ...modalProps, open: false });
 
@@ -67,7 +67,7 @@ const QuestionsPage: React.FunctionComponent<Props> = (props: Props) => {
       onAccept: handleCreate,
       question: Question.New({}),
       title: 'Create a new question',
-      submitButtonText: 'Create'
+      submitButtonText: 'Create',
     });
   };
 
@@ -80,12 +80,12 @@ const QuestionsPage: React.FunctionComponent<Props> = (props: Props) => {
       .present({
         title: 'Are you sure you want to delete this question\u00a0?',
         acceptText: 'Yes',
-        denyText: 'No'
+        denyText: 'No',
       })
       .then(() => {
         props.questionRemove(questionId);
       })
-      .catch(error => {
+      .catch((error) => {
         //this.props.addError(error);
       });
   };
@@ -127,7 +127,7 @@ const QuestionsPage: React.FunctionComponent<Props> = (props: Props) => {
 const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
   return {
     questionsState: states.questionsState,
-    questionTypesState: states.questionTypesState
+    questionTypesState: states.questionTypesState,
   };
 };
 
@@ -144,7 +144,7 @@ const mapDispatchToProps = (
     },
     questionRemove: async (questionId: string) => {
       return await dispatch(QuestionsActions.questionRemove(questionId));
-    }
+    },
   };
 };
 

@@ -1,18 +1,18 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core';
+// import { makeStyles } from '@material-ui/core';
 
 import { TemplateFormProps } from '../templateForm';
 
-const useStyles = makeStyles(theme => ({
-  ratingsGrid: {
-    width: 'calc(100% + 16px)',
-    marginLeft: -8,
-    textAlign: 'center'
-  },
-  hotLevelRating: {
-    color: '#FD6C9E'
-  }
-}));
+// const useStyles = makeStyles(theme => ({
+//   ratingsGrid: {
+//     width: 'calc(100% + 16px)',
+//     marginLeft: -8,
+//     textAlign: 'center'
+//   },
+//   hotLevelRating: {
+//     color: '#FD6C9E'
+//   }
+// }));
 
 interface OtherProps {}
 

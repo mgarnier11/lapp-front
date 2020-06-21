@@ -111,7 +111,7 @@ const GameCreatedPage: React.FunctionComponent<Props> = (props: Props) => {
     return () => {
       apiHandler.gameIo.leaveGame(game.id);
     };
-  }, []);
+  }, []); // eslint-disable-line
 
   const handleStepChange = (newStep: number) =>
     newStep >= 0 && newStep <= steps.length && setActiveStep(newStep);

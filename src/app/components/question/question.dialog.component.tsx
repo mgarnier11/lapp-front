@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   TextField,
-  Grid,
   DialogProps,
   DialogContent,
   DialogTitle,
   DialogActions,
   IconButton,
-  Container,
   Dialog,
   Box,
   Card,
@@ -22,7 +20,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import CheckIcon from '@material-ui/icons/Check';
 import DeleteIcon from '@material-ui/icons/Delete';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import {
   DangerButton,
@@ -32,9 +29,6 @@ import { Helper } from '../../../helper';
 import { Question } from '../../../api/classes/question.class';
 import { QuestionType } from '../../../api/classes/questionType.class';
 import { QuestionTypesState } from '../../../store/questionTypes/types';
-import Rating from '@material-ui/lab/Rating';
-import { OutlinedDiv } from '../utils/outlinedDiv.component';
-import { UserItem } from '../user/user.item.component';
 import { RootState } from '../../../store';
 import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
@@ -111,12 +105,12 @@ const QuestionDialogComponent: React.FunctionComponent<Props> = (props) => {
     props.editable &&
     setType(questionTypes!.find((t) => t.id === (e.target.value as string))!);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setText(props.question.text || '');
     setDifficulty(props.question.difficulty || 1);
     setHotLevel(props.question.hotLevel || 1);
     setType(props.question.type || Helper.clone(questionTypes![0]));
-  }, [props.question]);
+  }, [props.question]); // eslint-disable-line
 
   const beforeDelete = () => {
     if (props.onDelete) props.onDelete(props.question.id);

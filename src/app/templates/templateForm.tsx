@@ -41,7 +41,7 @@ const TemplateFormLoaderComponent: React.FunctionComponent<Props> = (
         })
       )
     );
-  }, [props.templatePath]);
+  }, [props.templatePath]); // eslint-disable-line
 
   return (
     <Suspense fallback={<div>{message}</div>}>

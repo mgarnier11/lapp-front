@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   TextField,
-  Grid,
   DialogProps,
   DialogContent,
   DialogTitle,
   DialogActions,
   IconButton,
-  Container,
   Dialog,
   Box,
   Card,
@@ -16,7 +14,7 @@ import {
   CardContent,
   CardActions,
   Typography,
-  MenuItem
+  MenuItem,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -25,7 +23,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import {
   DangerButton,
-  DangerIconButton
+  DangerIconButton,
 } from '../utils/dangerButton.component';
 import { Helper } from '../../../helper';
 import { QuestionTemplate } from '../../../api/classes/questionTemplate.class';
@@ -34,18 +32,18 @@ import { templateList } from '../../templates';
 import { TemplateDisplayLoader } from '../../templates/templateDisplay';
 import { Game } from '../../../api/classes/game.class';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {},
   title: {
     padding: '8px 16px',
-    paddingTop: 12
+    paddingTop: 12,
   },
   content: {
-    padding: '0px 16px'
+    padding: '0px 16px',
   },
   actions: {
-    padding: '8px 16px'
-  }
+    padding: '8px 16px',
+  },
 }));
 
 interface OwnProps {
@@ -63,7 +61,9 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-const QuestionTemplateDialogComponent: React.FunctionComponent<Props> = props => {
+const QuestionTemplateDialogComponent: React.FunctionComponent<Props> = (
+  props
+) => {
   const classes = useStyles();
 
   const [name, setName] = useState(props.questionTemplate.name);
@@ -71,7 +71,7 @@ const QuestionTemplateDialogComponent: React.FunctionComponent<Props> = props =>
     props.questionTemplate.clientPath
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     setName(props.questionTemplate.name || '');
     setClientPath(props.questionTemplate.clientPath || '');
   }, [props.questionTemplate]);
@@ -126,7 +126,7 @@ const QuestionTemplateDialogComponent: React.FunctionComponent<Props> = props =>
           onChange={handleClientPathChange}
         >
           {templateList ? (
-            templateList.map(t => (
+            templateList.map((t) => (
               <MenuItem value={t} key={t}>
                 {t}
               </MenuItem>
@@ -144,10 +144,10 @@ const QuestionTemplateDialogComponent: React.FunctionComponent<Props> = props =>
             question: Question.New({
               difficulty: 5,
               hotLevel: 5,
-              text: 'Patate'
+              text: 'Patate',
             }),
             onAccept: (q: Question) => {},
-            onDeny: (q: Question) => {}
+            onDeny: (q: Question) => {},
           }}
           errorMessage={'Cannot load template'}
         />
@@ -241,7 +241,7 @@ const QuestionTemplateDialogComponent: React.FunctionComponent<Props> = props =>
 };
 
 QuestionTemplateDialogComponent.defaultProps = {
-  showPreview: true
+  showPreview: true,
 };
 
 export const QuestionTemplateDialog = QuestionTemplateDialogComponent;

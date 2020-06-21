@@ -57,7 +57,7 @@ const AppStartingComponent: React.FunctionComponent<Props> = (props: Props) => {
     props.relog().then((isLogged) => {
       if (!isLogged) setLoading(false);
     });
-  }, ['componentDidMount']);
+  }, []); // eslint-disable-line
 
   useEffect(() => {
     setLoading(true);
@@ -80,7 +80,7 @@ const AppStartingComponent: React.FunctionComponent<Props> = (props: Props) => {
         }
       });
     }
-  }, [props.userState.user]);
+  }, [props.userState.user]); // eslint-disable-line
 
   return (
     <>

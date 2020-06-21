@@ -1,21 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   TextField,
-  Grid,
   DialogProps,
   DialogContent,
   DialogTitle,
   DialogActions,
   IconButton,
-  Container,
   Dialog,
   Box,
   Card,
   CardHeader,
   CardContent,
   CardActions,
-  Typography
+  Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -24,23 +22,23 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import {
   DangerButton,
-  DangerIconButton
+  DangerIconButton,
 } from '../utils/dangerButton.component';
 import { Helper } from '../../../helper';
 import { Role } from '../../../api/classes/role.class';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {},
   title: {
     padding: '8px 16px',
-    paddingTop: 12
+    paddingTop: 12,
   },
   content: {
-    padding: '0px 16px'
+    padding: '0px 16px',
   },
   actions: {
-    padding: '8px 16px'
-  }
+    padding: '8px 16px',
+  },
 }));
 
 interface OwnProps {
@@ -57,7 +55,7 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-const RoleDialogComponent: React.FunctionComponent<Props> = props => {
+const RoleDialogComponent: React.FunctionComponent<Props> = (props) => {
   const classes = useStyles();
 
   const [name, setName] = useState(props.role.name);
@@ -66,7 +64,7 @@ const RoleDialogComponent: React.FunctionComponent<Props> = props => {
     props.role.permissionLevel
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     setName(props.role.name || '');
     setIcon(props.role.icon || '');
     setPermissionLevel(props.role.permissionLevel || 0);

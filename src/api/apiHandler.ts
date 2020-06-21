@@ -2,7 +2,7 @@ import * as io from 'socket.io-client';
 
 import Feathers from '@feathersjs/feathers';
 import FeathersSocketIOClient from '@feathersjs/socketio-client';
-import FeathersAuthClient2 from '@feathersjs/authentication-client';
+import FeathersAuthClient2 from '@feathersjs/authentication-client'; // eslint-disable-line
 
 import { UserService } from './services/user.service';
 import { QuestionService } from './services/question.service';

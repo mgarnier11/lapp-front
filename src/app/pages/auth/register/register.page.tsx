@@ -4,14 +4,7 @@ import { RouterProps, withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { Link } from 'react-router-dom';
-import {
-  Container,
-  Avatar,
-  Box,
-  Typography,
-  makeStyles,
-} from '@material-ui/core';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { Container, Box, Typography, makeStyles } from '@material-ui/core';
 
 import { UserForm } from '../../../components/user/user.form.component';
 import { User } from '../../../../api/classes/user.class';
@@ -51,7 +44,7 @@ type RegisterPageProps = OwnProps & DispatchProps & StateProps & RouterProps;
 const RegisterPage: React.FunctionComponent<RegisterPageProps> = (props) => {
   useEffect(() => {
     props.logout(true);
-  }, []);
+  }, []); // eslint-disable-line
 
   const classes = useStyles();
 
