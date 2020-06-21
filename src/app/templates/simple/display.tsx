@@ -1,25 +1,12 @@
 import React from 'react';
-import { ThunkDispatch } from 'redux-thunk';
-import {
-  Box,
-  Grid,
-  Avatar,
-  makeStyles,
-  Typography,
-  IconButton,
-} from '@material-ui/core';
+import { Box, makeStyles, Typography, IconButton } from '@material-ui/core';
 import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
 import CheckCircleOutlinedIcon from '@material-ui/icons/CheckCircleOutlined';
-import { connect } from 'react-redux';
 
-import { Question } from '../../../api/classes/question.class';
-import { UserState } from '../../../store/user/types';
-import { RootState } from '../../../store';
 import { TemplateDisplayProps } from '../templateDisplay';
-import { GameState } from '../../../store/game/types';
 import {
-  TypeAvatar,
   BaseAvatar,
+  TypeAvatar,
 } from '../../components/utils/avatars.component';
 
 const useStyles = makeStyles((theme) => ({

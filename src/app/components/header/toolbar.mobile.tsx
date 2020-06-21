@@ -10,7 +10,6 @@ import {
   ListItemText,
   Divider,
   ListItem,
-  Avatar,
 } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';

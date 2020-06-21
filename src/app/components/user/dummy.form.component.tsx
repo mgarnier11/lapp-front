@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
 import { MenuItem, Button, TextField, Grid } from '@material-ui/core';
 
-import { RootState } from '../../../store';
 import { DummyUser } from '../../../api/classes/dummyUser.class';
 
 interface OwnProps {

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Switch, Redirect } from 'react-router';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, CssBaseline } from '@material-ui/core';
+import Webcam from 'react-webcam';
 
 import { roleActionsInstance } from '../store/roles/actions';
 import { questionActionsInstance } from '../store/questions/actions';
@@ -22,16 +23,16 @@ import { QuestionTemplates } from './pages/questionTemplates/questionTemplates.p
 import { Role } from '../api/classes/role.class';
 import { QuestionTypes } from './pages/questionTypes/questionTypes.page';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   baseContainer: {
-    paddingTop: 64
+    paddingTop: 64,
   },
   [theme.breakpoints.down('xs')]: {
     baseContainer: {
       paddingLeft: 0,
-      paddingRight: 0
-    }
-  }
+      paddingRight: 0,
+    },
+  },
 }));
 
 interface Props {}
@@ -98,12 +99,48 @@ const App: React.FunctionComponent<Props> = (props: Props) => {
           >
             <QuestionTypes />
           </Guard>
+          <Guard
+            minimalPermission={Role.AdminPermissionLevel}
+            path="/test"
+            redirect="/home"
+          >
+            <WebcamCapture />
+          </Guard>
           <Redirect from="*" to="/home" />
         </Switch>
       </Container>
       <Footer />
       <Success />
       <Error />
+    </>
+  );
+};
+
+const videoConstraints = {
+  width: 1280,
+  height: 720,
+  facingMode: 'user',
+};
+
+const WebcamCapture = () => {
+  const webcamRef = React.useRef(null) as any;
+
+  const capture = React.useCallback(() => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    console.log(imageSrc);
+  }, [webcamRef]);
+
+  return (
+    <>
+      <Webcam
+        audio={false}
+        height={720}
+        ref={webcamRef}
+        screenshotFormat="image/jpeg"
+        width={1280}
+        videoConstraints={videoConstraints}
+      />
+      <button onClick={capture}>Capture photo</button>
     </>
   );
 };

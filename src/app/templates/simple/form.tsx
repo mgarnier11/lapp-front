@@ -1,6 +1,4 @@
 import React from 'react';
-import { ThunkDispatch } from 'redux-thunk';
-import { connect } from 'react-redux';
 import { v4 as uuidV4 } from 'uuid';
 import {
   TextField,
@@ -13,8 +11,6 @@ import {
 import Rating from '@material-ui/lab/Rating';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
-import { UserState } from '../../../store/user/types';
-import { RootState } from '../../../store';
 import { TemplateFormProps } from '../templateForm';
 import { OutlinedDiv } from '../../components/utils/outlinedDiv.component';
 import { UserItem } from '../../components/user/user.item.component';

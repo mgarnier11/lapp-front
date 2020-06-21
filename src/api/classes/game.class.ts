@@ -94,26 +94,6 @@ export class Game {
     return this.allUsers[userIndex];
   }
 
-  public pickQuestion(selectedQuestions: Question[]): boolean {
-    let selectedSortedQuestions = selectedQuestions.filter(
-      (q) =>
-        this.questionTypes.find((t) =>
-          QuestionType.CompareObjects(t, q.type)
-        ) !== undefined
-    );
-
-    try {
-      this.actualQuestion =
-        selectedSortedQuestions[
-          Math.floor(Math.random() * selectedSortedQuestions.length)
-        ];
-      if (this.actualQuestion) return true;
-      else throw 'no question';
-    } catch (error) {
-      return false;
-    }
-  }
-
   public static New(datas: Partial<Game>): Game {
     return Object.assign(new Game(), datas);
   }

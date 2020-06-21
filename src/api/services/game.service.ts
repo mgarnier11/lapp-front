@@ -12,16 +12,16 @@ export class GameService extends BaseService<Game> {
 
     this.featherService.hooks({
       after: {
-        all: afterAllHook()
-      }
+        all: afterAllHook(),
+      },
     });
   }
 
   public async findGameByDisplayId(displayId: string) {
     let games = (await this.featherService.find({
       query: {
-        displayId: displayId
-      }
+        displayId: displayId,
+      },
     })) as Game[];
 
     return games[0];
@@ -30,20 +30,20 @@ export class GameService extends BaseService<Game> {
   public async findCreatedGamesPerUser(userId: string) {
     let createdGames = await this.featherService.find({
       query: {
-        creatorId: { $in: [userId] }
-      }
+        creatorId: { $in: [userId] },
+      },
     });
 
-    return createdGames;
+    return createdGames as Game | Game[];
   }
 
   public async findGamesPerUser(userId: string) {
     let games = await this.featherService.find({
       query: {
-        userIds: { $elemMatch: { $in: [userId] } }
-      }
+        userIds: { $elemMatch: { $in: [userId] } },
+      },
     });
 
-    return games;
+    return games as Game | Game[];
   }
 }

@@ -1,6 +1,5 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core';
-import { User } from '../../../api/classes/user.class';
 import { QuestionType } from '../../../api/classes/questionType.class';
 
 const useStyles = makeStyles((theme) => ({

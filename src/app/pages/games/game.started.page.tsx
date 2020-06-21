@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { GameState } from '../../../store/game/types';
-import { Game, GameStatus } from '../../../api/classes/game.class';
+import { Game } from '../../../api/classes/game.class';
 import { RootState } from '../../../store';
 import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';

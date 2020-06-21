@@ -19,8 +19,7 @@ import { Login } from './pages/auth/login/login.page';
 import { Register } from './pages/auth/register/register.page';
 import { UserState } from '../store/user/types';
 import { Error } from './components/error/error.component';
-import { Loading } from './components/utils/loading.component';
-import { Box, Typography } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import { QuestionTemplatesState } from '../store/questionTemplates/types';
 import { QuestionTemplatesActions } from '../store/questionTemplates/actions';
 import { LoadingLogo } from './components/utils/loadingLogo.component';
@@ -31,7 +30,7 @@ interface OwnProps {
 
 interface DispatchProps {
   relog: () => Promise<any>;
-  gameGetAll: () => Promise<any>;
+  gameGetAllLinked: (userId: string) => Promise<any>;
   roleGetAll: () => Promise<any>;
   questionTypeGetAll: () => Promise<any>;
   gameTypeGetAll: () => Promise<any>;
@@ -65,7 +64,7 @@ const AppStartingComponent: React.FunctionComponent<Props> = (props: Props) => {
 
     if (props.userState.user) {
       Promise.all([
-        props.gameGetAll(),
+        props.gameGetAllLinked(props.userState.user.id),
         props.roleGetAll(),
         props.questionTypeGetAll(),
         props.gameTypeGetAll(),
@@ -133,8 +132,8 @@ const mapDispatchToProps = (
   ownProps: OwnProps
 ): DispatchProps => {
   return {
-    gameGetAll: async () => {
-      return await dispatch(GamesActions.gameGetAll());
+    gameGetAllLinked: async (userId: string) => {
+      return await dispatch(GamesActions.gameGetAllLinked(userId));
     },
     gameTypeGetAll: async () => {
       return await dispatch(GameTypesActions.gameTypeGetAll());

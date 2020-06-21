@@ -1,16 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
-import {
-  Container,
-  Card,
-  CardContent,
-  CardHeader,
-  DialogTitle,
-} from '@material-ui/core';
+import { Container, Card, CardContent, CardHeader } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { RootState } from '../../../store';
 import { DummyUser } from '../../../api/classes/dummyUser.class';
 import { DummyUserForm } from './dummy.form.component';
 

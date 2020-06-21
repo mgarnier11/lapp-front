@@ -15,23 +15,8 @@ import {
   Button,
   Modal,
   Tooltip,
-  Stepper,
-  StepLabel,
-  Step,
-  MobileStepper,
-  Dialog,
 } from '@material-ui/core';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
-import {
-  withStyles,
-  WithStyles,
-  createStyles,
-  StyleRules,
-  Theme,
-  makeStyles,
-} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import DeleteIcon from '@material-ui/icons/Delete';
 import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
@@ -40,7 +25,7 @@ import SwipeableViews from 'react-swipeable-views';
 
 import { RootState } from '../../../store';
 import { addError } from '../../../store/errors/actions';
-import { Game, GameStatus } from '../../../api/classes/game.class';
+import { Game } from '../../../api/classes/game.class';
 import { GameTypesState } from '../../../store/gameTypes/types';
 import { QuestionTypesState } from '../../../store/questionTypes/types';
 import { GamesActions } from '../../../store/games/actions';
@@ -55,7 +40,6 @@ import { GamesState } from '../../../store/games/types';
 import { GameForm } from '../../components/game/game.form.component';
 import { DummyUserNew } from '../../components/user/dummy.new.component';
 import { LoadingOverlay } from '../../components/utils/loadingOverlay.component';
-import { Score } from '../../../api/classes/score.class';
 import { GameActions } from '../../../store/game/actions';
 
 const useStyles = makeStyles((theme) => ({

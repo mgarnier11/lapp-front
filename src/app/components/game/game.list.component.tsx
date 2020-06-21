@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useTheme, makeStyles, withStyles } from '@material-ui/core/styles';
+import { useTheme, makeStyles } from '@material-ui/core/styles';
 import { Game, GameStatus } from '../../../api/classes/game.class';
 import {
-  Grid,
   useMediaQuery,
   Box,
-  Typography,
   Hidden,
-  Switch,
-  Button,
-  Drawer,
-  Slider,
   TableContainer,
   Table,
   TableHead,
@@ -20,13 +14,11 @@ import {
   Tooltip,
   IconButton,
 } from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import { Helper } from '../../../helper';
 import { ThunkDispatch } from 'redux-thunk';
 import { RootState } from '../../../store';
 import { UserState } from '../../../store/user/types';

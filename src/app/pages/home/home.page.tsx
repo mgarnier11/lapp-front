@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Switch, Redirect, RouterProps, withRouter } from 'react-router';
+import React, { useState } from 'react';
+import { RouterProps, withRouter } from 'react-router';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  Container,
-  CssBaseline,
   Tabs,
   Tab,
   Fab,
@@ -13,10 +11,8 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  IconButton,
   TextField,
 } from '@material-ui/core';
-import CheckIcon from '@material-ui/icons/Check';
 import AddIcon from '@material-ui/icons/Add';
 
 import { UserState } from '../../../store/user/types';

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useTheme, makeStyles, withStyles } from '@material-ui/core/styles';
 import { Question } from '../../../api/classes/question.class';
 import {

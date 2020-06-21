@@ -1,6 +1,5 @@
 import React from 'react';
 import { makeStyles, CircularProgress } from '@material-ui/core';
-import zIndex from '@material-ui/core/styles/zIndex';
 
 const useStyles = makeStyles((theme) => ({
   root: {
