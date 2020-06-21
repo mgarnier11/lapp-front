@@ -11,9 +11,10 @@ export class QuestionService extends BaseService<Question> {
     super(service);
 
     this.featherService.hooks({
+      before: {},
       after: {
-        all: afterAllHook()
-      }
+        all: afterAllHook(),
+      },
     });
   }
 }

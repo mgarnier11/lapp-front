@@ -9,12 +9,23 @@ import { store } from './store';
 import App from './app/app';
 import * as serviceWorker from './serviceWorker';
 
+import ThemeManager, { themeManagerRef } from './app/theme/themeManager';
+import { AppStarting } from './app/starting.app';
+import { CssBaseline } from '@material-ui/core';
+import { YesNo, yesNoRef } from './app/components/dialogs/yesno.component';
+
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <SnackbarProvider maxSnack={10}>
-        <App />
-      </SnackbarProvider>
+      <ThemeManager ref={themeManagerRef}>
+        <YesNo ref={yesNoRef} />
+        <SnackbarProvider maxSnack={10}>
+          <CssBaseline />
+          <AppStarting>
+            <App />
+          </AppStarting>
+        </SnackbarProvider>
+      </ThemeManager>
     </BrowserRouter>
   </Provider>,
   document.getElementById('root')

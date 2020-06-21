@@ -234,6 +234,8 @@ export class GameTypesActions {
             resolve(true);
           })
           .catch(error => {
+            console.log(error);
+
             dispatch(GameTypesActions.gameTypesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);

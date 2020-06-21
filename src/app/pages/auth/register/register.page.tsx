@@ -1,263 +1,111 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
+import { RouterProps, withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import { ThunkDispatch } from 'redux-thunk';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import {
-  Container,
-  Avatar,
-  TextField,
-  Grid,
-  MenuItem
-} from '@material-ui/core';
-import {
-  withStyles,
-  WithStyles,
-  createStyles,
-  StyleRules,
-  Theme
-} from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
+import { Container, Box, Typography, makeStyles } from '@material-ui/core';
 
-import { withRouter, Link } from 'react-router-dom';
-
+import { UserForm } from '../../../components/user/user.form.component';
+import { User } from '../../../../api/classes/user.class';
 import { UserState } from '../../../../store/user/types';
 import { RootState } from '../../../../store';
-import { User } from '../../../../api/classes/user.class';
 import { logout, register } from '../../../../store/user/actions';
-import { RouterProps } from 'react-router';
-import { Role } from '../../../../api/classes/role.class';
-import { RolesActions } from '../../../../store/roles/actions';
-import { RolesState } from '../../../../store/roles/types';
-import { addError } from '../../../../store/errors/actions';
-import { withSnackbar, WithSnackbarProps } from 'notistack';
+import { BaseAvatar } from '../../../components/utils/avatars.component';
 
-const styles = (theme: Theme): StyleRules =>
-  createStyles({
-    paper: {
-      marginTop: theme.spacing(8),
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center'
-    },
-    avatar: {
-      margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main
-    },
-    form: {
-      width: '100%', // Fix IE 11 issue.
-      marginTop: theme.spacing(1)
-    },
-    submit: {
-      margin: theme.spacing(3, 0, 2)
-    }
-  });
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(4),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+  signIn: {
+    paddingTop: theme.spacing(1),
+  },
+}));
 
 interface OwnProps {}
 
 interface DispatchProps {
   register: (userDatas: Partial<User>) => Promise<any>;
-  logout: () => void;
-  addError: (error: any) => void;
+  logout: (hideSuccess?: boolean) => void;
 }
 
 interface StateProps {
   userState: UserState;
 }
 
-type Props = StateProps &
-  OwnProps &
-  DispatchProps &
-  RouterProps &
-  WithSnackbarProps &
-  WithStyles<typeof styles>;
+type RegisterPageProps = OwnProps & DispatchProps & StateProps & RouterProps;
 
-interface ComponentState {
-  email: string;
-  password: string;
-  name: string;
-  gender: number;
-}
+const RegisterPage: React.FunctionComponent<RegisterPageProps> = (props) => {
+  useEffect(() => {
+    props.logout(true);
+  }, []); // eslint-disable-line
 
-class RegisterPage extends React.Component<Props, ComponentState> {
-  /**
-   *
-   */
-  constructor(props: Props) {
-    super(props);
+  const classes = useStyles();
 
-    this.state = {
-      email: '',
-      password: '',
-      name: '',
-      gender: 0
-    };
-
-    if (this.props.userState.user) this.props.logout();
-  }
-
-  onFormRegisterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (this.state.email && this.state.name && this.state.password) {
-      this.props
-        .register({
-          email: this.state.email,
-          name: this.state.name,
-          password: this.state.password,
-          gender: this.state.gender
-        })
-        .then(registered => {
-          if (registered) {
-            this.props.history.push('/login');
-          }
-        });
-    } else {
-      let message = 'not defined';
-
-      if (!this.state.password) message = 'password ' + message;
-      if (!this.state.email) message = 'email ' + message;
-      if (!this.state.name) message = 'name ' + message;
-
-      this.props.addError({ message, code: 1 });
-    }
-  };
-
-  handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ name: e.target.value });
-  };
-
-  handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ email: e.target.value });
-  };
-
-  handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ password: e.target.value });
-  };
-
-  handleGenderChange = (e: React.ChangeEvent<{ value: unknown }>) => {
-    this.setState({
-      gender: e.target.value as number
+  const handleFormSubmit = (user: User) => {
+    props.register(user).then((registered) => {
+      if (registered) {
+        props.history.push('/login');
+      }
     });
   };
 
-  render() {
-    const classes = this.props.classes;
-    let { email, password, name, gender } = this.state;
+  return (
+    <Container component="div" maxWidth="xs" className={classes.paper}>
+      <BaseAvatar
+        pixelSize={80}
+        src="/assets/logo_party_drink.png"
+      ></BaseAvatar>
+      <Box margin={0.5}>
+        <Typography variant="h4">Register</Typography>
+      </Box>
+      <UserForm
+        user={User.New({})}
+        editable
+        displayConfirms
+        warningText="By clicking on the register button, I agree that the form datas will be stored by PartyDrink Studio"
+        acceptButtonText="register"
+        onSubmit={handleFormSubmit}
+      />
+      <Typography align="center" className={classes.signIn}>
+        <u>
+          <Link to="/login">Sign in</Link>
+        </u>
+      </Typography>
+    </Container>
+  );
+};
 
-    return (
-      <Container component="main" maxWidth="xs">
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography variant="h4">Register</Typography>
-          <form
-            className={classes.form}
-            noValidate
-            onSubmit={this.onFormRegisterSubmit}
-          >
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  name="name"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="name"
-                  label="Name"
-                  autoFocus
-                  value={name}
-                  onChange={this.handleNameChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  value={email}
-                  onChange={this.handleEmailChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  value={password}
-                  onChange={this.handlePasswordChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  select
-                  label="Gender"
-                  id="gender-select"
-                  value={gender}
-                  fullWidth
-                  onChange={this.handleGenderChange}
-                >
-                  <MenuItem value={0}>Man</MenuItem>
-                  <MenuItem value={1}>Woman</MenuItem>
-                </TextField>
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Register
-            </Button>
-            <Typography align="center" color="primary">
-              <u>
-                <Link to="/login">Already have an account ? Sign in</Link>
-              </u>
-            </Typography>
-          </form>
-        </div>
-      </Container>
-    );
-  }
-}
-
-const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
+const mapStateToProps = (states: RootState): StateProps => {
   return {
-    userState: states.userState
+    userState: states.userState,
   };
 };
 
 const mapDispatchToProps = (
-  dispatch: ThunkDispatch<{}, {}, any>,
-  ownProps: OwnProps
+  dispatch: ThunkDispatch<{}, {}, any>
 ): DispatchProps => {
   return {
-    register: async (userDatas: Partial<Role>) => {
+    register: async (userDatas: Partial<User>) => {
       return await dispatch(register(userDatas));
     },
-    logout: async () => {
-      await dispatch(logout());
+    logout: async (hideSuccess?: boolean) => {
+      await dispatch(logout(hideSuccess));
     },
-    addError: async (error: any) => {
-      await dispatch(addError(error));
-    }
   };
 };
 
 export const Register = withRouter(
   connect<StateProps, DispatchProps, OwnProps, RootState>(
     mapStateToProps,
-    mapDispatchToProps
-  )(withStyles(styles)(withSnackbar(RegisterPage)))
+    mapDispatchToProps,
+    null,
+    { forwardRef: true }
+  )(RegisterPage)
 );

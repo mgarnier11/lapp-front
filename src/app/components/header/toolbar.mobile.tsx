@@ -4,114 +4,200 @@ import {
   IconButton,
   Typography,
   SwipeableDrawer,
+  makeStyles,
   List,
+  ListItemIcon,
+  ListItemText,
+  Divider,
   ListItem,
-  ListItemText
 } from '@material-ui/core';
+import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import CloseIcon from '@material-ui/icons/Close';
-import HouseIcon from '@material-ui/icons/House';
-import { Link } from 'react-router-dom';
+import RateReviewIcon from '@material-ui/icons/RateReview';
+import PeopleIcon from '@material-ui/icons/People';
+import ForumIcon from '@material-ui/icons/Forum';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+import SettingsIcon from '@material-ui/icons/Settings';
+import Brightness3Icon from '@material-ui/icons/Brightness3';
+import WbSunnyIcon from '@material-ui/icons/WbSunny';
+import FilterNoneIcon from '@material-ui/icons/FilterNone';
 
 import { User } from '../../../api/classes/user.class';
-import { renderUser } from './header.component';
+import { ListItemLink } from '../utils/linkButtons.components';
+import { headerHeight } from './header.component';
+import { Role } from '../../../api/classes/role.class';
+import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
+import { ThemeController } from '../../theme/themeManager';
+import { UserItem } from '../user/user.item.component';
+import { BaseAvatar } from '../utils/avatars.component';
+
+const drawerWidth = 240;
+
+const useStyles = makeStyles((theme) => ({
+  appName: {
+    flexGrow: 1,
+  },
+  toolBar: {
+    height: headerHeight,
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+    paddingTop: headerHeight,
+  },
+  drawerWrapper: {
+    justifyContent: 'space-between',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  userName: {
+    fontSize: '150%',
+    marginBottom: theme.spacing(1),
+  },
+}));
 
 interface OwnProps {
-  user: User;
-  classes: any;
-  logout: any;
+  user?: User;
+  logout: (hideSuccess?: boolean) => Promise<any>;
 }
 
-type Props = OwnProps;
+type Props = OwnProps & RouteComponentProps;
 
 const ToolbarMobileComponent: React.FunctionComponent<Props> = (
   props: Props
 ) => {
-  const { user, classes } = props;
-  const [state, setState] = React.useState({
-    drawerOpen: false
-  });
-
-  const admin = () =>
-    user.role.permissionLevel >= 100 ? (
-      <>
-        <Link to="/roles" onClick={() => toggleDrawer(false)}>
-          <ListItem button className={classes.listItem}>
-            <ListItemText>Roles</ListItemText>
-          </ListItem>
-        </Link>
-        <Link to="/questionTypes" onClick={() => toggleDrawer(false)}>
-          <ListItem button className={classes.listItem}>
-            <ListItemText>Question Types</ListItemText>
-          </ListItem>
-        </Link>
-      </>
-    ) : (
-      <></>
-    );
+  const classes = useStyles();
+  const { user } = props;
+  const [drawerOpen, setState] = React.useState(false);
 
   const toggleDrawer = (open: boolean) => {
-    setState({ drawerOpen: open });
+    setState(open);
   };
 
+  const baseItems = () => <>{listItem('/home', 'Home', <HomeIcon />)}</>;
+
+  const baseUserItems = () => (
+    <>{listItem('/questions', 'Questions', <RateReviewIcon />)}</>
+  );
+
+  const adminItems = () => (
+    <>
+      {listItem('/roles', 'Roles', <PeopleIcon />)}
+      {listItem('/questionTypes', 'Question Types', <ForumIcon />)}
+      {listItem('/questionTemplates', 'Question Templates', <FilterNoneIcon />)}
+    </>
+  );
+
+  const userItems = (user: User) => (
+    <>
+      <UserItem user={user} />
+      <ListItem button onClick={ThemeController.toggleTheme}>
+        {ThemeController.isLight() ? (
+          <>
+            <ListItemIcon children={<Brightness3Icon />} />
+            <ListItemText primary="Set dark mode" />
+          </>
+        ) : (
+          <>
+            <ListItemIcon children={<WbSunnyIcon />} />
+            <ListItemText primary="Set clear mode" />
+          </>
+        )}
+      </ListItem>
+      {listItem('/me', 'Settings', <SettingsIcon />)}
+      <ListItemLink
+        to="/signin"
+        onClick={() => {
+          props.logout(true).then(() => window.location.reload());
+        }}
+      >
+        <ListItemIcon>
+          <PowerSettingsNewIcon />
+        </ListItemIcon>
+        <ListItemText primary={'Disconnect'} />
+      </ListItemLink>
+    </>
+  );
+
+  const notLoggedItems = () => (
+    <>
+      {listItem('/login', 'Login', <ExitToAppIcon />)}
+      {listItem('/register', 'Register', <PersonAddIcon />)}
+    </>
+  );
+
+  const listItem = (to: string, text: string, icon: JSX.Element) => (
+    <ListItemLink to={to} onClick={() => toggleDrawer(false)}>
+      <ListItemIcon>{icon}</ListItemIcon>
+      <ListItemText primary={text} />
+    </ListItemLink>
+  );
+
+  const logoToUse = ThemeController.isDark()
+    ? 'logo_party_drink_dark_mode.png'
+    : 'logo_party_drink.png';
+
   return (
-    <Toolbar>
-      <IconButton
-        edge="start"
-        className={classes.button}
-        color="inherit"
-        onClick={() => toggleDrawer(!state.drawerOpen)}
-        style={{ zIndex: 1200 }}
-      >
-        {state.drawerOpen ? <CloseIcon /> : <MenuIcon />}
-      </IconButton>
+    <>
+      <Toolbar className={classes.toolBar}>
+        <IconButton edge="start" onClick={() => toggleDrawer(!drawerOpen)}>
+          {drawerOpen ? <CloseIcon /> : <MenuIcon />}
+        </IconButton>
 
-      <IconButton
-        edge="start"
-        className={classes.button}
-        color="inherit"
-        style={{ zIndex: 1200 }}
-      >
-        <Link to="/home" className={classes.button}>
-          <HouseIcon />
-        </Link>
-      </IconButton>
-
-      <Typography style={{ flexGrow: 1 }} />
-
-      {renderUser(props)}
-
+        <Typography
+          component="h1"
+          variant="h5"
+          align="center"
+          className={classes.appName}
+        >
+          <Link to="/home">Party Drink</Link>
+        </Typography>
+        <IconButton edge="end" onClick={() => props.history.goBack()}>
+          <ArrowBackIcon />
+        </IconButton>
+      </Toolbar>
       <SwipeableDrawer
-        swipeAreaWidth={56}
         className={classes.drawer}
-        anchor="top"
-        open={state.drawerOpen}
+        style={{ zIndex: 1200 }}
+        open={drawerOpen}
         onClose={() => toggleDrawer(false)}
         onOpen={() => toggleDrawer(true)}
         classes={{ paper: classes.drawerPaper }}
       >
-        <div className={classes.toolbar} />
-        <Typography
-          variant="h6"
-          className={classes.title}
-          align="center"
-          style={{ paddingTop: '5px' }}
-        >
-          <Link to="/home" className={classes.button}>
-            Name not defined
-          </Link>
-        </Typography>
-        <List component="nav">
-          <Link to="/questions" onClick={() => toggleDrawer(false)}>
-            <ListItem button className={classes.listItem}>
-              <ListItemText>Questions</ListItemText>
-            </ListItem>
-          </Link>
-          {admin()}
+        <BaseAvatar
+          src={`/assets/${logoToUse}`}
+          style={{ marginTop: '20px' }}
+        ></BaseAvatar>
+        <List style={{ height: '100%' }} className={classes.drawerWrapper}>
+          {user ? (
+            <>
+              <div>
+                {baseItems()}
+                {!user.isIDVice() && baseUserItems()}
+                {user.role.permissionLevel >= Role.AdminPermissionLevel &&
+                  adminItems()}
+                {/* <Divider /> */}
+              </div>
+              <div>
+                <Divider />
+                {userItems(user!)}
+              </div>
+            </>
+          ) : (
+            <div>{notLoggedItems()}</div>
+          )}
         </List>
       </SwipeableDrawer>
-    </Toolbar>
+    </>
   );
 };
 
-export const ToolbarMobile = ToolbarMobileComponent;
+export const ToolbarMobile = withRouter(ToolbarMobileComponent);

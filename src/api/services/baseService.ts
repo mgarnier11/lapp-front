@@ -8,7 +8,8 @@ export enum ServiceNames {
   Role = 'Role',
   QuestionType = 'QuestionType',
   Game = 'Game',
-  GameType = 'GameType'
+  GameType = 'GameType',
+  QuestionTemplate = 'QuestionTemplate'
 }
 
 export enum ServiceEvents {

@@ -14,6 +14,12 @@ export interface ActionStarted {
 export interface ActionFailure {
   type: GameActionTypes.ACTION_FAILURE;
 }
+export interface StartLoading {
+  type: GameActionTypes.START_LOADING;
+}
+export interface FinishLoading {
+  type: GameActionTypes.FINISH_LOADING;
+}
 export interface Get {
   type: GameActionTypes.GET;
   game: Game;
@@ -27,7 +33,14 @@ export interface Remove {
 }
 
 // Union Action Types
-export type Action = ActionStarted | ActionFailure | Get | Update | Remove;
+export type Action =
+  | ActionStarted
+  | ActionFailure
+  | StartLoading
+  | FinishLoading
+  | Get
+  | Update
+  | Remove;
 
 export class GameActions {
   private static gameActionStartedCreator = (): ActionStarted => {
@@ -39,6 +52,18 @@ export class GameActions {
   private static gameActionFailureCreator = (): ActionFailure => {
     return {
       type: GameActionTypes.ACTION_FAILURE
+    };
+  };
+
+  public static gameStartLoading = (): StartLoading => {
+    return {
+      type: GameActionTypes.START_LOADING
+    };
+  };
+
+  public static gameFinishLoading = (): FinishLoading => {
+    return {
+      type: GameActionTypes.FINISH_LOADING
     };
   };
 

@@ -1,6 +1,5 @@
 import { Action } from './actions';
 import { UserState, defaultUserState, UserActionTypes } from './types';
-import apiHandler from '../../api/apiHandler';
 // States' definition
 
 export const user = (

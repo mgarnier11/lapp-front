@@ -237,6 +237,8 @@ export class QuestionTypesActions {
             resolve(true);
           })
           .catch(error => {
+            console.log(error);
+
             dispatch(QuestionTypesActions.questionTypesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);

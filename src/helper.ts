@@ -1,6 +1,5 @@
 import seedRandom from 'seedrandom';
 import uuid from 'uuid';
-import systeminformation from 'systeminformation';
 import { User, LoginCredentials } from './api/classes/user.class';
 
 const idVice = 'id-vice';
@@ -46,12 +45,21 @@ export class Helper {
     return { email: mail, password: pwd };
   }
 
+  public static explodeArray<T>(arr: T[], nbFragments: number): T[][] {
+    let resArrays = Array.from({ length: nbFragments }, () => new Array<T>());
+
+    for (let i = 0; i < arr.length; i++)
+      resArrays[i % nbFragments].push(arr[i]);
+
+    return resArrays;
+  }
+
   public static getPlayer(
     actualTurn: number,
     nbTurns: number,
     nbPlayers: number,
     seed: string
-  ) {
+  ): number {
     let rng = seedRandom(seed);
 
     let playersNbTurns: number[] = [...new Array(nbPlayers)].fill(

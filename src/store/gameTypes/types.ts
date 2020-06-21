@@ -20,6 +20,10 @@ export enum GameTypesActionTypes {
 export interface GameTypesState {
   readonly gameTypes?: GameType[];
   readonly loading: boolean;
+  readonly isStarting: boolean;
 }
 
-export const defaultGameTypesState: GameTypesState = { loading: false };
+export const defaultGameTypesState: GameTypesState = {
+  loading: false,
+  isStarting: true
+};

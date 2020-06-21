@@ -81,7 +81,8 @@ export const questionTypes = (
       return {
         ...questionTypeState,
         questionTypes: action.questionTypes,
-        loading: false
+        loading: false,
+        isStarting: false
       };
     }
     default:

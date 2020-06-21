@@ -1,205 +1,172 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+import { RouterProps, withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import { ThunkDispatch } from 'redux-thunk';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { Link } from 'react-router-dom';
 import {
   Container,
-  Avatar,
+  Box,
+  Typography,
+  makeStyles,
   TextField,
-  Grid,
-  CircularProgress
+  Button,
+  CircularProgress,
 } from '@material-ui/core';
-import { withRouter, Link } from 'react-router-dom';
-import { RouterProps } from 'react-router';
-import {
-  StyleRules,
-  Theme,
-  withStyles,
-  WithStyles
-} from '@material-ui/core/styles';
 
+import { LoginCredentials } from '../../../../api/classes/user.class';
 import { UserState } from '../../../../store/user/types';
 import { RootState } from '../../../../store';
-import { LoginCredentials, User } from '../../../../api/classes/user.class';
-import { login, logout, register } from '../../../../store/user/actions';
-import apiHandler from '../../../../api/apiHandler';
-import uuid from 'uuid';
-import { Helper } from '../../../../helper';
-import { IdVice } from '../../../components/user/idVice.component';
+import { logout, login } from '../../../../store/user/actions';
+import { BaseAvatar } from '../../../components/utils/avatars.component';
 
-const styles = (theme: Theme): StyleRules => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(4),
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center'
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    alignItems: 'center',
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
+    margin: theme.spacing(3, 0, 2),
   },
   noLogin: {
-    cursor: 'pointer'
-  }
-});
+    cursor: 'pointer',
+  },
+  register: {
+    paddingTop: theme.spacing(1),
+  },
+}));
 
 interface OwnProps {}
 
 interface DispatchProps {
   login: (credentials: LoginCredentials) => Promise<any>;
-  logout: (hideSuccess?: boolean) => void;
+  logout: (hideSuccess?: boolean, hideError?: boolean) => void;
 }
 
 interface StateProps {
   userState: UserState;
 }
 
-type Props = StateProps &
-  OwnProps &
-  DispatchProps &
-  RouterProps &
-  WithStyles<typeof styles>;
+type LoginPageProps = OwnProps & DispatchProps & StateProps & RouterProps;
 
-interface ComponentState {
-  email: string;
-  password: string;
-}
+const LoginPage: React.FunctionComponent<LoginPageProps> = (props) => {
+  useEffect(() => {
+    props.logout(true, true);
+  }, []); // eslint-disable-line
 
-class LoginPage extends React.Component<Props, ComponentState> {
-  /**
-   *
-   */
-  constructor(props: Props) {
-    super(props);
+  const classes = useStyles();
 
-    this.state = {
-      email: '',
-      password: ''
-    };
+  const loading = props.userState.loading;
 
-    this.props.logout(true);
-  }
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  onFormLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    this.props
+    props
       .login({
-        email: this.state.email,
-        password: this.state.password
+        email,
+        password,
       })
-      .then(logged => {
-        if (logged) this.props.history.push('/home');
+      .then((logged) => {
+        console.log(logged);
+
+        if (logged) props.history.push('/home');
       });
   };
 
-  handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ email: e.target.value });
-  };
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setEmail(e.target.value);
 
-  handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ password: e.target.value });
-  };
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setPassword(e.target.value);
 
-  render() {
-    const classes = this.props.classes;
-    const loading = this.props.userState.loading;
-    let { email, password } = this.state;
+  return (
+    <Container component="div" maxWidth="xs" className={classes.paper}>
+      <BaseAvatar
+        pixelSize={80}
+        src="/assets/logo_party_drink.png"
+      ></BaseAvatar>
+      <Box margin={0.5}>
+        <Typography variant="h4">Sign in</Typography>
+      </Box>
 
-    return (
-      <Container component="main" maxWidth="xs">
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography variant="h4">Sign in</Typography>
-          <form
-            className={classes.form}
-            noValidate
-            onSubmit={this.onFormLoginSubmit}
-          >
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              value={email}
-              onChange={this.handleEmailChange}
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={this.handlePasswordChange}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              disabled={loading}
-              className={classes.submit}
-            >
-              {loading && <CircularProgress size={24} />}
-              {!loading && 'Sign In'}
-            </Button>
-            <IdVice />
-            <Typography align="center" color="primary">
-              <u>
-                <Link to="/register">Don't have an account ? Register</Link>
-              </u>
-            </Typography>
-          </form>
-        </div>
-      </Container>
-    );
-  }
-}
+      <form noValidate onSubmit={handleFormSubmit}>
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          id="email"
+          label="Email Address"
+          name="email"
+          autoComplete="email"
+          autoFocus
+          value={email}
+          onChange={handleEmailChange}
+        />
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          name="password"
+          label="Password"
+          type="password"
+          id="password"
+          autoComplete="current-password"
+          value={password}
+          onChange={handlePasswordChange}
+        />
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          disabled={loading}
+          className={classes.submit}
+        >
+          {loading && <CircularProgress size={24} color="inherit" />}
+          {!loading && 'Sign In'}
+        </Button>
+        {/* <IdVice /> */}
+        <Typography align="center" className={classes.register}>
+          <u>
+            <Link to="/register">Register</Link>
+          </u>
+        </Typography>
+      </form>
+    </Container>
+  );
+};
 
-const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
+const mapStateToProps = (states: RootState): StateProps => {
   return {
-    userState: states.userState
+    userState: states.userState,
   };
 };
 
 const mapDispatchToProps = (
-  dispatch: ThunkDispatch<{}, {}, any>,
-  ownProps: OwnProps
+  dispatch: ThunkDispatch<{}, {}, any>
 ): DispatchProps => {
   return {
     login: async (credentials: LoginCredentials) => {
       return await dispatch(login(credentials));
     },
-    logout: async (hideSuccess?: boolean) => {
-      await dispatch(logout(hideSuccess));
-    }
+    logout: async (hideSuccess?: boolean, hideError?: boolean) => {
+      await dispatch(logout(hideSuccess, hideError));
+    },
   };
 };
 
 export const Login = withRouter(
   connect<StateProps, DispatchProps, OwnProps, RootState>(
     mapStateToProps,
-    mapDispatchToProps
-  )(withStyles(styles)(LoginPage))
+    mapDispatchToProps,
+    null,
+    { forwardRef: true }
+  )(LoginPage)
 );

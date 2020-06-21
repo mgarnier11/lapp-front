@@ -8,6 +8,8 @@ export interface QuestionBackModel {
   _difficulty: number;
   _hotLevel: number;
   _creator: UserBackModel;
+  _creationDate: string;
+  _updateDate: string;
 }
 
 export class Question {
@@ -23,9 +25,9 @@ export class Question {
 
   public creator: User = new User();
 
-  public temp(): string {
-    return 'ok';
-  }
+  public creationDate: Date = new Date();
+
+  public updateDate: Date = new Date();
 
   public static New(datas: Partial<Question>): Question {
     return Object.assign(new Question(), datas);
@@ -40,6 +42,8 @@ export class Question {
     newObj.difficulty = datas._difficulty;
     newObj.hotLevel = datas._hotLevel;
     newObj.creator = User.fromBack(datas._creator);
+    newObj.creationDate = new Date(datas._creationDate);
+    newObj.updateDate = new Date(datas._updateDate);
 
     return newObj;
   }
@@ -60,7 +64,9 @@ export class Question {
       obj1.hotLevel === obj2.hotLevel &&
       obj1.text === obj2.text &&
       QuestionType.CompareObjects(obj1.type, obj2.type) &&
-      User.CompareObjects(obj1.creator, obj2.creator)
+      User.CompareObjects(obj1.creator, obj2.creator) &&
+      obj1.creationDate === obj2.creationDate &&
+      obj1.updateDate === obj2.updateDate
     );
   }
 }

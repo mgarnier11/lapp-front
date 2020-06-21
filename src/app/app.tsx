@@ -1,267 +1,68 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Switch, Route, Redirect, withRouter } from 'react-router';
-import { RouteComponentProps } from 'react-router';
+import React, { useEffect } from 'react';
+import { Switch, Redirect } from 'react-router';
+import { makeStyles } from '@material-ui/core/styles';
+import { Container, CssBaseline } from '@material-ui/core';
+import Webcam from 'react-webcam';
 
-import { RootState } from '../store';
-import { ThunkDispatch } from 'redux-thunk';
-import { relog } from '../store/user/actions';
-import { CssBaseline, Fab, Modal } from '@material-ui/core';
-import { RolesActions, roleActionsInstance } from '../store/roles/actions';
+import { roleActionsInstance } from '../store/roles/actions';
 import { questionActionsInstance } from '../store/questions/actions';
-import {
-  questionTypeActionsInstance,
-  QuestionTypesActions
-} from '../store/questionTypes/actions';
-import { UserState } from '../store/user/types';
-import apiHandler from '../api/apiHandler';
-import { Question } from '../api/classes/question.class';
-import { Game, GameStatus } from '../api/classes/game.class';
-import { ServiceEvents } from '../api/services/baseService';
-import {
-  gameTypeActionsInstance,
-  GameTypesActions
-} from '../store/gameTypes/actions';
-import { gamesActionsInstance, GamesActions } from '../store/games/actions';
-import { GameState } from '../store/game/types';
-import { Helper } from '../helper';
+import { questionTypeActionsInstance } from '../store/questionTypes/actions';
+import { gameTypeActionsInstance } from '../store/gameTypes/actions';
+import { gamesActionsInstance } from '../store/games/actions';
 import { Home } from './pages/home/home.page';
 import { Questions } from './pages/questions/questions.page';
 import { Roles } from './pages/roles/roles.page';
-import { QuestionTypes } from './pages/questionTypes/question-types.page';
-import { Login } from './pages/auth/login/login.page';
-import { Register } from './pages/auth/register/register.page';
-import { QuestionNew } from './components/question/question.new.component';
-import { GameNew } from './components/game/game.new.component';
 import { Header } from './components/header/header.component';
 import { Guard } from './components/guard/guard.component';
 import { GameMiddleware } from './components/game/game.middleware.component';
 import { Footer } from './components/footer/footer.component';
 import { Success } from './components/success/success.component';
 import { Error } from './components/error/error.component';
+import { questionTemplateActionsInstance } from '../store/questionTemplates/actions';
+import { QuestionTemplates } from './pages/questionTemplates/questionTemplates.page';
+import { Role } from '../api/classes/role.class';
+import { QuestionTypes } from './pages/questionTypes/questionTypes.page';
 
-interface OwnProps {}
+const useStyles = makeStyles((theme) => ({
+  baseContainer: {
+    paddingTop: 64,
+  },
+  [theme.breakpoints.down('xs')]: {
+    baseContainer: {
+      paddingLeft: 0,
+      paddingRight: 0,
+    },
+  },
+}));
 
-interface DispatchProps {
-  relog: () => void;
-  roleGetAll: () => void;
-  questionTypeGetAll: () => void;
-  gameTypeGetAll: () => void;
-  gameUpdate: (game: Game) => Promise<any>;
-}
+interface Props {}
 
-interface StateProps {
-  userState: UserState;
-  gameState: GameState;
-}
+const App: React.FunctionComponent<Props> = (props: Props) => {
+  const classes = useStyles();
 
-type Props = StateProps & OwnProps & DispatchProps & RouteComponentProps;
-
-interface State {
-  questionModalOpen: boolean;
-  gameModalOpen: boolean;
-}
-
-class App extends React.Component<Props, State> {
-  /**
-   *
-   */
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      questionModalOpen: false,
-      gameModalOpen: false
-    };
-
-    this.props.relog();
-    this.props.roleGetAll();
-
-    this.questionSuccessfullyCreated = this.questionSuccessfullyCreated.bind(
-      this
-    );
-    this.gameSuccessfullyCreated = this.gameSuccessfullyCreated.bind(this);
-    /*
-    console.log(Helper.getPlayer(8, 150, 5, 'test'));
-
-    Helper.verify(150, 5, 'test').then(r => console.log(r));
-    console.log(MediaDeviceInfo.toString());
-    */
-  }
-
-  componentDidMount() {
-    apiHandler.questionService.ownEvents.on(
-      ServiceEvents.created,
-      this.questionSuccessfullyCreated
-    );
-    apiHandler.gameService.ownEvents.on(
-      ServiceEvents.created,
-      this.gameSuccessfullyCreated
-    );
-
+  useEffect(() => {
     roleActionsInstance.bindBaseEvents();
     questionActionsInstance.bindBaseEvents();
     questionTypeActionsInstance.bindBaseEvents();
     gameTypeActionsInstance.bindBaseEvents();
     gamesActionsInstance.bindBaseEvents();
-    this.loadTypes();
-    //apiHandler.gameService.findGamesPerUser('5de6bcf9a23a5d40602409fb');
-  }
+    questionTemplateActionsInstance.bindBaseEvents();
 
-  loadTypes() {
-    this.props.questionTypeGetAll();
-    this.props.gameTypeGetAll();
-  }
+    return () => {
+      roleActionsInstance.unbindEvents();
+      questionActionsInstance.unbindEvents();
+      questionTypeActionsInstance.unbindEvents();
+      gameTypeActionsInstance.unbindEvents();
+      gamesActionsInstance.unbindEvents();
+      questionTemplateActionsInstance.unbindEvents();
+    };
+  }, []);
 
-  componentWillUnmount() {
-    apiHandler.questionService.ownEvents.off(
-      ServiceEvents.created,
-      this.questionSuccessfullyCreated
-    );
-    apiHandler.gameService.ownEvents.off(
-      ServiceEvents.created,
-      this.gameSuccessfullyCreated
-    );
-
-    roleActionsInstance.unbindEvents();
-    questionActionsInstance.unbindEvents();
-    questionTypeActionsInstance.unbindEvents();
-    gameTypeActionsInstance.unbindEvents();
-    gamesActionsInstance.unbindEvents();
-  }
-
-  questionSuccessfullyCreated(q: Question) {
-    this.closeQuestionModal();
-  }
-
-  gameSuccessfullyCreated(g: Game) {
-    this.closeGameModal();
-  }
-
-  openQuestionModal = () => {
-    this.setState({ questionModalOpen: true });
-  };
-
-  closeQuestionModal = () => {
-    this.setState({ questionModalOpen: false });
-  };
-
-  openGameModal = () => {
-    this.setState({ gameModalOpen: true });
-  };
-
-  closeGameModal = () => {
-    this.setState({ gameModalOpen: false });
-  };
-
-  playingGameNext = () => {
-    const { game } = this.props.gameState;
-
-    if (game) {
-      this.props.gameUpdate(Helper.clone(game, { status: GameStatus.started }));
-    }
-  };
-
-  renderQuestionFAB() {
-    return (
-      <Fab
-        variant="extended"
-        className="floating-action-button"
-        color="primary"
-        onClick={this.openQuestionModal}
-      >
-        New Question
-      </Fab>
-    );
-  }
-
-  renderPlayingFAB() {
-    const { game } = this.props.gameState;
-    const isDisabled =
-      this.props.userState.user!.id !== game!.creator.id || !game!.canStart();
-    let text = 'Next';
-
-    if (game) {
-      switch (game!.status) {
-        case GameStatus.created:
-          text = 'Start Game';
-          break;
-        case GameStatus.started:
-          text = 'Next Question';
-          break;
-        case GameStatus.finished:
-          text = '';
-          break;
-      }
-    }
-
-    return (
-      <Fab
-        variant="extended"
-        className="floating-action-button"
-        color="primary"
-        onClick={this.playingGameNext}
-        disabled={isDisabled}
-      >
-        {text}
-      </Fab>
-    );
-  }
-
-  renderGameFAB() {
-    return (
-      <Fab
-        variant="extended"
-        className="floating-action-button"
-        color="primary"
-        onClick={this.openGameModal}
-      >
-        New Game
-      </Fab>
-    );
-  }
-
-  renderQuestionModal() {
-    return (
-      <Modal
-        open={this.state.questionModalOpen}
-        onClose={this.closeQuestionModal}
-      >
-        <QuestionNew />
-      </Modal>
-    );
-  }
-
-  renderGameModal() {
-    return (
-      <Modal open={this.state.gameModalOpen} onClose={this.closeGameModal}>
-        <GameNew />
-      </Modal>
-    );
-  }
-
-  renderFAB() {
-    const questions = /questions/;
-    const game = /games\/[A-Z0-9]{5,}/;
-    const { pathname } = this.props.location;
-
-    switch (true) {
-      case questions.test(pathname):
-        return this.renderQuestionFAB();
-      case game.test(pathname):
-        if (this.props.gameState.game) return this.renderPlayingFAB();
-        else return this.renderGameFAB();
-      default:
-        return this.renderGameFAB();
-    }
-  }
-
-  render() {
-    const user = this.props.userState.user;
-    return (
-      <React.Fragment>
-        <CssBaseline />
-
-        <Header />
+  return (
+    <>
+      <CssBaseline />
+      <Header />
+      <Container component="main" className={classes.baseContainer}>
         <Switch>
           <Guard minimalPermission={NaN} path="/home" redirect="/">
             <Home />
@@ -277,70 +78,71 @@ class App extends React.Component<Props, State> {
           <Guard minimalPermission={0} path="/games/:displayId" redirect="/">
             <GameMiddleware />
           </Guard>
-          <Guard minimalPermission={100} path="/roles" redirect="/home">
+          <Guard
+            minimalPermission={Role.AdminPermissionLevel}
+            path="/roles"
+            redirect="/home"
+          >
             <Roles />
           </Guard>
-          <Guard minimalPermission={100} path="/questionTypes" redirect="/home">
+          <Guard
+            minimalPermission={Role.AdminPermissionLevel}
+            path="/questionTemplates"
+            redirect="/home"
+          >
+            <QuestionTemplates />
+          </Guard>
+          <Guard
+            minimalPermission={Role.AdminPermissionLevel}
+            path="/questionTypes"
+            redirect="/home"
+          >
             <QuestionTypes />
           </Guard>
-          <Route exact path="/login">
-            <Login />
-          </Route>
-          <Route exact path="/register">
-            <Register />
-          </Route>
+          <Guard
+            minimalPermission={Role.AdminPermissionLevel}
+            path="/test"
+            redirect="/home"
+          >
+            <WebcamCapture />
+          </Guard>
           <Redirect from="*" to="/home" />
         </Switch>
-        <Footer />
-        <Success />
-        <Error />
-        {user ? (
-          <>
-            {this.renderFAB()}
-            {this.renderQuestionModal()}
-            {this.renderGameModal()}
-          </>
-        ) : (
-          <></>
-        )}
-      </React.Fragment>
-    );
-  }
-}
-
-const mapStateToProps = (states: RootState, ownProps: OwnProps): StateProps => {
-  return {
-    userState: states.userState,
-    gameState: states.gameState
-  };
+      </Container>
+      <Footer />
+      <Success />
+      <Error />
+    </>
+  );
 };
 
-const mapDispatchToProps = (
-  dispatch: ThunkDispatch<{}, {}, any>,
-  ownProps: OwnProps
-): DispatchProps => {
-  return {
-    gameTypeGetAll: () => {
-      dispatch(GameTypesActions.gameTypeGetAll());
-    },
-    questionTypeGetAll: () => {
-      dispatch(QuestionTypesActions.questionTypeGetAll());
-    },
-    relog: async () => {
-      await dispatch(relog(false));
-    },
-    roleGetAll: async () => {
-      await dispatch(RolesActions.roleGetAll());
-    },
-    gameUpdate: async (game: Game) => {
-      return await dispatch(GamesActions.gameUpdate(game));
-    }
-  };
+const videoConstraints = {
+  width: 1280,
+  height: 720,
+  facingMode: 'user',
 };
 
-export default withRouter(
-  connect<StateProps, DispatchProps, OwnProps, RootState>(
-    mapStateToProps,
-    mapDispatchToProps
-  )(App)
-);
+const WebcamCapture = () => {
+  const webcamRef = React.useRef(null) as any;
+
+  const capture = React.useCallback(() => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    console.log(imageSrc);
+  }, [webcamRef]);
+
+  return (
+    <>
+      <Webcam
+        audio={false}
+        height={720}
+        ref={webcamRef}
+        screenshotFormat="image/jpeg"
+        width={1280}
+        videoConstraints={videoConstraints}
+      />
+      <button onClick={capture}>Capture photo</button>
+    </>
+  );
+};
+
+export default App;

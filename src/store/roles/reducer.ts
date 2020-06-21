@@ -71,7 +71,8 @@ export const roles = (
       return {
         ...roleState,
         roles: action.roles,
-        loading: false
+        loading: false,
+        isStarting: false
       };
     }
     default:

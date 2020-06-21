@@ -20,6 +20,10 @@ export enum QuestionsActionTypes {
 export interface QuestionsState {
   readonly questions?: Question[];
   readonly loading: boolean;
+  readonly isStarting: boolean;
 }
 
-export const defaultQuestionsState: QuestionsState = { loading: false };
+export const defaultQuestionsState: QuestionsState = {
+  loading: false,
+  isStarting: true
+};

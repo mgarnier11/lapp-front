@@ -17,6 +17,8 @@ import { GameTypesState } from './gameTypes/types';
 import { RolesState } from './roles/types';
 import { GamesState } from './games/types';
 import { GameState } from './game/types';
+import { QuestionTemplatesState } from './questionTemplates/types';
+import questionTemplates from './questionTemplates/reducer';
 
 declare global {
   interface Window {
@@ -30,6 +32,7 @@ export interface RootState {
   userState: UserState;
   errorsState: ErrorsState;
   rolesState: RolesState;
+  questionTemplatesState: QuestionTemplatesState;
   questionTypesState: QuestionTypesState;
   questionsState: QuestionsState;
   gameTypesState: GameTypesState;
@@ -41,6 +44,7 @@ const rootReducer = combineReducers<RootState>({
   userState: user,
   errorsState: errors,
   rolesState: roles,
+  questionTemplatesState: questionTemplates,
   questionTypesState: questionTypes,
   questionsState: questions,
   gameTypesState: gameTypes,

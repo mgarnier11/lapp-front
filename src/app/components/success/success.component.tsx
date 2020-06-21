@@ -8,6 +8,8 @@ import { Question } from '../../../api/classes/question.class';
 import { Role } from '../../../api/classes/role.class';
 import { QuestionType } from '../../../api/classes/questionType.class';
 import { Game } from '../../../api/classes/game.class';
+import { QuestionTemplate } from '../../../api/classes/questionTemplate.class';
+
 import {
   ServiceNames,
   ServiceEvent,
@@ -44,7 +46,10 @@ class SuccessComponent extends React.Component<Props, State> {
       this.addEvent(ServiceEvents.removed, ServiceNames.QuestionType),
       this.addEvent(ServiceEvents.created, ServiceNames.Game),
       this.addEvent(ServiceEvents.updated, ServiceNames.Game),
-      this.addEvent(ServiceEvents.removed, ServiceNames.Game)
+      this.addEvent(ServiceEvents.removed, ServiceNames.Game),
+      this.addEvent(ServiceEvents.created, ServiceNames.QuestionTemplate),
+      this.addEvent(ServiceEvents.updated, ServiceNames.QuestionTemplate),
+      this.addEvent(ServiceEvents.removed, ServiceNames.QuestionTemplate)
     ];
 
     this.state = {
@@ -93,6 +98,12 @@ class SuccessComponent extends React.Component<Props, State> {
   onGame(type: string) {
     return (game: Game) => {
       this.displaySnackbar(`Game succesfully ${type}`);
+    };
+  }
+
+  onQuestionTemplate(type: string) {
+    return (questionTemplate: QuestionTemplate) => {
+      this.displaySnackbar(`QuestionTemplate succesfully ${type}`);
     };
   }
 

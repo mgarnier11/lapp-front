@@ -14,7 +14,6 @@ export function afterAllHook(options = {}): Hook {
     } else {
       context.result = convertToClass(context.result);
     }
-
     return context;
   };
 }

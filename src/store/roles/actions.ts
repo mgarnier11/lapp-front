@@ -225,6 +225,8 @@ export class RolesActions {
             resolve(true);
           })
           .catch(error => {
+            console.log(error);
+
             dispatch(RolesActions.rolesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);

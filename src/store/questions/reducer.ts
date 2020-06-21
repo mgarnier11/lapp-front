@@ -77,7 +77,8 @@ export const questions = (
       return {
         ...questionState,
         questions: action.questions,
-        loading: false
+        loading: false,
+        isStarting: false
       };
     }
     default:

@@ -2,7 +2,7 @@ import * as io from 'socket.io-client';
 
 import Feathers from '@feathersjs/feathers';
 import FeathersSocketIOClient from '@feathersjs/socketio-client';
-import FeathersAuthClient2 from '@feathersjs/authentication-client';
+import FeathersAuthClient2 from '@feathersjs/authentication-client'; // eslint-disable-line
 
 import { UserService } from './services/user.service';
 import { QuestionService } from './services/question.service';
@@ -12,26 +12,27 @@ import { RoleService } from './services/role.service';
 import { User, LoginCredentials } from './classes/user.class';
 import { ServiceNames } from './services/baseService';
 import { GameTypeService } from './services/gameType.service';
-import { Helper } from '../helper';
+import { QuestionTemplateService } from './services/questionTemplate.service';
+import { GameIo } from './socket.io/game.io';
 
 class ApiHandler {
   //api initialization
   private _feathers = Feathers(); // init feathers
   // @ts-ignore
   private _socket = io.connect(apiUrl, {
-    transports: ['websocket'],
-    forceNew: true
+    // transports: ['websocket'],
+    forceNew: true,
   }); //init socket io
   private _feathersAuthClient = require('@feathersjs/authentication-client')
     .default;
 
   constructor() {
     this._feathers
-      .configure(FeathersSocketIOClient(this._socket)) // add socket.io plugin
+      .configure(FeathersSocketIOClient(this._socket, { timeout: 30000 })) // add socket.io plugin
       .configure(
         this._feathersAuthClient({
           // add authentication plugin
-          storage: window.localStorage
+          storage: window.localStorage,
         })
       );
 
@@ -48,7 +49,14 @@ class ApiHandler {
     this.gameTypeService = new GameTypeService(
       this._feathers.service('game-types')
     );
+    this.questionTemplateService = new QuestionTemplateService(
+      this._feathers.service('question-templates')
+    );
+
+    this.gameIo = new GameIo(this._feathers);
   }
+
+  public gameIo: GameIo;
 
   public roleService: RoleService;
   public userservice: UserService;
@@ -56,6 +64,7 @@ class ApiHandler {
   public gameService: GameService;
   public questionTypeService: QuestionTypeService;
   public gameTypeService: GameTypeService;
+  public questionTemplateService: QuestionTemplateService;
 
   public service(serviceName: ServiceNames) {
     switch (serviceName) {
@@ -71,6 +80,8 @@ class ApiHandler {
         return this.questionTypeService;
       case ServiceNames.GameType:
         return this.gameTypeService;
+      case ServiceNames.QuestionTemplate:
+        return this.questionTemplateService;
     }
   }
 
@@ -90,7 +101,7 @@ class ApiHandler {
   public async login(credentials?: LoginCredentials) {
     let options = {
       ...{ strategy: 'local' },
-      ...credentials
+      ...credentials,
     };
     let response = await this._feathers.authenticate(options);
 
