@@ -8,7 +8,7 @@ import apiHandler from '../../api/apiHandler';
 import { addError } from '../errors/actions';
 import {
   QuestionType,
-  QuestionTypeBackModel
+  QuestionTypeBackModel,
 } from '../../api/classes/questionType.class';
 import { ServiceEvents } from '../../api/services/baseService';
 
@@ -88,33 +88,33 @@ export class QuestionTypesActions {
   private questionTypeCreated(questionTypeModel: QuestionTypeBackModel) {
     store.dispatch({
       type: QuestionTypesActionTypes.CREATE,
-      questionType: QuestionType.fromBack(questionTypeModel)
+      questionType: QuestionType.fromBack(questionTypeModel),
     });
   }
 
   private questionTypeUpdated(questionTypeModel: QuestionTypeBackModel) {
     store.dispatch({
       type: QuestionTypesActionTypes.UPDATE,
-      questionType: QuestionType.fromBack(questionTypeModel)
+      questionType: QuestionType.fromBack(questionTypeModel),
     });
   }
 
   private questionTypeRemoved(questionTypeModel: QuestionTypeBackModel) {
     store.dispatch({
       type: QuestionTypesActionTypes.REMOVE,
-      questionType: QuestionType.fromBack(questionTypeModel)
+      questionType: QuestionType.fromBack(questionTypeModel),
     });
   }
 
   private static questionTypesActionStartedCreator = (): ActionStarted => {
     return {
-      type: QuestionTypesActionTypes.ACTION_STARTED
+      type: QuestionTypesActionTypes.ACTION_STARTED,
     };
   };
 
   private static questionTypesActionFailureCreator = (): ActionFailure => {
     return {
-      type: QuestionTypesActionTypes.ACTION_FAILURE
+      type: QuestionTypesActionTypes.ACTION_FAILURE,
     };
   };
 
@@ -124,11 +124,11 @@ export class QuestionTypesActions {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+      return new Promise<boolean>((resolve) => {
         dispatch(QuestionTypesActions.questionTypesActionStartedCreator());
         apiHandler.questionTypeService.featherService
           .create(questionType)
-          .then(questionType => {
+          .then((questionType) => {
             /*
             dispatch({
               type: QuestionTypeActionTypes.CREATE,
@@ -141,7 +141,7 @@ export class QuestionTypesActions {
             );
             resolve(true);
           })
-          .catch(error => {
+          .catch((error) => {
             dispatch(QuestionTypesActions.questionTypesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
@@ -156,11 +156,11 @@ export class QuestionTypesActions {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+      return new Promise<boolean>((resolve) => {
         dispatch(QuestionTypesActions.questionTypesActionStartedCreator());
         apiHandler.questionTypeService.featherService
           .patch(questionType.id, questionType)
-          .then(questionType => {
+          .then((questionType) => {
             /*
           dispatch({
             type: QuestionTypeActionTypes.UPDATE,
@@ -174,7 +174,7 @@ export class QuestionTypesActions {
 
             resolve(true);
           })
-          .catch(error => {
+          .catch((error) => {
             dispatch(QuestionTypesActions.questionTypesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
@@ -189,11 +189,11 @@ export class QuestionTypesActions {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+      return new Promise<boolean>((resolve) => {
         dispatch(QuestionTypesActions.questionTypesActionStartedCreator());
         apiHandler.questionTypeService.featherService
           .remove(questionTypeId)
-          .then(questionType => {
+          .then((questionType) => {
             /*
             dispatch({
               type: QuestionTypeActionTypes.REMOVE,
@@ -207,7 +207,7 @@ export class QuestionTypesActions {
 
             resolve(true);
           })
-          .catch(error => {
+          .catch((error) => {
             dispatch(QuestionTypesActions.questionTypesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
@@ -225,20 +225,18 @@ export class QuestionTypesActions {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+      return new Promise<boolean>((resolve) => {
         dispatch(QuestionTypesActions.questionTypesActionStartedCreator());
         apiHandler.questionTypeService.featherService
           .find()
-          .then(questionTypes => {
+          .then((questionTypes) => {
             dispatch({
               type: QuestionTypesActionTypes.GETALL,
-              questionTypes: questionTypes
+              questionTypes: questionTypes,
             });
             resolve(true);
           })
-          .catch(error => {
-            console.log(error);
-
+          .catch((error) => {
             dispatch(QuestionTypesActions.questionTypesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);

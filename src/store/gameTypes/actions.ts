@@ -85,33 +85,33 @@ export class GameTypesActions {
   private gameTypeCreated(gameTypeModel: GameTypeBackModel) {
     store.dispatch({
       type: GameTypesActionTypes.CREATE,
-      gameType: GameType.fromBack(gameTypeModel)
+      gameType: GameType.fromBack(gameTypeModel),
     });
   }
 
   private gameTypeUpdated(gameTypeModel: GameTypeBackModel) {
     store.dispatch({
       type: GameTypesActionTypes.UPDATE,
-      gameType: GameType.fromBack(gameTypeModel)
+      gameType: GameType.fromBack(gameTypeModel),
     });
   }
 
   private gameTypeRemoved(gameTypeModel: GameTypeBackModel) {
     store.dispatch({
       type: GameTypesActionTypes.REMOVE,
-      gameType: GameType.fromBack(gameTypeModel)
+      gameType: GameType.fromBack(gameTypeModel),
     });
   }
 
   private static gameTypesActionStartedCreator = (): ActionStarted => {
     return {
-      type: GameTypesActionTypes.ACTION_STARTED
+      type: GameTypesActionTypes.ACTION_STARTED,
     };
   };
 
   private static gameTypesActionFailureCreator = (): ActionFailure => {
     return {
-      type: GameTypesActionTypes.ACTION_FAILURE
+      type: GameTypesActionTypes.ACTION_FAILURE,
     };
   };
 
@@ -121,11 +121,11 @@ export class GameTypesActions {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+      return new Promise<boolean>((resolve) => {
         dispatch(GameTypesActions.gameTypesActionStartedCreator());
         apiHandler.gameTypeService.featherService
           .create(gameType)
-          .then(gameType => {
+          .then((gameType) => {
             /*
             dispatch({
               type: GameTypeActionTypes.CREATE,
@@ -138,7 +138,7 @@ export class GameTypesActions {
             );
             resolve(true);
           })
-          .catch(error => {
+          .catch((error) => {
             dispatch(GameTypesActions.gameTypesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
@@ -153,11 +153,11 @@ export class GameTypesActions {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+      return new Promise<boolean>((resolve) => {
         dispatch(GameTypesActions.gameTypesActionStartedCreator());
         apiHandler.gameTypeService.featherService
           .patch(gameType.id, gameType)
-          .then(gameType => {
+          .then((gameType) => {
             /*
           dispatch({
             type: GameTypeActionTypes.UPDATE,
@@ -171,7 +171,7 @@ export class GameTypesActions {
 
             resolve(true);
           })
-          .catch(error => {
+          .catch((error) => {
             dispatch(GameTypesActions.gameTypesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
@@ -186,11 +186,11 @@ export class GameTypesActions {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+      return new Promise<boolean>((resolve) => {
         dispatch(GameTypesActions.gameTypesActionStartedCreator());
         apiHandler.gameTypeService.featherService
           .remove(gameTypeId)
-          .then(gameType => {
+          .then((gameType) => {
             /*
             dispatch({
               type: GameTypeActionTypes.REMOVE,
@@ -204,7 +204,7 @@ export class GameTypesActions {
 
             resolve(true);
           })
-          .catch(error => {
+          .catch((error) => {
             dispatch(GameTypesActions.gameTypesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
@@ -222,20 +222,18 @@ export class GameTypesActions {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+      return new Promise<boolean>((resolve) => {
         dispatch(GameTypesActions.gameTypesActionStartedCreator());
         apiHandler.gameTypeService.featherService
           .find()
-          .then(gameTypes => {
+          .then((gameTypes) => {
             dispatch({
               type: GameTypesActionTypes.GETALL,
-              gameTypes: gameTypes
+              gameTypes: gameTypes,
             });
             resolve(true);
           })
-          .catch(error => {
-            console.log(error);
-
+          .catch((error) => {
             dispatch(GameTypesActions.gameTypesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);

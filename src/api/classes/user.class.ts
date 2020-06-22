@@ -1,5 +1,6 @@
 import { Role, RoleBackModel } from './role.class';
 import { Game } from './game.class';
+import { UserConfig, UserConfigBackModel } from './userConfig.class';
 import isUUID from 'is-uuid';
 
 export interface LoginCredentials {
@@ -14,7 +15,7 @@ export interface UserBackModel {
   _password: string;
   _role: RoleBackModel;
   _gender: number;
-  _darkMode: boolean;
+  _config: UserConfigBackModel;
 }
 
 export const GenderTable = ['Man', 'Woman'];
@@ -32,7 +33,7 @@ export class User {
 
   public gender: number = 0;
 
-  public darkMode: boolean = false;
+  public config: UserConfig = new UserConfig();
 
   public createdGames: Game[] = [];
 
@@ -55,7 +56,7 @@ export class User {
     newObj.role = Role.fromBack(datas._role);
     newObj.gender = datas._gender;
     newObj.password = datas._password;
-    newObj.darkMode = datas._darkMode;
+    newObj.config = UserConfig.fromBack(datas._config);
 
     return newObj;
   }
@@ -75,7 +76,7 @@ export class User {
       obj1.gender === obj2.gender &&
       obj1.password === obj2.password &&
       obj1.id === obj2.id &&
-      obj1.darkMode === obj2.darkMode &&
+      UserConfig.CompareObjects(obj1.config, obj2.config) &&
       Role.CompareObjects(obj1.role, obj2.role)
     );
   }

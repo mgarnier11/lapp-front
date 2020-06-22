@@ -49,13 +49,13 @@ export type Action =
 
 const userActionStartedCreator = (): ActionStarted => {
   return {
-    type: UserActionTypes.ACTION_STARTED
+    type: UserActionTypes.ACTION_STARTED,
   };
 };
 
 const userActionFailureCreator = (): ActionFailure => {
   return {
-    type: UserActionTypes.ACTION_FAILURE
+    type: UserActionTypes.ACTION_FAILURE,
   };
 };
 
@@ -67,19 +67,19 @@ export const login = (
   return async (
     dispatch: ThunkDispatch<{}, {}, AnyAction>
   ): Promise<boolean> => {
-    return new Promise<boolean>(resolve => {
+    return new Promise<boolean>((resolve) => {
       dispatch(userActionStartedCreator());
       apiHandler
         .login(credentials)
-        .then(response => {
+        .then((response) => {
           dispatch({
             type: UserActionTypes.LOGIN,
-            user: response.user
+            user: response.user,
           });
           if (!hideSuccess) apiHandler.userservice.ownEvents.emit('logged in');
           resolve(true);
         })
-        .catch(error => {
+        .catch((error) => {
           dispatch(userActionFailureCreator());
           dispatch(addError(error));
           resolve(false);
@@ -95,20 +95,20 @@ export const register = (
   return async (
     dispatch: ThunkDispatch<{}, {}, AnyAction>
   ): Promise<boolean | User> => {
-    return new Promise<boolean | User>(resolve => {
+    return new Promise<boolean | User>((resolve) => {
       dispatch(userActionStartedCreator());
       apiHandler
         .register(userDatas)
-        .then(user => {
+        .then((user) => {
           dispatch({
             type: UserActionTypes.REGISTER,
-            user
+            user,
           });
 
           if (!hideSuccess) apiHandler.userservice.ownEvents.emit('registered');
           resolve(user);
         })
-        .catch(error => {
+        .catch((error) => {
           dispatch(userActionFailureCreator());
           dispatch(addError(error));
           resolve(false);
@@ -124,7 +124,7 @@ export const logout = (
   return async (
     dispatch: ThunkDispatch<{}, {}, AnyAction>
   ): Promise<boolean> => {
-    return new Promise<boolean>(resolve => {
+    return new Promise<boolean>((resolve) => {
       dispatch(userActionStartedCreator());
       apiHandler
         .logout()
@@ -133,7 +133,7 @@ export const logout = (
           if (!hideSuccess) apiHandler.userservice.ownEvents.emit('logged out');
           resolve(true);
         })
-        .catch(error => {
+        .catch((error) => {
           dispatch(userActionFailureCreator());
           if (!hideError) dispatch(addError(error));
           resolve(false);
@@ -148,19 +148,19 @@ export const relog = (
   return async (
     dispatch: ThunkDispatch<{}, {}, AnyAction>
   ): Promise<boolean> => {
-    return new Promise<boolean>(resolve => {
+    return new Promise<boolean>((resolve) => {
       dispatch(userActionStartedCreator());
       apiHandler
         .reAuthenticate()
-        .then(response => {
+        .then((response) => {
           dispatch({
             type: UserActionTypes.RELOG,
-            user: response.user
+            user: response.user,
           });
           apiHandler.userservice.ownEvents.emit('logged');
           resolve(true);
         })
-        .catch(error => {
+        .catch((error) => {
           dispatch(userActionFailureCreator());
           if (dispatchError) dispatch(addError(error));
           resolve(false);
@@ -175,21 +175,21 @@ export const userUpdate = (
   return async (
     dispatch: ThunkDispatch<{}, {}, AnyAction>
   ): Promise<boolean> => {
-    return new Promise<boolean>(resolve => {
+    return new Promise<boolean>((resolve) => {
       dispatch(userActionStartedCreator());
       apiHandler.roleService.featherService
         .patch(user.id, user)
-        .then(user => {
+        .then((user) => {
           dispatch({
             type: UserActionTypes.UPDATE,
-            user: user
+            user: user,
           });
 
           apiHandler.userservice.ownEvents.emit(ServiceEvents.updated, user);
 
           resolve(true);
         })
-        .catch(error => {
+        .catch((error) => {
           dispatch(userActionFailureCreator());
           dispatch(addError(error));
           resolve(false);
@@ -204,20 +204,20 @@ export const userRemove = (
   return async (
     dispatch: ThunkDispatch<{}, {}, AnyAction>
   ): Promise<boolean> => {
-    return new Promise<boolean>(resolve => {
+    return new Promise<boolean>((resolve) => {
       dispatch(userActionStartedCreator());
       apiHandler.userservice.featherService
         .remove(userId)
-        .then(user => {
+        .then((user) => {
           dispatch({
             type: UserActionTypes.REMOVE,
-            role: user
+            role: user,
           });
           apiHandler.userservice.ownEvents.emit(ServiceEvents.removed, user);
 
           resolve(true);
         })
-        .catch(error => {
+        .catch((error) => {
           dispatch(userActionFailureCreator());
           dispatch(addError(error));
           resolve(false);

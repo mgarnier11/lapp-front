@@ -85,33 +85,33 @@ export class QuestionsActions {
   private questionCreated(questionModel: QuestionBackModel) {
     store.dispatch({
       type: QuestionsActionTypes.CREATE,
-      question: Question.fromBack(questionModel)
+      question: Question.fromBack(questionModel),
     });
   }
 
   private questionUpdated(questionModel: QuestionBackModel) {
     store.dispatch({
       type: QuestionsActionTypes.UPDATE,
-      question: Question.fromBack(questionModel)
+      question: Question.fromBack(questionModel),
     });
   }
 
   private questionRemoved(questionModel: QuestionBackModel) {
     store.dispatch({
       type: QuestionsActionTypes.REMOVE,
-      question: Question.fromBack(questionModel)
+      question: Question.fromBack(questionModel),
     });
   }
 
   private static questionsActionStartedCreator = (): ActionStarted => {
     return {
-      type: QuestionsActionTypes.ACTION_STARTED
+      type: QuestionsActionTypes.ACTION_STARTED,
     };
   };
 
   private static questionsActionFailureCreator = (): ActionFailure => {
     return {
-      type: QuestionsActionTypes.ACTION_FAILURE
+      type: QuestionsActionTypes.ACTION_FAILURE,
     };
   };
 
@@ -121,11 +121,11 @@ export class QuestionsActions {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+      return new Promise<boolean>((resolve) => {
         dispatch(QuestionsActions.questionsActionStartedCreator());
         apiHandler.questionService.featherService
           .create(question)
-          .then(question => {
+          .then((question) => {
             /*
             dispatch({
               type: QuestionActionTypes.CREATE,
@@ -138,7 +138,7 @@ export class QuestionsActions {
             );
             resolve(true);
           })
-          .catch(error => {
+          .catch((error) => {
             dispatch(QuestionsActions.questionsActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
@@ -153,11 +153,11 @@ export class QuestionsActions {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+      return new Promise<boolean>((resolve) => {
         dispatch(QuestionsActions.questionsActionStartedCreator());
         apiHandler.questionService.featherService
           .patch(question.id, question)
-          .then(question => {
+          .then((question) => {
             /*
           dispatch({
             type: QuestionActionTypes.UPDATE,
@@ -171,7 +171,7 @@ export class QuestionsActions {
 
             resolve(true);
           })
-          .catch(error => {
+          .catch((error) => {
             dispatch(QuestionsActions.questionsActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
@@ -186,11 +186,11 @@ export class QuestionsActions {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+      return new Promise<boolean>((resolve) => {
         dispatch(QuestionsActions.questionsActionStartedCreator());
         apiHandler.questionService.featherService
           .remove(questionId)
-          .then(question => {
+          .then((question) => {
             /*
             dispatch({
               type: QuestionActionTypes.REMOVE,
@@ -204,7 +204,7 @@ export class QuestionsActions {
 
             resolve(true);
           })
-          .catch(error => {
+          .catch((error) => {
             dispatch(QuestionsActions.questionsActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
@@ -222,20 +222,18 @@ export class QuestionsActions {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+      return new Promise<boolean>((resolve) => {
         dispatch(QuestionsActions.questionsActionStartedCreator());
         apiHandler.questionService.featherService
           .find()
-          .then(questions => {
+          .then((questions) => {
             dispatch({
               type: QuestionsActionTypes.GETALL,
-              questions: questions
+              questions: questions,
             });
             resolve(true);
           })
-          .catch(error => {
-            console.log(error);
-
+          .catch((error) => {
             dispatch(QuestionsActions.questionsActionFailureCreator());
             dispatch(addError(error));
             resolve(false);

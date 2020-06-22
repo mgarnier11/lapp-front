@@ -8,7 +8,7 @@ export function afterAllHook(options = {}): Hook {
       let oldResults = [...context.result];
       context.result = [];
 
-      console.log(context.result);
+      // console.log(context.result);
 
       for (let data of oldResults) {
         context.result.push(convertToClass(data));

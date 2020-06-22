@@ -48,8 +48,6 @@ const GameStartedPage: React.FunctionComponent<Props> = (props: Props) => {
   }, []); // eslint-disable-line
 
   const gameLoading = (isLoading: boolean) => {
-    console.log(isLoading);
-
     if (isLoading) {
       props.gameStartLoading();
     } else {

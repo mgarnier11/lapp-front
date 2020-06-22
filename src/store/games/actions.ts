@@ -243,8 +243,6 @@ export class GamesActions {
             resolve(true);
           })
           .catch((error) => {
-            console.log(error);
-
             dispatch(GamesActions.gameActionFailureCreator());
             dispatch(addError(error));
             resolve(false);

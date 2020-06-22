@@ -72,7 +72,7 @@ const LoginPage: React.FunctionComponent<LoginPageProps> = (props) => {
         password,
       })
       .then((logged) => {
-        console.log(logged);
+        // console.log(logged);
 
         if (logged) props.history.push('/home');
       });

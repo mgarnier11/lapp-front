@@ -85,33 +85,33 @@ export class RolesActions {
   private roleCreated(roleModel: RoleBackModel) {
     store.dispatch({
       type: RolesActionTypes.CREATE,
-      role: Role.fromBack(roleModel)
+      role: Role.fromBack(roleModel),
     });
   }
 
   private roleUpdated(roleModel: RoleBackModel) {
     store.dispatch({
       type: RolesActionTypes.UPDATE,
-      role: Role.fromBack(roleModel)
+      role: Role.fromBack(roleModel),
     });
   }
 
   private roleRemoved(roleModel: RoleBackModel) {
     store.dispatch({
       type: RolesActionTypes.REMOVE,
-      role: Role.fromBack(roleModel)
+      role: Role.fromBack(roleModel),
     });
   }
 
   private static rolesActionStartedCreator = (): ActionStarted => {
     return {
-      type: RolesActionTypes.ACTION_STARTED
+      type: RolesActionTypes.ACTION_STARTED,
     };
   };
 
   private static rolesActionFailureCreator = (): ActionFailure => {
     return {
-      type: RolesActionTypes.ACTION_FAILURE
+      type: RolesActionTypes.ACTION_FAILURE,
     };
   };
 
@@ -121,11 +121,11 @@ export class RolesActions {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+      return new Promise<boolean>((resolve) => {
         dispatch(RolesActions.rolesActionStartedCreator());
         apiHandler.roleService.featherService
           .create(role)
-          .then(role => {
+          .then((role) => {
             /*
             dispatch({
               type: RoleActionTypes.CREATE,
@@ -135,7 +135,7 @@ export class RolesActions {
             apiHandler.roleService.ownEvents.emit(ServiceEvents.created, role);
             resolve(true);
           })
-          .catch(error => {
+          .catch((error) => {
             dispatch(RolesActions.rolesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
@@ -150,11 +150,11 @@ export class RolesActions {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+      return new Promise<boolean>((resolve) => {
         dispatch(RolesActions.rolesActionStartedCreator());
         apiHandler.roleService.featherService
           .patch(role.id, role)
-          .then(role => {
+          .then((role) => {
             /*
           dispatch({
             type: RoleActionTypes.UPDATE,
@@ -165,7 +165,7 @@ export class RolesActions {
 
             resolve(true);
           })
-          .catch(error => {
+          .catch((error) => {
             dispatch(RolesActions.rolesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
@@ -180,11 +180,11 @@ export class RolesActions {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+      return new Promise<boolean>((resolve) => {
         dispatch(RolesActions.rolesActionStartedCreator());
         apiHandler.roleService.featherService
           .remove(roleId)
-          .then(role => {
+          .then((role) => {
             /*
             dispatch({
               type: RoleActionTypes.REMOVE,
@@ -195,7 +195,7 @@ export class RolesActions {
 
             resolve(true);
           })
-          .catch(error => {
+          .catch((error) => {
             dispatch(RolesActions.rolesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);
@@ -213,20 +213,18 @@ export class RolesActions {
     return async (
       dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<boolean> => {
-      return new Promise<boolean>(resolve => {
+      return new Promise<boolean>((resolve) => {
         dispatch(RolesActions.rolesActionStartedCreator());
         apiHandler.roleService.featherService
           .find()
-          .then(roles => {
+          .then((roles) => {
             dispatch({
               type: RolesActionTypes.GETALL,
-              roles: roles
+              roles: roles,
             });
             resolve(true);
           })
-          .catch(error => {
-            console.log(error);
-
+          .catch((error) => {
             dispatch(RolesActions.rolesActionFailureCreator());
             dispatch(addError(error));
             resolve(false);

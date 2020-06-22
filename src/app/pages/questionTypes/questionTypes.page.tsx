@@ -51,8 +51,6 @@ const QuestionTypesPage: React.FunctionComponent<Props> = (props: Props) => {
     questionType: QuestionType.New({}),
   } as ModalProps);
 
-  console.log(modalProps);
-
   const openModal = () => setModalProps({ ...modalProps, open: true }); // eslint-disable-line
 
   const closeModal = () => setModalProps({ ...modalProps, open: false });
