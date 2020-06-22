@@ -51,16 +51,16 @@ const UserFormComponent: FunctionComponent<UserFormProps> = (props) => {
   const isDenied = (): boolean => {
     if (props.displayConfirms) {
       return (
-        email.length <= User.emailMinLength &&
-        email !== confirmEmail &&
-        password.length <= User.passwordMinLength &&
-        password !== confirmPassword &&
-        name.length <= User.nameMinLength
+        email.length < User.emailMinLength ||
+        email !== confirmEmail ||
+        password.length < User.passwordMinLength ||
+        password !== confirmPassword ||
+        name.length < User.nameMinLength
       );
     } else {
       return (
-        email.length <= User.emailMinLength &&
-        password.length <= User.passwordMinLength &&
+        email.length <= User.emailMinLength ||
+        password.length <= User.passwordMinLength ||
         name.length <= User.nameMinLength
       );
     }
