@@ -15,6 +15,8 @@ import {
   CardActions,
   Typography,
   MenuItem,
+  Checkbox,
+  FormControlLabel,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -76,11 +78,21 @@ const QuestionTypeDialogComponent: React.FunctionComponent<Props> = (props) => {
     props.questionType.description
   );
   const [template, setTemplate] = useState(props.questionType.template);
+  const [icon, setIcon] = useState(props.questionType.icon);
+  const [allowParameters, setAllowParameters] = useState(
+    props.questionType.allowParameters
+  );
 
   useEffect(() => {
     setName(props.questionType.name || '');
     setDescription(props.questionType.description || '');
     setTemplate(props.questionType.template || questionTemplates![0]);
+    setIcon(props.questionType.icon || '');
+    setAllowParameters(
+      typeof props.questionType.allowParameters === 'undefined'
+        ? true
+        : props.questionType.allowParameters
+    );
   }, [props.questionType]); // eslint-disable-line
 
   const isDenied = (): boolean => {
@@ -89,7 +101,9 @@ const QuestionTypeDialogComponent: React.FunctionComponent<Props> = (props) => {
         QuestionTemplate.CompareObjects(t, template)
       ) ||
       name.length === 0 ||
-      description.length === 0
+      description.length === 0 ||
+      icon.length === 0 ||
+      allowParameters === undefined
     );
   };
 
@@ -105,6 +119,14 @@ const QuestionTypeDialogComponent: React.FunctionComponent<Props> = (props) => {
       questionTemplates!.find((t) => t.id === (e.target.value as string))!
     );
 
+  const handleIconChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    props.editable && setIcon(e.target.value);
+
+  const handleAllowParametersChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    value: boolean
+  ) => props.editable && setAllowParameters(value);
+
   const beforeDelete = () => {
     if (props.onDelete) props.onDelete(props.questionType.id);
   };
@@ -112,7 +134,13 @@ const QuestionTypeDialogComponent: React.FunctionComponent<Props> = (props) => {
   const beforeAccept = () => {
     if (!isDenied() && props.onAccept) {
       props.onAccept(
-        Helper.clone(props.questionType, { name, description, template })
+        Helper.clone(props.questionType, {
+          name,
+          description,
+          template,
+          icon,
+          allowParameters,
+        })
       );
     }
   };
@@ -168,6 +196,30 @@ const QuestionTypeDialogComponent: React.FunctionComponent<Props> = (props) => {
         label="Description"
         value={description}
         onChange={handleDescriptionChange}
+      />
+
+      <TextField
+        name="icon"
+        margin="normal"
+        variant="outlined"
+        type="text"
+        disabled={props.disabled}
+        fullWidth
+        id="icon"
+        label="Icon"
+        value={icon}
+        onChange={handleIconChange}
+      />
+
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={allowParameters}
+            onChange={handleAllowParametersChange}
+            name="allowParameters"
+          />
+        }
+        label="Allow question parameters"
       />
     </Box>
   );

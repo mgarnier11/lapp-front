@@ -10,6 +10,7 @@ export interface QuestionTypeBackModel {
   _template: QuestionTemplateBackModel;
   _icon: string;
   _hasQuestions: boolean;
+  _allowParameters: boolean;
 }
 
 export class QuestionType {
@@ -22,6 +23,8 @@ export class QuestionType {
   public template: QuestionTemplate = new QuestionTemplate();
 
   public icon: string = '';
+
+  public allowParameters: boolean = false;
 
   public hasQuestions: boolean = false;
 
@@ -38,6 +41,7 @@ export class QuestionType {
     newObj.template = QuestionTemplate.fromBack(datas._template);
     newObj.icon = datas._icon;
     newObj.hasQuestions = datas._hasQuestions;
+    newObj.allowParameters = datas._allowParameters;
 
     return newObj;
   }
@@ -64,7 +68,8 @@ export class QuestionType {
       obj1.description === obj2.description &&
       QuestionTemplate.CompareObjects(obj1.template, obj2.template) &&
       obj1.icon === obj2.icon &&
-      obj1.hasQuestions === obj2.hasQuestions
+      obj1.hasQuestions === obj2.hasQuestions &&
+      obj1.allowParameters === obj2.allowParameters
     );
   }
 }

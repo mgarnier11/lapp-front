@@ -1,17 +1,18 @@
-import React, { createRef } from 'react';
+import React, { createRef, useState } from 'react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme';
 import { MyDarkTheme } from './MyDarkTheme';
 import { MyLightTheme } from './MyLightTheme';
+import { UserState } from '../../store/user/types';
 
 export enum ThemeTypes {
   light = 'light',
-  dark = 'dark'
+  dark = 'dark',
 }
 
 const Themes: { [key: string]: ThemeOptions } = {
   light: MyLightTheme,
-  dark: MyDarkTheme
+  dark: MyDarkTheme,
 };
 
 interface ComponentProps {
@@ -30,7 +31,7 @@ class ThemeManager extends React.Component<ComponentProps, ComponentState> {
     super(props);
 
     this.state = {
-      selectedTheme: ThemeTypes.dark
+      selectedTheme: ThemeTypes.dark,
     };
   }
 
@@ -39,13 +40,13 @@ class ThemeManager extends React.Component<ComponentProps, ComponentState> {
       selectedTheme:
         this.state.selectedTheme === ThemeTypes.light
           ? ThemeTypes.dark
-          : ThemeTypes.light
+          : ThemeTypes.light,
     });
   };
 
   public setTheme = (newTheme: ThemeTypes) => {
     this.setState({
-      selectedTheme: newTheme
+      selectedTheme: newTheme,
     });
   };
 
