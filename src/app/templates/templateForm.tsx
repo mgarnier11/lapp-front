@@ -1,8 +1,10 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { Question } from '../../api/classes/question.class';
+import { QuestionType } from '../../api/classes/questionType.class';
 
 export type TemplateFormProps = {
   question: Question;
+  type: QuestionType;
   editable: boolean;
   disabled?: boolean;
   displayExtraInfos?: boolean;

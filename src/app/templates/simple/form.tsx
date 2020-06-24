@@ -6,6 +6,8 @@ import {
   Typography,
   Box,
   makeStyles,
+  Button,
+  MenuItem,
 } from '@material-ui/core';
 
 import Rating from '@material-ui/lab/Rating';
@@ -66,6 +68,37 @@ const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
           value={props.formProps.text}
           onChange={handleTextChange}
         />
+      )}
+
+      {props.displayText && props.editable && props.type.allowParameters && (
+        <Grid container>
+          <Grid item xs={7}>
+            <TextField
+              name="typeSelect"
+              margin="normal"
+              variant="outlined"
+              select={props.editable}
+              disabled={props.disabled}
+              fullWidth
+              id="typeSelect"
+              label="Question type"
+              // value={props.editable ? type.id : type.name}
+              // onChange={handleTypeChange}
+            >
+              <MenuItem disabled>Loading...</MenuItem>
+            </TextField>
+          </Grid>
+          <Grid item xs={5}>
+            <Button
+              disabled={props.disabled}
+              variant="contained"
+              color="primary"
+              fullWidth
+            >
+              Add a text parameter
+            </Button>
+          </Grid>
+        </Grid>
       )}
 
       <Grid container className={classes.ratingsGrid}>

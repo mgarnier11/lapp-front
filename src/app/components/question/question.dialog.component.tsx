@@ -170,6 +170,7 @@ const QuestionDialogComponent: React.FunctionComponent<Props> = (props) => {
             hotLevel,
             setHotLevel,
           },
+          type: type,
           dateOptions,
           disabled: props.disabled,
           displayText: props.displayText,
