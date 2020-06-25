@@ -70,3 +70,19 @@ export class Question {
     );
   }
 }
+
+export interface TextParameter {
+  text: string;
+  value: string;
+}
+
+export const textParametersList: TextParameter[] = [
+  {
+    text: 'Random player',
+    value: 'player',
+  },
+  {
+    text: 'Random number',
+    value: 'number',
+  },
+];

@@ -16,6 +16,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import { TemplateFormProps } from '../templateForm';
 import { OutlinedDiv } from '../../components/utils/outlinedDiv.component';
 import { UserItem } from '../../components/user/user.item.component';
+import QuestionParam from '../../components/question/question.params.component';
 
 const useStyles = makeStyles((theme) => ({
   ratingsGrid: {
@@ -71,34 +72,7 @@ const SimpleQuestionTemplate: React.FunctionComponent<Props> = (
       )}
 
       {props.displayText && props.editable && props.type.allowParameters && (
-        <Grid container>
-          <Grid item xs={7}>
-            <TextField
-              name="typeSelect"
-              margin="normal"
-              variant="outlined"
-              select={props.editable}
-              disabled={props.disabled}
-              fullWidth
-              id="typeSelect"
-              label="Question type"
-              // value={props.editable ? type.id : type.name}
-              // onChange={handleTypeChange}
-            >
-              <MenuItem disabled>Loading...</MenuItem>
-            </TextField>
-          </Grid>
-          <Grid item xs={5}>
-            <Button
-              disabled={props.disabled}
-              variant="contained"
-              color="primary"
-              fullWidth
-            >
-              Add a text parameter
-            </Button>
-          </Grid>
-        </Grid>
+        <QuestionParam />
       )}
 
       <Grid container className={classes.ratingsGrid}>
